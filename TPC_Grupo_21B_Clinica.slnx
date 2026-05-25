@@ -1,3 +1,6 @@
 <Solution>
   <Project Path="App_Clinica/App_Clinica.csproj" />
+  <Project Path="ConexionBD/ConexionBD.csproj" />
+  <Project Path="Dominio/Dominio.csproj" />
+  <Project Path="Negocio/Negocio.csproj" />
 </Solution>
