@@ -12,6 +12,13 @@ namespace Dominio
         public int IdTurno { get; set; } //Ver si es necesario crear un nro de turno o se utiliza este (autonumerado)
         public DateTime Fecha { get; set; }
         public TimeSpan Hora { get; set; }
+
+        //Relaciones de composición
+        public Medico Medico { get; set; }
+        public Especialidad Especialidad { get; set; }
+        public Paciente Paciente { get; set; }
+        public EstadoTurno Estado { get; set; }
+
         public string Observaciones { get; set; } //Motivo del turno
         public string Diagnostico { get; set; } //Resultado de la consulta
     }
