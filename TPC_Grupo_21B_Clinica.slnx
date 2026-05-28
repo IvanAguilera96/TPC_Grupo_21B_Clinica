@@ -1,4 +1,7 @@
 <Solution>
+  <Folder Name="/Script/">
+    <File Path="Script_1_CreateDB.sql" />
+  </Folder>
   <Project Path="App_Clinica/App_Clinica.csproj" Id="b80a94ac-c7f2-4e49-a00f-bb7b2e84286e" />
   <Project Path="ConexionBD/ConexionBD.csproj" Id="b1802722-7523-49de-8aec-96065e2920cc" />
   <Project Path="Dominio/Dominio.csproj" Id="9b74a3aa-4bbc-49ed-8355-34cda57e0b82" />
