@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Dominio
 {
-    internal class EstadoTurno
+    public class EstadoTurno
     {
         public int IdEstado { get; set; }
         public string Descripcion { get; set; } //Cancelado, Asignado, etc.

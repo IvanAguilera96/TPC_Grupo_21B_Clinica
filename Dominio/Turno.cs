@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Dominio
 {
-    internal class Turno
+    public class Turno
     {
         public int IdTurno { get; set; } //Ver si es necesario crear un nro de turno o se utiliza este (autonumerado)
         public DateTime Fecha { get; set; }
