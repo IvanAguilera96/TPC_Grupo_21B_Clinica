@@ -20,8 +20,8 @@ namespace ConexionBD
 
         public AccesoDatos()
         {
-            //conexion = new SqlConnection("server=.\\SQLEXPRESS; database=PROMOS_DB; integrated security=true");
-            //comando = new SqlCommand();
+            conexion = new SqlConnection("server=.\\SQLEXPRESS; database=TPC_Clinica; integrated security=true");
+            comando = new SqlCommand();
         }
 
         public void setearConsulta(string consulta)
@@ -64,7 +64,7 @@ namespace ConexionBD
 
         public void cerrarConexion()
         {
-            if (lector != null)
+            if(lector != null)
                 lector.Close();
 
             conexion.Close();
