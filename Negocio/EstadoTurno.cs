@@ -8,11 +8,11 @@ using ConexionBD;
 
 namespace Negocio
 {
-    public class PerfilNegocio
+    public class EstadoTurno
     {
-        public List<Perfil> Listar()
+        public List<EstadoTurno> Listar()
         {
-            List<Perfil> lista = new List<Perfil>();
+            List<EstadoTurno> lista = new List<EstadoTurno>();
             AccesoDatos datos = new AccesoDatos();
 
             try
