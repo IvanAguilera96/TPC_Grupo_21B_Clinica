@@ -19,7 +19,7 @@ namespace Dominio
         public Paciente Paciente { get; set; }
         public EstadoTurno Estado { get; set; }
 
-        public string Observaciones { get; set; } //Motivo del turno
+        public string Observacion { get; set; } //Motivo del turno
         public string Diagnostico { get; set; } //Resultado de la consulta
     }
 }
