@@ -11,7 +11,7 @@ namespace App_Clinica
 {
 
 
-    public partial class Default1
+    public partial class Paciente
     {
     }
 }
