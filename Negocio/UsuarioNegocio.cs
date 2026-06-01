@@ -17,14 +17,14 @@ namespace Negocio
 
             try
             {
-                datos.setearConsulta("SELECT U.IdUsuario, U.NombreUsuario, U.Contrasenia, P.IdPerfil, P.Descripcion FROM Usuario U INNER JOIN Perfil P ON U.IdPerfil = P.IdPerfil");
+                datos.setearConsulta("SELECT U.IdUsuario, U.Nombre, U.Contrasenia, P.IdPerfil, P.Descripcion FROM Usuario U INNER JOIN Perfil P ON U.IdPerfil = P.IdPerfil");
                 datos.ejecutarLectura();
 
                 while (datos.Lector.Read())
                 {
                     Usuario aux = new Usuario();
                     aux.IdUsuario = (int)datos.Lector["IdUsuario"];
-                    aux.NombreUsuario = (string)datos.Lector["NombreUsuario"];
+                    aux.Nombre = (string)datos.Lector["Nombre"];
                     aux.Contrasenia = (string)datos.Lector["Contrasenia"];
 
                     aux.Perfil = new Perfil();
