@@ -40,7 +40,7 @@
                         <a href="Paciente.aspx" id="menuPacientes" runat="server" class="nav-link text-dark py-4 text-center border">PACIENTES</a>
                         <a href="" id="menuMedicos" runat="server" class="nav-link text-dark py-4 text-center border">MEDICOS</a>
                         <a href="" id="menuTurnos" runat="server" class="nav-link text-dark py-4 text-center border">TURNOS</a>
-                        <a href="" id="menuUsuario" runat="server" class="nav-link text-dark py-4 text-center border">USUARIOS</a>
+                        <a href="Usuario.aspx" id="menuUsuario" runat="server" class="nav-link text-dark py-4 text-center border">USUARIOS</a>
 
                         <asp:Button ID="btnSalir" runat="server" Text="Salir" CssClass="btn btn-outline-danger mt-3 py-4 w-100" />
                     </div>
