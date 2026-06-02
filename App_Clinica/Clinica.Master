@@ -35,12 +35,13 @@
             <div class="row g-0 flex-grow-1">
 
                 <div class="col-md-2 bg-white border-end d-flex flex-column p-4">
-                    <div class="nav flex-column nav-pills gap-5 mt-3">
-                        <a href="Default.aspx" class="nav-link active py-4 text-center border">INICIO</a>
-                        <a href="Paciente.aspx" id="menuPacientes" runat="server" class="nav-link text-dark py-4 text-center border">PACIENTES</a>
-                        <a href="" id="menuMedicos" runat="server" class="nav-link text-dark py-4 text-center border">MEDICOS</a>
-                        <a href="" id="menuTurnos" runat="server" class="nav-link text-dark py-4 text-center border">TURNOS</a>
-                        <a href="Usuario.aspx" id="menuUsuario" runat="server" class="nav-link text-dark py-4 text-center border">USUARIOS</a>
+                    <div class="list-group gap-5 mt-3">
+
+                        <a href="Default.aspx" class="list-group-item list-group-item-action active py-4 text-center border">INICIO</a>
+                        <a href="Paciente.aspx" id="menuPacientes" runat="server" class="list-group-item list-group-item-action py-4 text-center border">PACIENTES</a>
+                        <a href="" id="menuMedicos" runat="server" class="list-group-item list-group-item-action py-4 text-center border">MEDICOS</a>
+                        <a href="" id="menuTurnos" runat="server" class="list-group-item list-group-item-action py-4 text-center border">TURNOS</a>
+                        <a href="Usuario.aspx" id="menuUsuario" runat="server" class="list-group-item list-group-item-action py-4 text-center border">USUARIOS</a>
 
                         <asp:Button ID="btnSalir" runat="server" Text="Salir" CssClass="btn btn-outline-danger mt-3 py-4 w-100" />
                     </div>
