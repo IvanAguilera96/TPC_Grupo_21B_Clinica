@@ -45,5 +45,30 @@ namespace Negocio
                 datos.cerrarConexion();
             }
         }
+
+        public void Agregar(Usuario nuevo)
+        {
+            AccesoDatos datos = new AccesoDatos();
+
+            try
+            {
+                datos.setearConsulta("INSERT INTO Usuario (Nombre, Contrasenia, IdPerfil) VALUES (@usuario, @contrasenia, @idPerfil)");
+
+                datos.setearParametros("@usuario", nuevo.Nombre);
+                datos.setearParametros("@contrasenia", nuevo.Contrasenia);
+                datos.setearParametros("@idPerfil", nuevo.Perfil.IdPerfil);
+
+                datos.ejecutarAccion();
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
     }
 }

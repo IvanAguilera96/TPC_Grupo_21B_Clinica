@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using Negocio;
+using Dominio;
 
 namespace App_Clinica
 {
@@ -14,18 +15,42 @@ namespace App_Clinica
         {
             if (!IsPostBack)
             {
-                try
-                {
-                    UsuarioNegocio negocio = new UsuarioNegocio();
+                ActualizarGrillaUsuarios();
+            }
+        }
 
-                    dgvUsuario.DataSource = negocio.Listar();
-                    dgvUsuario.DataBind();
-                }
-                catch (Exception ex )
-                {
+        private void ActualizarGrillaUsuarios()
+        {
+            try
+            {
+                UsuarioNegocio negocio = new UsuarioNegocio();
 
-                    throw ex;
-                }
+                dgvUsuario.DataSource = negocio.Listar();
+                dgvUsuario.DataBind();
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+        }
+
+        protected void btnGuardar_Click(object sender, EventArgs e)
+        {
+            if(string.IsNullOrWhiteSpace(txtNombre.Text) || string.IsNullOrWhiteSpace(txtContrasenia.Text))
+            {
+                lblMensaje.ForeColor = System.Drawing.Color.Red;
+                lblMensaje.Text = "Debe completar todos los campos para continuar.";
+            }
+
+            try
+            {
+
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
             }
         }
     }
