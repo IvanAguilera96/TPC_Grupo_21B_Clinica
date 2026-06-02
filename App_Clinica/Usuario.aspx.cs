@@ -41,16 +41,36 @@ namespace App_Clinica
             {
                 lblMensaje.ForeColor = System.Drawing.Color.Red;
                 lblMensaje.Text = "Debe completar todos los campos para continuar.";
+                return;
             }
 
             try
             {
+                Dominio.Usuario nuevo = new Dominio.Usuario();
+                nuevo.Nombre = txtNombre.Text;
+                nuevo.Contrasenia = txtContrasenia.Text;
 
+                nuevo.Perfil = new Perfil();
+                nuevo.Perfil.IdPerfil = int.Parse(ddlPerfil.SelectedValue);
+
+                UsuarioNegocio negocio = new UsuarioNegocio();
+                negocio.Agregar(nuevo);
+
+                //Si grabó el nuevo usuario limpia los campos
+                txtNombre.Text ="";
+                txtContrasenia.Text = "";
+
+                lblMensaje.ForeColor = System.Drawing.Color.Green;
+                lblMensaje.Text = "Usuario registado con éxito.";
+
+                //Actualiza grilla
+                ActualizarGrillaUsuarios();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
 
-                throw ex;
+                lblMensaje.ForeColor = System.Drawing.Color.Red;
+                lblMensaje.Text = "Error dando de alta al nuevo usuario";
             }
         }
     }

@@ -12,5 +12,11 @@ namespace Dominio
         public string Nombre { get; set; }
         public string Contrasenia { get; set; }
         public Perfil Perfil { get; set; } //Define los permisos del usuario.
+
+        //Propiedades
+        public string DescripcionPerfil
+        {
+            get { return Perfil.Descripcion; } //Para cargar la descripción del perfil en la grilla de usuarios.
+        }
     }
 }
