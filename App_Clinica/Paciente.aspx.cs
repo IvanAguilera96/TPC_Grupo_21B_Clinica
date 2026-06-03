@@ -4,6 +4,9 @@ using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using Dominio;
+using ConexionBD;
+using Negocio;
 
 namespace App_Clinica
 {
@@ -11,7 +14,13 @@ namespace App_Clinica
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-
+            if (!IsPostBack)
+            {
+                PacienteNegocio pacienteNeg = new PacienteNegocio();
+                dgvPaciente.DataSource = pacienteNeg.Listar();
+                dgvPaciente.DataBind();
+            }
+          
         }
     }
 }
