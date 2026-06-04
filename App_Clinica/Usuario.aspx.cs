@@ -47,9 +47,26 @@ namespace App_Clinica
             }
             else if (e.CommandName == "Eliminar")
             {
-                string id = e.CommandArgument.ToString();
+                try
+                {
+                    int IdEliminar = int.Parse(e.CommandArgument.ToString());
 
-                //CODIGO PARA BAJA LOGICA
+                    UsuarioNegocio negocio = new UsuarioNegocio();
+
+                    negocio.ELiminar(IdEliminar);
+
+                    lblMensajeGrilla.ForeColor = System.Drawing.Color.Green;
+                    lblMensajeGrilla.Text = "Usuario eliminado con éxito.";
+                    lblMensajeGrilla.Visible = true;
+
+                    ActualizarGrillaUsuarios();
+                }
+                catch (Exception ex)
+                {
+                    lblMensajeGrilla.ForeColor = System.Drawing.Color.Red;
+                    lblMensajeGrilla.Text = "Error eliminando el usuario.";
+                    lblMensajeGrilla.Visible = true;
+                }
             }
         }
     }

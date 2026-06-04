@@ -14,5 +14,7 @@ namespace Dominio
         public string Apellido { get; set; }
         public int Matricula { get; set; }
 
+        public bool Estado { get; set; } //true=activo, false=inactivo
+
     }
 }

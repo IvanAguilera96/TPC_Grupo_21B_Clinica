@@ -8,6 +8,8 @@
 
         <div class="col-md-6 d-flex flex-column align-items-center">
 
+            <asp:Label ID="lblMensajeGrilla" runat="server" CssClass="alert alert-success d-block text-center mb-3" Visible="false"></asp:Label>
+
             <h3 class="mb-3"> Usuarios registrados </h3>
 
             <%-- AutogenerateColumns = False para poder cargar las columnas a mano y traer la descripción del perfil (objeto dentro de Usuario) --%>
@@ -21,7 +23,7 @@
                     <asp:TemplateField HeaderText="Acciones">
                         <ItemTemplate>
                             <asp:Button ID="btnEditar" runat="server" Text="Editar" CssClass="btn btn-sm btn-outline-primary me-2" CommandName="Editar" CommandArgument='<%# Eval("IdUsuario") %>'/>
-                            <asp:Button ID="btnEliminar" runat="server" Text="Eliminar" CssClass="btn btn-sm btn-outline-danger"/>
+                            <asp:Button ID="btnEliminar" runat="server" Text="Eliminar" CssClass="btn btn-sm btn-outline-danger" CommandName="Eliminar" CommandArgument='<%# Eval("IdUsuario") %>' OnClientClick="return confirm('¿Está seguro de eliminar el registro seleccionado?');" />
                         </ItemTemplate>
                     </asp:TemplateField>
                 </Columns>
