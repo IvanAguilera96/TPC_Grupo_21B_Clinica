@@ -34,5 +34,23 @@ namespace App_Clinica
                 throw ex;
             }
         }
+
+        protected void dgvUsuario_RowCommand(object sender, GridViewCommandEventArgs e)
+        {
+            //Si presionan Editar:
+            if (e.CommandName == "Editar")
+            {
+                //Captura el ID para enviar al formulario
+                string id = e.CommandArgument.ToString();
+
+                Response.Redirect("UsuarioForm.aspx?id=" + id);
+            }
+            else if (e.CommandName == "Eliminar")
+            {
+                string id = e.CommandArgument.ToString();
+
+                //CODIGO PARA BAJA LOGICA
+            }
+        }
     }
 }
