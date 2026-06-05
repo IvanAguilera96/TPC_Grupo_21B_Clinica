@@ -17,7 +17,7 @@ namespace Negocio
 
             try
             {
-                datos.setearConsulta("SELECT U.IdUsuario, U.Nombre, U.Contrasenia, P.IdPerfil, P.Descripcion FROM Usuario U INNER JOIN Perfil P ON U.IdPerfil = P.IdPerfil");
+                datos.setearConsulta("SELECT U.IdUsuario, U.Nombre, U.Contrasenia, P.IdPerfil, P.Descripcion FROM Usuario U INNER JOIN Perfil P ON U.IdPerfil = P.IdPerfil WHERE U.Estado = 1");
                 datos.ejecutarLectura();
 
                 while (datos.Lector.Read())
@@ -58,6 +58,27 @@ namespace Negocio
                 datos.setearParametros("@contrasenia", nuevo.Contrasenia);
                 datos.setearParametros("@idPerfil", nuevo.Perfil.IdPerfil);
 
+                datos.ejecutarAccion();
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
+
+        public void ELiminar(int IdEliminar)
+        {
+            AccesoDatos datos = new AccesoDatos();
+
+            try
+            {
+                datos.setearConsulta("UPDATE USUARIO SET Estado = 0 WHERE IdUsuario = @id");
+                datos.setearParametros("@id", IdEliminar);
                 datos.ejecutarAccion();
             }
             catch (Exception ex)

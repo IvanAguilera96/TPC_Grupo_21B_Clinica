@@ -71,6 +71,7 @@
     <Content Include="Login.aspx" />
     <Content Include="Paciente.aspx" />
     <Content Include="Usuario.aspx" />
+    <Content Include="UsuarioForm.aspx" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
@@ -109,6 +110,13 @@
     </Compile>
     <Compile Include="Usuario.aspx.designer.cs">
       <DependentUpon>Usuario.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="UsuarioForm.aspx.cs">
+      <DependentUpon>UsuarioForm.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="UsuarioForm.aspx.designer.cs">
+      <DependentUpon>UsuarioForm.aspx</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>

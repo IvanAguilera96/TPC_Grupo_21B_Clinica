@@ -35,42 +35,38 @@ namespace App_Clinica
             }
         }
 
-        protected void btnGuardar_Click(object sender, EventArgs e)
+        protected void dgvUsuario_RowCommand(object sender, GridViewCommandEventArgs e)
         {
-            if(string.IsNullOrWhiteSpace(txtNombre.Text) || string.IsNullOrWhiteSpace(txtContrasenia.Text))
+            //Si presionan Editar:
+            if (e.CommandName == "Editar")
             {
-                lblMensaje.ForeColor = System.Drawing.Color.Red;
-                lblMensaje.Text = "Debe completar todos los campos para continuar.";
-                return;
+                //Captura el ID para enviar al formulario
+                string id = e.CommandArgument.ToString();
+
+                Response.Redirect("UsuarioForm.aspx?id=" + id);
             }
-
-            try
+            else if (e.CommandName == "Eliminar")
             {
-                Dominio.Usuario nuevo = new Dominio.Usuario();
-                nuevo.Nombre = txtNombre.Text;
-                nuevo.Contrasenia = txtContrasenia.Text;
+                try
+                {
+                    int IdEliminar = int.Parse(e.CommandArgument.ToString());
 
-                nuevo.Perfil = new Perfil();
-                nuevo.Perfil.IdPerfil = int.Parse(ddlPerfil.SelectedValue);
+                    UsuarioNegocio negocio = new UsuarioNegocio();
 
-                UsuarioNegocio negocio = new UsuarioNegocio();
-                negocio.Agregar(nuevo);
+                    negocio.ELiminar(IdEliminar);
 
-                //Si grabó el nuevo usuario limpia los campos
-                txtNombre.Text ="";
-                txtContrasenia.Text = "";
+                    lblMensajeGrilla.ForeColor = System.Drawing.Color.Green;
+                    lblMensajeGrilla.Text = "Usuario eliminado con éxito.";
+                    lblMensajeGrilla.Visible = true;
 
-                lblMensaje.ForeColor = System.Drawing.Color.Green;
-                lblMensaje.Text = "Usuario registado con éxito.";
-
-                //Actualiza grilla
-                ActualizarGrillaUsuarios();
-            }
-            catch (Exception)
-            {
-
-                lblMensaje.ForeColor = System.Drawing.Color.Red;
-                lblMensaje.Text = "Error dando de alta al nuevo usuario";
+                    ActualizarGrillaUsuarios();
+                }
+                catch (Exception ex)
+                {
+                    lblMensajeGrilla.ForeColor = System.Drawing.Color.Red;
+                    lblMensajeGrilla.Text = "Error eliminando el usuario.";
+                    lblMensajeGrilla.Visible = true;
+                }
             }
         }
     }
