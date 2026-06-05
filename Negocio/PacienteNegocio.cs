@@ -17,7 +17,7 @@ namespace Negocio
 
 			try
 			{
-				datos.setearConsulta("Select IdPaciente, Dni, Nombre, Apellido, Email, Telefono From Paciente");
+				datos.setearConsulta("Select IdPaciente, Dni, Nombre, Apellido, Email, Telefono, Estado From Paciente");
 				datos.ejecutarLectura();
 
 				while (datos.Lector.Read())
@@ -29,7 +29,7 @@ namespace Negocio
 					aux.Apellido = (string)datos.Lector["Apellido"];
 					aux.Email = (string)datos.Lector["Email"];
 					aux.Telefono = (string)datos.Lector["Telefono"];
-
+					aux.Estado = (bool)datos.Lector["Estado"];
 					lista.Add(aux);
 				}
 				return lista;

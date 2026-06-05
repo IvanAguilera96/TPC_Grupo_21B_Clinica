@@ -22,5 +22,11 @@ namespace App_Clinica
             }
           
         }
+
+        protected void dgvPaciente_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            // Recupero el ID de la columna seleccionada
+            var ID = dgvPaciente.SelectedDataKey.Value.ToString();
+        }
     }
 }
