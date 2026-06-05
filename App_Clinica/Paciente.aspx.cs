@@ -27,6 +27,9 @@ namespace App_Clinica
         {
             // Recupero el ID de la columna seleccionada
             var ID = dgvPaciente.SelectedDataKey.Value.ToString();
+
+            //Paso ID de la fila seleccionada
+            Response.Redirect("PacienteForm.aspx?id=" + ID);
         }
     }
 }
