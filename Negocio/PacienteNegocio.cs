@@ -42,7 +42,33 @@ namespace Negocio
 			{
 				datos.cerrarConexion();
 			}
-        }
+        } // Listar
+
+		public void Agregar(Paciente nuevo)
+		{
+			AccesoDatos datos = new AccesoDatos();
+
+			try
+			{
+				datos.setearConsulta("INSERT INTO Paciente (Dni, Nombre, Apellido, Email, Telefono, Estado) VALUES (@Dni, @Nombre, @Apellido, @Email, @Telefono, 1)");
+				datos.setearParametros("@Dni", nuevo.Dni);
+                datos.setearParametros("@Nombre", nuevo.Nombre);
+                datos.setearParametros("@Apellido", nuevo.Apellido);
+                datos.setearParametros("@Email", nuevo.Email);
+                datos.setearParametros("@Telefono", nuevo.Telefono);
+				datos.ejecutarAccion();
+
+            }
+			catch (Exception ex)
+			{
+				throw ex;
+			}
+			finally
+			{
+				datos.cerrarConexion();
+			}
+		} // Agregar
+
 
 	} // PacienteNegocio
 }
