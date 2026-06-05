@@ -1,4 +1,7 @@
-﻿SET IDENTITY_INSERT [dbo].[Perfil] ON;
+﻿USE TPC_Clinica;
+GO
+
+SET IDENTITY_INSERT [dbo].[Perfil] ON;
 
 INSERT INTO [dbo].[Perfil] ([IdPerfil], [Descripcion]) VALUES 
 (1, N'Administrador'),

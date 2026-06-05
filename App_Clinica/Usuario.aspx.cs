@@ -37,23 +37,18 @@ namespace App_Clinica
 
         protected void dgvUsuario_RowCommand(object sender, GridViewCommandEventArgs e)
         {
-            //Si presionan Editar:
+            string idUsuario = e.CommandArgument.ToString();
+
             if (e.CommandName == "Editar")
             {
-                //Captura el ID para enviar al formulario
-                string id = e.CommandArgument.ToString();
-
-                Response.Redirect("UsuarioForm.aspx?id=" + id);
+                Response.Redirect("UsuarioForm.aspx?id=" + idUsuario);
             }
             else if (e.CommandName == "Eliminar")
             {
                 try
                 {
-                    int IdEliminar = int.Parse(e.CommandArgument.ToString());
-
                     UsuarioNegocio negocio = new UsuarioNegocio();
-
-                    negocio.ELiminar(IdEliminar);
+                    negocio.Eliminar(int.Parse(idUsuario));
 
                     lblMensajeGrilla.ForeColor = System.Drawing.Color.Green;
                     lblMensajeGrilla.Text = "Usuario eliminado con éxito.";
@@ -64,7 +59,7 @@ namespace App_Clinica
                 catch (Exception ex)
                 {
                     lblMensajeGrilla.ForeColor = System.Drawing.Color.Red;
-                    lblMensajeGrilla.Text = "Error eliminando el usuario.";
+                    lblMensajeGrilla.Text = "Error al intentar eliminar: " + ex.Message;
                     lblMensajeGrilla.Visible = true;
                 }
             }

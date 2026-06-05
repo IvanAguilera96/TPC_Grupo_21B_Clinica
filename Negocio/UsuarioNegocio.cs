@@ -17,7 +17,7 @@ namespace Negocio
 
             try
             {
-                datos.setearConsulta("SELECT U.IdUsuario, U.Nombre, U.Contrasenia, P.IdPerfil, P.Descripcion FROM Usuario U INNER JOIN Perfil P ON U.IdPerfil = P.IdPerfil WHERE U.Estado = 1");
+                datos.setearConsulta("SELECT U.IdUsuario, U.Nombre, U.Estado, P.IdPerfil, P.Descripcion FROM Usuario U INNER JOIN Perfil P ON U.IdPerfil = P.IdPerfil WHERE U.Estado = 1");
                 datos.ejecutarLectura();
 
                 while (datos.Lector.Read())
@@ -25,8 +25,7 @@ namespace Negocio
                     Usuario aux = new Usuario();
                     aux.IdUsuario = (int)datos.Lector["IdUsuario"];
                     aux.Nombre = (string)datos.Lector["Nombre"];
-                    aux.Contrasenia = (string)datos.Lector["Contrasenia"];
-
+                    aux.Estado = (bool)datos.Lector["Estado"];
                     aux.Perfil = new Perfil();
                     aux.Perfil.IdPerfil = (int)datos.Lector["IdPerfil"];
                     aux.Perfil.Descripcion = (string)datos.Lector["Descripcion"];
@@ -71,7 +70,7 @@ namespace Negocio
             }
         }
 
-        public void ELiminar(int IdEliminar)
+        public void Eliminar(int IdEliminar)
         {
             AccesoDatos datos = new AccesoDatos();
 
