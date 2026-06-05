@@ -13,7 +13,8 @@ namespace Dominio
         public string Nombre { get; set; }
         public string Apellido { get; set; }
         public int Matricula { get; set; }
-
+        public Especialidad Especialidad { get; set; }
+        public List<TurnoTrabajo> TurnoTrabajo { get; set; }
         public bool Estado { get; set; } //true=activo, false=inactivo
 
     }
