@@ -43,8 +43,11 @@
                     <a href="Default.aspx" class="btn btn-outline-secondary py-2">Cancelar</a>
                 </div>
 
+                <div>
+                    <asp:Label ID="lblMensaje" runat="server"></asp:Label>
+                </div>
             </div>
 
         </div>
-</div>
+    </div>
 </asp:Content>
