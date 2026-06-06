@@ -10,7 +10,7 @@ using Negocio;
 
 namespace App_Clinica
 {
-    public partial class Paciente : System.Web.UI.Page
+    public partial class PacientePag : System.Web.UI.Page
     {
         protected void Page_Load(object sender, EventArgs e)
         {

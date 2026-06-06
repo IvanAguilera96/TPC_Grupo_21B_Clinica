@@ -69,7 +69,9 @@
   <ItemGroup>
     <Content Include="Default.aspx" />
     <Content Include="Login.aspx" />
-    <Content Include="Paciente.aspx" />
+    <Content Include="PacientePag.aspx">
+      <BrowseToURL>~/Paciente.aspx</BrowseToURL>
+    </Content>
     <Content Include="PacienteForm.aspx" />
     <Content Include="Usuario.aspx" />
     <Content Include="UsuarioForm.aspx" />
@@ -97,12 +99,12 @@
     <Compile Include="Clinica.Master.designer.cs">
       <DependentUpon>Clinica.Master</DependentUpon>
     </Compile>
-    <Compile Include="Paciente.aspx.cs">
-      <DependentUpon>Paciente.aspx</DependentUpon>
+    <Compile Include="PacientePag.aspx.cs">
+      <DependentUpon>PacientePag.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="Paciente.aspx.designer.cs">
-      <DependentUpon>Paciente.aspx</DependentUpon>
+    <Compile Include="PacientePag.aspx.designer.cs">
+      <DependentUpon>PacientePag.aspx</DependentUpon>
     </Compile>
     <Compile Include="PacienteForm.aspx.cs">
       <DependentUpon>PacienteForm.aspx</DependentUpon>

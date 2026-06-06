@@ -11,7 +11,7 @@ namespace App_Clinica
 {
 
 
-    public partial class Paciente
+    public partial class PacientePag
     {
 
         /// <summary>
