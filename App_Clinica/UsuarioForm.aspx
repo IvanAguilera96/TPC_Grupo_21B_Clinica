@@ -19,15 +19,12 @@
 
                 <div class="mb-3">
                     <label class="form-label fw-semibold text-secondary">Contraseña:</label>
-                    <asp:TextBox ID="txtContrasenia" runat="server" TextMode="Password" CssClass="form-control" ></asp:TextBox> <%-- TextMode Password oculta caracteres al escribir --%>
+                    <asp:TextBox ID="txtContrasenia" runat="server" CssClass="form-control" ></asp:TextBox> <%-- TextMode Password oculta caracteres al escribir --%>
                 </div>
 
                 <div class="mb-4">
                     <label class="form-label fw-semibold text-secondary">Perfil:</label>
                     <asp:DropDownList ID="ddlPerfil" runat="server" CssClass="form-select" >
-                        <asp:ListItem Text="Administrador" Value="1" />
-                        <asp:ListItem Text="Recepcionista" Value="2" />
-                        <asp:ListItem Text="Médico" Value="3" />
                     </asp:DropDownList>
                 </div>
 

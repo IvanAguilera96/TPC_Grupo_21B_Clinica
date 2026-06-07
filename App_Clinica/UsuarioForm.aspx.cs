@@ -13,7 +13,41 @@ namespace App_Clinica
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            
+                try
+                {   
+                    //Configuración inicial
+                    if (!IsPostBack)
+                    {
+                        PerfilNegocio negocio = new PerfilNegocio();
+
+                        ddlPerfil.DataSource = negocio.Listar();
+                        ddlPerfil.DataValueField = "IdPerfil";
+                        ddlPerfil.DataTextField = "Descripcion";
+                        ddlPerfil.DataBind();
+                    }
+
+                //Configuración si recibe ID (modificar)
+                if (Request.QueryString["id"] != null)
+                {
+                    int idUrl = int.Parse(Request.QueryString["id"]);
+
+                    UsuarioNegocio negocio = new UsuarioNegocio();
+                    Dominio.Usuario seleccionado = negocio.BuscarPorId(idUrl);
+
+                    if (seleccionado != null)
+                    {
+                        txtNombre.Text = seleccionado.Nombre;
+                        txtContrasenia.Text = seleccionado.Contrasenia;
+                        ddlPerfil.SelectedValue = seleccionado.Perfil.IdPerfil.ToString();
+                    }
+                }
+
+                }
+                catch (Exception ex)
+                {
+
+                    throw ex;
+                }
         }
 
         protected void btnGuardar_Click(object sender, EventArgs e)
@@ -37,14 +71,7 @@ namespace App_Clinica
                 UsuarioNegocio negocio = new UsuarioNegocio();
                 negocio.Agregar(nuevo);
 
-                //Si grabó el nuevo usuario limpia los campos
-                txtNombre.Text = "";
-                txtContrasenia.Text = "";
-
-                lblMensaje.ForeColor = System.Drawing.Color.Green;
-                lblMensaje.Text = "Usuario registado con éxito.";
-
-                Response.Redirect("Usuario.aspx");
+                Response.Redirect("Usuario.aspx", false);
             }
             catch (Exception)
             {

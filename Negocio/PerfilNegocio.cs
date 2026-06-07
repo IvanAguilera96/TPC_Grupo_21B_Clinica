@@ -17,6 +17,17 @@ namespace Negocio
 
             try
             {
+                datos.setearConsulta("SELECT IdPerfil, Descripcion FROM Perfil");
+                datos.ejecutarLectura();
+
+                while (datos.Lector.Read())
+                {
+                    Perfil aux = new Perfil();
+                    aux.IdPerfil = (int)datos.Lector["IdPerfil"];
+                    aux.Descripcion = (string)datos.Lector["Descripcion"];
+                    lista.Add(aux);
+                }
+
                 return lista;
             }
             catch (Exception ex)
@@ -26,7 +37,7 @@ namespace Negocio
             }
             finally
             {
-
+                datos.cerrarConexion();
             }
         }
     }

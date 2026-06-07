@@ -45,6 +45,41 @@ namespace Negocio
             }
         }
 
+        public Dominio.Usuario BuscarPorId(int id)
+        {
+            AccesoDatos datos = new AccesoDatos();
+
+            try
+            {
+                datos.setearConsulta("SELECT U.IdUsuario, U.Nombre, U.Contrasenia, P.IdPerfil, P.Descripcion FROM Usuario U INNER JOIN Perfil P ON U.IdPerfil = P.IdPerfil WHERE U.IdUsuario = @id");
+                datos.setearParametros("@id", id);
+                datos.ejecutarLectura();
+
+                if (datos.Lector.Read())
+                {
+                    Dominio.Usuario user = new Usuario();
+                    user.IdUsuario = (int)datos.Lector["IdUsuario"];
+                    user.Nombre = datos.Lector["Nombre"].ToString();
+                    user.Contrasenia = datos.Lector["Contrasenia"].ToString();
+                    user.Perfil = new Perfil();
+                    user.Perfil.IdPerfil = (int)datos.Lector["IdPerfil"];
+                    user.Perfil.Descripcion = datos.Lector["Descripcion"].ToString();
+
+                    return user;
+                }
+
+                return null;
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
         public void Agregar(Usuario nuevo)
         {
             AccesoDatos datos = new AccesoDatos();
