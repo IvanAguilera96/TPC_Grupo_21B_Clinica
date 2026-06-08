@@ -13,12 +13,33 @@ namespace App_Clinica
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            // Si obtengo ID por la url guardo ID
-            if (Request.QueryString["ID"] != null)
+
+            try
             {
-                int IdPaciente = int.Parse(Request.QueryString["ID"].ToString());
+                // Si obtengo ID por la url guardo ID (Quiere modificar)
+                if (Request.QueryString["ID"] != null)
+                {
+                    int IdPaciente = int.Parse(Request.QueryString["ID"].ToString());
+                    PacienteNegocio negocio = new PacienteNegocio();
+                    Paciente paciente = new Paciente();
+
+                    paciente = negocio.buscoPaciente(IdPaciente);
+                    if (paciente != null)
+                    {
+                        txtDni.Text = paciente.Dni;
+                        txtNombre.Text = paciente.Nombre;
+                        txtApellido.Text = paciente.Apellido;
+                        txtEmail.Text = paciente.Email;
+                        txtTelefono.Text = paciente.Telefono;
+                    }
+                }
             }
+            catch (Exception ex)
+            {
+                throw ex;
+            } 
         }
+        
 
         protected void btnGuardar_Click(object sender, EventArgs e)
         {
@@ -37,7 +58,7 @@ namespace App_Clinica
                 negocio.Agregar(nuevo);
 
                 // Limpio campos si agrego el paciente
-                txtApellido.Text = ""; 
+                txtApellido.Text = "";
                 txtNombre.Text = "";
                 txtDni.Text = "";
                 txtEmail.Text = "";
@@ -53,7 +74,7 @@ namespace App_Clinica
             {
                 throw ex;
             }
-      
+
         }
     }
 }
