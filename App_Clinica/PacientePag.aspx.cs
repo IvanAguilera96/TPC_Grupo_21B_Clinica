@@ -16,20 +16,58 @@ namespace App_Clinica
         {
             if (!IsPostBack)
             {
-                PacienteNegocio pacienteNeg = new PacienteNegocio();
-                dgvPaciente.DataSource = pacienteNeg.Listar();
-                dgvPaciente.DataBind();
+                ActualizarGrillaPaciente();
             }
-          
         }
 
-        protected void dgvPaciente_SelectedIndexChanged(object sender, EventArgs e)
+        protected void dgvPaciente_RowCommand(object sender, GridViewCommandEventArgs e)
         {
             // Recupero el ID de la columna seleccionada
-            var ID = dgvPaciente.SelectedDataKey.Value.ToString();
+            string ID = e.CommandArgument.ToString();
 
-            //Paso ID de la fila seleccionada
-            Response.Redirect("PacienteForm.aspx?id=" + ID);
+            if(e.CommandName == "Editar")
+            {
+                //Paso ID de la fila seleccionada
+                Response.Redirect("PacienteForm.aspx?id=" + ID);
+            }
+            else if(e.CommandName == "Eliminar")
+            {
+                try
+                {
+                    PacienteNegocio negocio = new PacienteNegocio();
+                    negocio.Eliminar(int.Parse(ID));
+                    lblMensajeGrilla.ForeColor = System.Drawing.Color.Green;
+                    lblMensajeGrilla.Text = "Paciente eliminado con éxito.";
+                    lblMensajeGrilla.Visible = true;
+
+                    ActualizarGrillaPaciente();
+                }
+                catch (Exception ex)
+                {
+                    lblMensajeGrilla.ForeColor = System.Drawing.Color.Red;
+                    lblMensajeGrilla.Text = "Error al intentar eliminar: " + ex.Message;
+                    lblMensajeGrilla.Visible = true;
+                }
+            }
+         
         }
+
+        public void ActualizarGrillaPaciente()
+        {
+            try
+            {
+                PacienteNegocio negocio = new PacienteNegocio();
+                dgvPaciente.DataSource = negocio.Listar();
+                dgvPaciente.DataBind();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+               
+
+             
+           
     }
 }

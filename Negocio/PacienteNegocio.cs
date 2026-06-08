@@ -69,6 +69,26 @@ namespace Negocio
 			}
 		} // Agregar
 
+		public void Eliminar(int ID)
+		{
+			AccesoDatos datos = new AccesoDatos();
+
+			try
+			{
+				datos.setearConsulta("UPDATE Paciente SET Estado = 0 WHERE IdPaciente = @ID");
+				datos.setearParametros("@ID", ID);
+				datos.ejecutarAccion();
+
+			}
+			catch (Exception ex)
+			{
+				throw ex;
+			}
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        } // Eliminar
 
 	} // PacienteNegocio
 }
