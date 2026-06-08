@@ -47,7 +47,7 @@ namespace App_Clinica
 
                 //lblMensaje.ForeColor = System.Drawing.Color.Green;
                 //lblMensaje.Text = "Paciente registado con éxito.";
-                Response.Redirect("PacientePag.aspx");
+                Response.Redirect("PacientePag.aspx", false);
             }
             catch (Exception ex)
             {

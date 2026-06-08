@@ -90,6 +90,39 @@ namespace Negocio
             }
         } // Eliminar
 
-	} // PacienteNegocio
+		public Paciente buscoPaciente(int ID)
+		{
+			AccesoDatos datos = new AccesoDatos();
+			try
+			{
+				datos.setearConsulta("SELECT Dni, Nombre, Apellido, Email, Telefono, Estado FROM Paciente WHERE IdPaciente = @ID");
+				datos.setearParametros("@ID", ID);
+				datos.ejecutarLectura();
+
+				if (datos.Lector.Read())
+				{
+					Paciente aux = new Paciente();
+					aux.Dni = (string)datos.Lector["Dni"];
+					aux.Nombre = (string)datos.Lector["Nombre"];
+					aux.Apellido = (string)datos.Lector["Apellido"];
+					aux.Email = (string)datos.Lector["Email"];
+					aux.Telefono = (string)datos.Lector["Telefono"];
+					aux.Estado = (bool)datos.Lector["Estado"];
+
+					return aux;
+				}
+				return null;
+			}
+			catch (Exception ex)
+			{
+                throw ex;
+			}
+			finally
+			{
+				datos.cerrarConexion();
+			}
+        } // buscoPaciente
+
+    } // PacienteNegocio
 }
 
