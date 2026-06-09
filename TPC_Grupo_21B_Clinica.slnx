@@ -2,6 +2,7 @@
   <Folder Name="/Script/">
     <File Path="Script_1_CreateDB.sql" />
     <File Path="Script_2_Perfil_Insert.sql" />
+    <File Path="Script_3_Especialidad_Insert.sql" />
   </Folder>
   <Project Path="App_Clinica/App_Clinica.csproj" Id="b80a94ac-c7f2-4e49-a00f-bb7b2e84286e" />
   <Project Path="ConexionBD/ConexionBD.csproj" Id="b1802722-7523-49de-8aec-96065e2920cc" />

@@ -24,7 +24,8 @@ CREATE TABLE Paciente(
 
 CREATE TABLE Especialidad(
 	IdEspecialidad INT PRIMARY KEY IDENTITY(1,1),
-	Descripcion VARCHAR(100) NOT NULL
+	Descripcion VARCHAR(100) NOT NULL,
+	Estado BIT NOT NULL DEFAULT 1
 );
 
 CREATE TABLE TurnoTrabajo(

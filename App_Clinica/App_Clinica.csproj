@@ -68,6 +68,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Default.aspx" />
+    <Content Include="EspecialidadForm.aspx" />
+    <Content Include="EspecialidadPag.aspx" />
     <Content Include="Login.aspx" />
     <Content Include="PacientePag.aspx">
       <BrowseToURL>~/Paciente.aspx</BrowseToURL>
@@ -84,6 +86,20 @@
     </Compile>
     <Compile Include="Default.aspx.designer.cs">
       <DependentUpon>Default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="EspecialidadForm.aspx.cs">
+      <DependentUpon>EspecialidadForm.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="EspecialidadForm.aspx.designer.cs">
+      <DependentUpon>EspecialidadForm.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="EspecialidadPag.aspx.cs">
+      <DependentUpon>EspecialidadPag.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="EspecialidadPag.aspx.designer.cs">
+      <DependentUpon>EspecialidadPag.aspx</DependentUpon>
     </Compile>
     <Compile Include="Login.aspx.cs">
       <DependentUpon>Login.aspx</DependentUpon>

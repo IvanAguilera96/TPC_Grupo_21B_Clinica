@@ -82,16 +82,19 @@ namespace Negocio
         }
         public void Agregar(Usuario nuevo)
         {
+            if (ExisteUsuario(nuevo.Nombre, 0))
+            {
+                throw new Exception("El nombre de usuario ya existe.");
+            }
+
             AccesoDatos datos = new AccesoDatos();
 
             try
             {
                 datos.setearConsulta("INSERT INTO Usuario (Nombre, Contrasenia, IdPerfil) VALUES (@usuario, @contrasenia, @idPerfil)");
-
                 datos.setearParametros("@usuario", nuevo.Nombre);
                 datos.setearParametros("@contrasenia", nuevo.Contrasenia);
                 datos.setearParametros("@idPerfil", nuevo.Perfil.IdPerfil);
-
                 datos.ejecutarAccion();
             }
             catch (Exception ex)
@@ -105,6 +108,34 @@ namespace Negocio
             }
         }
 
+        public void Modificar(Usuario user)
+        {
+            if (ExisteUsuario(user.Nombre, user.IdUsuario))
+            {
+                throw new Exception("El nombre de usuario ya existe.");
+            }
+
+            AccesoDatos datos = new AccesoDatos();
+
+            try
+            {
+                datos.setearConsulta("UPDATE Usuario SET Nombre = @nombre, Contrasenia = @contrasenia, IdPerfil = @idPerfil WHERE IdUsuario = @id");
+                datos.setearParametros("@nombre", user.Nombre);
+                datos.setearParametros("@contrasenia", user.Contrasenia);
+                datos.setearParametros("@idPerfil", user.Perfil.IdPerfil);
+                datos.setearParametros("@id", user.IdUsuario);
+                datos.ejecutarAccion();
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
         public void Eliminar(int IdEliminar)
         {
             AccesoDatos datos = new AccesoDatos();
@@ -118,6 +149,35 @@ namespace Negocio
             catch (Exception ex)
             {
 
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
+
+        private bool ExisteUsuario(string nombreUsuario, int IdUsuarioActual = 0)
+        {
+            AccesoDatos datos = new AccesoDatos();
+
+            try
+            {
+                datos.setearConsulta("SELECT COUNT(*) FROM Usuario WHERE Nombre = @nombre AND Estado = 1 AND IdUsuario <> @id");
+                datos.setearParametros("@nombre", nombreUsuario);
+                datos.setearParametros("@id", IdUsuarioActual);
+                datos.ejecutarLectura();
+
+                if (datos.Lector.Read())
+                {
+                    int cantidad = (int)datos.Lector[0];
+                    return cantidad > 0;
+                }
+
+                return false;
+            }
+            catch (Exception ex)
+            {
                 throw ex;
             }
             finally
