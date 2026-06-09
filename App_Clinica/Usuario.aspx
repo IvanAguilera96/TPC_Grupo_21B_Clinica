@@ -38,7 +38,7 @@
                 </Columns>
             </asp:GridView>
 
-            <div class="d-flex justify-content-end w-100">
+            <div class="d-flex justify-content-center">
                 <a href="UsuarioForm.aspx" class="btn btn-primary px-4 py-2 shadow-sm">
                     <i class="bi bi-plus-lg"></i> Agregar Nuevo Usuario
                 </a>

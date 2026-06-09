@@ -10,5 +10,6 @@ namespace Dominio
     {
         public int IdEspecialidad { get; set; }
         public string Descripcion { get; set; }
+        public bool Estado { get; set; } //true = Activo, false = Eliminado
     }
 }

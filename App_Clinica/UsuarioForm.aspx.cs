@@ -18,34 +18,33 @@ namespace App_Clinica
                     //Configuración inicial
                     if (!IsPostBack)
                     {
-                        PerfilNegocio negocio = new PerfilNegocio();
+                        PerfilNegocio negocioPerfil = new PerfilNegocio();
+                        UsuarioNegocio negocioUsuario = new UsuarioNegocio();
 
-                        ddlPerfil.DataSource = negocio.Listar();
+                        ddlPerfil.DataSource = negocioPerfil.Listar();
                         ddlPerfil.DataValueField = "IdPerfil";
                         ddlPerfil.DataTextField = "Descripcion";
                         ddlPerfil.DataBind();
-                    }
 
-                //Configuración si recibe ID (modificar)
-                if (Request.QueryString["id"] != null)
-                {
-                    int idUrl = int.Parse(Request.QueryString["id"]);
-
-                    UsuarioNegocio negocio = new UsuarioNegocio();
-                    Dominio.Usuario seleccionado = negocio.BuscarPorId(idUrl);
-
-                    if (seleccionado != null)
+                    //Configuración si recibe ID (modificar)
+                    if (Request.QueryString["id"] != null)
                     {
-                        txtNombre.Text = seleccionado.Nombre;
-                        txtContrasenia.Text = seleccionado.Contrasenia;
-                        ddlPerfil.SelectedValue = seleccionado.Perfil.IdPerfil.ToString();
+                        int idUrl = int.Parse(Request.QueryString["id"]);
+
+                        Dominio.Usuario seleccionado = negocioUsuario.BuscarPorId(idUrl);
+
+                        if (seleccionado != null)
+                        {
+                            txtNombre.Text = seleccionado.Nombre;
+                            txtContrasenia.Text = seleccionado.Contrasenia;
+                            ddlPerfil.SelectedValue = seleccionado.Perfil.IdPerfil.ToString();
+                        }
                     }
                 }
 
                 }
                 catch (Exception ex)
                 {
-
                     throw ex;
                 }
         }
@@ -68,16 +67,33 @@ namespace App_Clinica
                 nuevo.Perfil = new Perfil();
                 nuevo.Perfil.IdPerfil = int.Parse(ddlPerfil.SelectedValue);
 
-                UsuarioNegocio negocio = new UsuarioNegocio();
-                negocio.Agregar(nuevo);
+                //Asigna el id para que viaje al metodo modificar
+                if (Request.QueryString["id"] != null)
+                {
+                    nuevo.IdUsuario = int.Parse(Request.QueryString["id"]);
+                }
 
+                UsuarioNegocio negocio = new UsuarioNegocio();
+
+                //Evalua si es alta o editar
+                if (Request.QueryString["id"] != null)
+                {
+                    negocio.Modificar(nuevo);
+                    Session["MensajeExito"] = "Usuario modificado con éxito.";
+                }
+                else
+                {
+                    negocio.Agregar(nuevo);
+                    Session["MensajeExito"] = "Usuario registrado con éxito.";
+                }
+                
                 Response.Redirect("Usuario.aspx", false);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
 
                 lblMensaje.ForeColor = System.Drawing.Color.Red;
-                lblMensaje.Text = "Error dando de alta al nuevo usuario";
+                lblMensaje.Text = "Error: " + ex.Message;
             }
         }
     }

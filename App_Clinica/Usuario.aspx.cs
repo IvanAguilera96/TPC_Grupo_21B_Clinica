@@ -16,6 +16,19 @@ namespace App_Clinica
             if (!IsPostBack)
             {
                 ActualizarGrillaUsuarios();
+
+                //Valida si debe mostrar mensaje guardado en Session
+                if (Session["MensajeExito"] != null)
+                {
+                    lblMensajeGrilla.Visible = true;
+
+                    //Asigna mensaje almacenado en Session
+                    lblMensajeGrilla.Text = Session["MensajeExito"].ToString();
+                    lblMensajeGrilla.ForeColor = System.Drawing.Color.Green;
+
+                    //Limpia el mensaje
+                    Session["MensajeExito"] = null;
+                }
             }
         }
 
