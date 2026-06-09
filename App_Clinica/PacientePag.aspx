@@ -10,7 +10,9 @@
             <asp:Label ID="lblMensajeGrilla" runat="server" CssClass="alert alert-success d-block text-center mb-3" Visible="false"></asp:Label>
 
             <h3 class="mb-3">Pacientes registrados</h3>
-            <asp:GridView ID="dgvPaciente" DataKeyNames="IdPaciente" CssClass="table table-striped table-bordered table-hover" OnRowCommand="dgvPaciente_RowCommand" runat="server" AutoGenerateColumns="false">
+            <asp:GridView ID="dgvPaciente" DataKeyNames="IdPaciente" CssClass="table table-striped table-bordered table-hover"
+                    OnRowCommand="dgvPaciente_RowCommand" runat="server" AutoGenerateColumns="false" 
+                    AllowPaging="true" PageSize="10" OnPageIndexChanging="dgvPaciente_PageIndexChanging">
                 <Columns>
                     <asp:BoundField HeaderText="DNI" DataField="DNI" />
                     <asp:BoundField HeaderText="Nombre" DataField="Nombre" />

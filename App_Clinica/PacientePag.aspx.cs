@@ -17,6 +17,19 @@ namespace App_Clinica
             if (!IsPostBack)
             {
                 ActualizarGrillaPaciente();
+
+                //Valida si debe mostrar mensaje guardado en Session
+                if (Session["MensajeExito"] != null)
+                {
+                    lblMensajeGrilla.Visible = true;
+
+                    //Asigna mensaje almacenado en Session
+                    lblMensajeGrilla.Text = Session["MensajeExito"].ToString();
+                    lblMensajeGrilla.ForeColor = System.Drawing.Color.Green;
+
+                    //Limpia el mensaje
+                    Session["MensajeExito"] = null;
+                }
             }
         }
 
@@ -65,9 +78,14 @@ namespace App_Clinica
                 throw ex;
             }
         }
-               
 
-             
-           
+        protected void dgvPaciente_PageIndexChanging(object sender, GridViewPageEventArgs e)
+        {
+            dgvPaciente.PageIndex = e.NewPageIndex;
+
+            PacienteNegocio negocio = new PacienteNegocio();
+            dgvPaciente.DataSource = negocio.Listar();
+            dgvPaciente.DataBind();
+        }
     }
 }

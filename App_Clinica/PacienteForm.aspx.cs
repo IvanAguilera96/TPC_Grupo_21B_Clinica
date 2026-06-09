@@ -56,14 +56,14 @@ namespace App_Clinica
                 {
                     aux.IdPaciente = Convert.ToInt32(Request.QueryString["ID"]);
                     negocio.Modificar(aux);
+                    Session["MensajeExito"] = "Paciente modificado con éxito.";
                 }
                 else
+                {
                     negocio.Agregar(aux);
-         
-                // Trata de hacer aparecer el msj en la pantalla principal de "Paciente registado con éxito."
+                    Session["MensajeExito"] = "Paciente registrado con éxito.";
+                }
 
-                //lblMensaje.ForeColor = System.Drawing.Color.Green;
-                //lblMensaje.Text = "Paciente registado con éxito.";
                 Response.Redirect("PacientePag.aspx", false);
             }
             catch (Exception ex)
