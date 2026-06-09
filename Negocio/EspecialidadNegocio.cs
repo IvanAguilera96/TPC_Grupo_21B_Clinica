@@ -100,8 +100,9 @@ namespace Negocio
             AccesoDatos datos = new AccesoDatos();
             try
             {
-                datos.setearConsulta("UPDATE Especialidad SET Descripcion = @descripcion WHERE IdEspecialidad = @id");
+                datos.setearConsulta("UPDATE Especialidad SET Descripcion = @descripcion, Estado = @estado WHERE IdEspecialidad = @id");
                 datos.setearParametros("@descripcion", esp.Descripcion);
+                datos.setearParametros("@estado", esp.Estado);
                 datos.setearParametros("@id", esp.IdEspecialidad);
                 datos.ejecutarAccion();
             }
@@ -139,7 +140,7 @@ namespace Negocio
             AccesoDatos datos = new AccesoDatos();
             try
             {
-                datos.setearConsulta("SELECT COUNT(*) FROM Especialidad WHERE Descripcion = @descripcion AND Estado = 1 AND IdEspecialidad <> @id");
+                datos.setearConsulta("SELECT COUNT(*) FROM Especialidad WHERE Descripcion = @descripcion AND IdEspecialidad <> @id");
                 datos.setearParametros("@descripcion", descripcion);
                 datos.setearParametros("@id", idEspecialidad);
                 datos.ejecutarLectura();

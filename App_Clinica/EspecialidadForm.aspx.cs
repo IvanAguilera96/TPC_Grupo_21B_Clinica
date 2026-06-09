@@ -27,6 +27,7 @@ namespace App_Clinica
                         if (seleccionado != null)
                         {
                             txtDescripcion.Text = seleccionado.Descripcion;
+                            chkEstado.Checked = seleccionado.Estado;
                         }
                     }
                 }
@@ -50,6 +51,7 @@ namespace App_Clinica
             {
                 Especialidad nueva = new Especialidad();
                 nueva.Descripcion = txtDescripcion.Text;
+                nueva.Estado = chkEstado.Checked;
 
                 //Asigna el id para que viaje al metodo modificar
                 if (Request.QueryString["id"] != null)

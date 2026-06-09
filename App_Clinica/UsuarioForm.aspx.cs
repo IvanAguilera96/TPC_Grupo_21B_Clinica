@@ -38,6 +38,7 @@ namespace App_Clinica
                             txtNombre.Text = seleccionado.Nombre;
                             txtContrasenia.Text = seleccionado.Contrasenia;
                             ddlPerfil.SelectedValue = seleccionado.Perfil.IdPerfil.ToString();
+                            chkEstado.Checked = seleccionado.Estado;
                         }
                     }
                 }
@@ -63,6 +64,7 @@ namespace App_Clinica
                 Dominio.Usuario nuevo = new Dominio.Usuario();
                 nuevo.Nombre = txtNombre.Text;
                 nuevo.Contrasenia = txtContrasenia.Text;
+                nuevo.Estado = chkEstado.Checked;
 
                 nuevo.Perfil = new Perfil();
                 nuevo.Perfil.IdPerfil = int.Parse(ddlPerfil.SelectedValue);

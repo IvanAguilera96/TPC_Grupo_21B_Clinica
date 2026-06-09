@@ -15,8 +15,21 @@
                     <asp:TextBox ID="txtDescripcion" runat="server" CssClass="form-control"></asp:TextBox>
                 </div>
 
+                <div class="mb-4">
+                    <div class="p-3 border rounded bg-light d-flex align-items-center justify-content-between">
+                        <div>
+                            <label class="form-label fw-semibold text-secondary mb-0 d-block">Estado de la Especialidad</label>
+                            <small class="text-muted small">Indica si la especialidad se encuentra activa en el sistema</small>
+                        </div>
+
+                        <div class="form-check form-switch fs-4 mb-0">
+                            <input type="checkbox" id="chkEstado" runat="server" class="form-check-input" role="checkbox" checked="checked" />
+                        </div>
+                    </div>
+                </div>
+
                 <div class="d-grid gap-2">
-                     <asp:Button ID="btnGuardar" runat="server" Text="Aceptar" CssClass="btn btn-primary py-2 fw-bold" OnClick="btnGuardar_Click"/>
+                     <asp:Button ID="btnGuardar" runat="server" Text="Guardar Especialidad" CssClass="btn btn-primary py-2 fw-bold" OnClick="btnGuardar_Click"/>
                      <a href="EspecialidadPag.aspx" class="btn btn-outline-secondary py-2">Cancelar</a>
                 </div>
 

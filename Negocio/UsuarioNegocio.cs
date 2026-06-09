@@ -17,7 +17,7 @@ namespace Negocio
 
             try
             {
-                datos.setearConsulta("SELECT U.IdUsuario, U.Nombre, U.Estado, P.IdPerfil, P.Descripcion FROM Usuario U INNER JOIN Perfil P ON U.IdPerfil = P.IdPerfil WHERE U.Estado = 1");
+                datos.setearConsulta("SELECT U.IdUsuario, U.Nombre, U.Estado, P.IdPerfil, P.Descripcion FROM Usuario U INNER JOIN Perfil P ON U.IdPerfil = P.IdPerfil");
                 datos.ejecutarLectura();
 
                 while (datos.Lector.Read())
@@ -51,7 +51,7 @@ namespace Negocio
 
             try
             {
-                datos.setearConsulta("SELECT U.IdUsuario, U.Nombre, U.Contrasenia, P.IdPerfil, P.Descripcion FROM Usuario U INNER JOIN Perfil P ON U.IdPerfil = P.IdPerfil WHERE U.IdUsuario = @id");
+                datos.setearConsulta("SELECT U.IdUsuario, U.Nombre, U.Contrasenia, U.Estado, P.IdPerfil, P.Descripcion FROM Usuario U INNER JOIN Perfil P ON U.IdPerfil = P.IdPerfil WHERE U.IdUsuario = @id");
                 datos.setearParametros("@id", id);
                 datos.ejecutarLectura();
 
@@ -61,6 +61,7 @@ namespace Negocio
                     user.IdUsuario = (int)datos.Lector["IdUsuario"];
                     user.Nombre = datos.Lector["Nombre"].ToString();
                     user.Contrasenia = datos.Lector["Contrasenia"].ToString();
+                    user.Estado = (bool)datos.Lector["Estado"];
                     user.Perfil = new Perfil();
                     user.Perfil.IdPerfil = (int)datos.Lector["IdPerfil"];
                     user.Perfil.Descripcion = datos.Lector["Descripcion"].ToString();
@@ -91,7 +92,7 @@ namespace Negocio
 
             try
             {
-                datos.setearConsulta("INSERT INTO Usuario (Nombre, Contrasenia, IdPerfil) VALUES (@usuario, @contrasenia, @idPerfil)");
+                datos.setearConsulta("INSERT INTO Usuario (Nombre, Contrasenia, IdPerfil) VALUES (@usuario, @contrasenia, @idPerfil, 1)");
                 datos.setearParametros("@usuario", nuevo.Nombre);
                 datos.setearParametros("@contrasenia", nuevo.Contrasenia);
                 datos.setearParametros("@idPerfil", nuevo.Perfil.IdPerfil);
@@ -119,9 +120,10 @@ namespace Negocio
 
             try
             {
-                datos.setearConsulta("UPDATE Usuario SET Nombre = @nombre, Contrasenia = @contrasenia, IdPerfil = @idPerfil WHERE IdUsuario = @id");
+                datos.setearConsulta("UPDATE Usuario SET Nombre = @nombre, Contrasenia = @contrasenia, Estado = @estado, IdPerfil = @idPerfil WHERE IdUsuario = @id");
                 datos.setearParametros("@nombre", user.Nombre);
                 datos.setearParametros("@contrasenia", user.Contrasenia);
+                datos.setearParametros("@estado", user.Estado);
                 datos.setearParametros("@idPerfil", user.Perfil.IdPerfil);
                 datos.setearParametros("@id", user.IdUsuario);
                 datos.ejecutarAccion();
@@ -163,7 +165,7 @@ namespace Negocio
 
             try
             {
-                datos.setearConsulta("SELECT COUNT(*) FROM Usuario WHERE Nombre = @nombre AND Estado = 1 AND IdUsuario <> @id");
+                datos.setearConsulta("SELECT COUNT(*) FROM Usuario WHERE Nombre = @nombre AND IdUsuario <> @id");
                 datos.setearParametros("@nombre", nombreUsuario);
                 datos.setearParametros("@id", IdUsuarioActual);
                 datos.ejecutarLectura();
