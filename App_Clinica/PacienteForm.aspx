@@ -38,6 +38,19 @@
                     <asp:TextBox ID="txtTelefono" runat="server" CssClass="form-control" TextMode="Phone"></asp:TextBox>
                 </div>
 
+                <div class="mb-4">
+                    <div class="p-3 border rounded bg-light d-flex align-items-center justify-content-between">
+                        <div>
+                            <label class="form-label fw-semibold text-secondary mb-0 d-block">Estado del Paciente</label>
+                            <small class="text-muted small">Indica si el paciente se encuentra activo en el sistema</small>
+                        </div>
+
+                        <div class="form-check form-switch fs-4 mb-0">
+                            <input type="checkbox" id="chkEstado" runat="server" class="form-check-input" role="checkbox" checked="checked" />
+                        </div>
+                    </div>
+                </div>
+
                 <div class="d-grid gap-2">
                     <asp:Button ID="btnGuardar" runat="server" Text="Guardar Paciente" CssClass="btn btn-primary py-2 fw-bold" OnClick="btnGuardar_Click" />
                     <a href="Default.aspx" class="btn btn-outline-secondary py-2">Cancelar</a>

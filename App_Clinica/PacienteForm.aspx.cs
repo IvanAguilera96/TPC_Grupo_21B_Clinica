@@ -13,8 +13,7 @@ namespace App_Clinica
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-
-            try
+            if (!IsPostBack)
             {
                 // Si obtengo ID por la url guardo ID (Quiere modificar)
                 if (Request.QueryString["ID"] != null)
@@ -31,39 +30,36 @@ namespace App_Clinica
                         txtApellido.Text = paciente.Apellido;
                         txtEmail.Text = paciente.Email;
                         txtTelefono.Text = paciente.Telefono;
+                        chkEstado.Checked = paciente.Estado;
                     }
                 }
             }
-            catch (Exception ex)
-            {
-                throw ex;
-            } 
+
         }
-        
 
         protected void btnGuardar_Click(object sender, EventArgs e)
         {
             PacienteNegocio negocio = new PacienteNegocio();
-            Paciente nuevo = new Paciente();
+            Paciente aux = new Paciente();
 
             try
             {
-                nuevo.Apellido = txtApellido.Text;
-                nuevo.Nombre = txtNombre.Text;
+                aux.Apellido = txtApellido.Text;
+                aux.Nombre = txtNombre.Text;
                 // validar que no tenga mas de 8 caracteres DNI
-                nuevo.Dni = txtDni.Text;
-                nuevo.Email = txtEmail.Text;
-                nuevo.Telefono = txtTelefono.Text;
+                aux.Dni = txtDni.Text;
+                aux.Email = txtEmail.Text;
+                aux.Telefono = txtTelefono.Text;
+                aux.Estado = chkEstado.Checked;
 
-                negocio.Agregar(nuevo);
-
-                // Limpio campos si agrego el paciente
-                txtApellido.Text = "";
-                txtNombre.Text = "";
-                txtDni.Text = "";
-                txtEmail.Text = "";
-                txtTelefono.Text = "";
-
+                if (Request.QueryString["ID"] != null)
+                {
+                    aux.IdPaciente = Convert.ToInt32(Request.QueryString["ID"]);
+                    negocio.Modificar(aux);
+                }
+                else
+                    negocio.Agregar(aux);
+         
                 // Trata de hacer aparecer el msj en la pantalla principal de "Paciente registado con éxito."
 
                 //lblMensaje.ForeColor = System.Drawing.Color.Green;

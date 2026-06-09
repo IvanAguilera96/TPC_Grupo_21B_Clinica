@@ -5,7 +5,7 @@
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
 
     <div class="row justify-content-center">
-        <div lass="col-md-6 d-flex flex-column align-items-center">
+        <div class="col-md-6 d-flex flex-column align-items-center">
 
             <asp:Label ID="lblMensajeGrilla" runat="server" CssClass="alert alert-success d-block text-center mb-3" Visible="false"></asp:Label>
 

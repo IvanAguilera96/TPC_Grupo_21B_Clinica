@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Dominio;
 using ConexionBD;
+using System.Data;
 
 namespace Negocio
 {
@@ -50,13 +51,14 @@ namespace Negocio
 
 			try
 			{
-				datos.setearConsulta("INSERT INTO Paciente (Dni, Nombre, Apellido, Email, Telefono, Estado) VALUES (@Dni, @Nombre, @Apellido, @Email, @Telefono, 1)");
+				datos.setearConsulta("INSERT INTO Paciente (Dni, Nombre, Apellido, Email, Telefono, Estado) VALUES (@Dni, @Nombre, @Apellido, @Email, @Telefono, @Estado)");
 				datos.setearParametros("@Dni", nuevo.Dni);
                 datos.setearParametros("@Nombre", nuevo.Nombre);
                 datos.setearParametros("@Apellido", nuevo.Apellido);
                 datos.setearParametros("@Email", nuevo.Email);
                 datos.setearParametros("@Telefono", nuevo.Telefono);
-				datos.ejecutarAccion();
+                datos.setearParametros("@Estado", nuevo.Estado);
+                datos.ejecutarAccion();
 
             }
 			catch (Exception ex)
@@ -123,6 +125,30 @@ namespace Negocio
 			}
         } // buscoPaciente
 
+		public void Modificar(Paciente paciente)
+		{
+			AccesoDatos datos = new AccesoDatos();
+			try
+			{
+				datos.setearConsulta("UPDATE Paciente SET Dni = @Dni, Nombre = @Nombre, Apellido = @Apellido, Email = @Email, Telefono = @Telefono, Estado = @Estado WHERE IdPaciente = @ID");
+				datos.setearParametros("@ID", paciente.IdPaciente);
+				datos.setearParametros("@Dni", paciente.Dni);
+                datos.setearParametros("@Nombre", paciente.Nombre);
+                datos.setearParametros("@Apellido", paciente.Apellido);
+                datos.setearParametros("@Email", paciente.Email);
+                datos.setearParametros("@Telefono", paciente.Telefono);
+                datos.setearParametros("@Estado", paciente.Estado);
+				datos.ejecutarAccion();
+            }
+			catch (Exception ex)
+			{
+				throw ex;
+			}
+			finally
+			{
+				datos.cerrarConexion();
+			}
+		}
     } // PacienteNegocio
 }
 
