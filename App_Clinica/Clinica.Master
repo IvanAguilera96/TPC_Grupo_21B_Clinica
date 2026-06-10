@@ -40,7 +40,7 @@
 
                         <a href="Default.aspx" class="list-group-item list-group-item-action active py-4 text-center border">INICIO</a>
                         <a href="PacientePag.aspx" id="menuPacientes" runat="server" class="list-group-item list-group-item-action py-4 text-center border">PACIENTES</a>
-                        <a href="" id="menuMedicos" runat="server" class="list-group-item list-group-item-action py-4 text-center border">MEDICOS</a>
+                        <a href="MedicoPag.aspx" id="menuMedicos" runat="server" class="list-group-item list-group-item-action py-4 text-center border">MEDICOS</a>
                         <a href="" id="menuTurnos" runat="server" class="list-group-item list-group-item-action py-4 text-center border">TURNOS</a>
                         <a href="EspecialidadPag.aspx" id="menuEspecialidad" runat="server" class="list-group-item list-group-item-action py-4 text-center border">ESPECIALIDADES</a>
                         <a href="Usuario.aspx" id="menuUsuario" runat="server" class="list-group-item list-group-item-action py-4 text-center border">USUARIOS</a>

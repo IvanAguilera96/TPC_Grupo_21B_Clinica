@@ -71,6 +71,8 @@
     <Content Include="EspecialidadForm.aspx" />
     <Content Include="EspecialidadPag.aspx" />
     <Content Include="Login.aspx" />
+    <Content Include="MedicoForm.aspx" />
+    <Content Include="MedicoPag.aspx" />
     <Content Include="PacientePag.aspx">
       <BrowseToURL>~/Paciente.aspx</BrowseToURL>
     </Content>
@@ -114,6 +116,20 @@
     </Compile>
     <Compile Include="Clinica.Master.designer.cs">
       <DependentUpon>Clinica.Master</DependentUpon>
+    </Compile>
+    <Compile Include="MedicoForm.aspx.cs">
+      <DependentUpon>MedicoForm.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MedicoForm.aspx.designer.cs">
+      <DependentUpon>MedicoForm.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="MedicoPag.aspx.cs">
+      <DependentUpon>MedicoPag.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MedicoPag.aspx.designer.cs">
+      <DependentUpon>MedicoPag.aspx</DependentUpon>
     </Compile>
     <Compile Include="PacientePag.aspx.cs">
       <DependentUpon>PacientePag.aspx</DependentUpon>
