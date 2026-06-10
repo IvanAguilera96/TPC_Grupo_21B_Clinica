@@ -34,7 +34,6 @@ CREATE TABLE TurnoTrabajo(
 	HoraEntrada Time NOT NULL,
 	HoraSalida Time NOT NULL,
 	DiaDeTrabajo VARCHAR(10) NOT NULL,
-	IdEspecialidad INT FOREIGN KEY REFERENCES Especialidad(IdEspecialidad)
 );
 
 CREATE TABLE EstadoTurno(
@@ -65,5 +64,13 @@ CREATE TABLE Usuario(
 	Contrasenia VARCHAR(20) NOT NULL,
 	IdPerfil INT FOREIGN KEY REFERENCES Perfil(IdPerfil),
 	Estado BIT NOT NULL DEFAULT 1
+);
+
+CREATE TABLE AgendaMedico(
+	IdAgendaMedico INT PRIMARY KEY IDENTITY(1,1),
+	IdMedico INT FOREIGN KEY REFERENCES Medico(IdMedico),
+	IdEspecialidad INT FOREIGN KEY REFERENCES Especialidad(IdEspecialidad),
+    IdTurnoTrabajo INT FOREIGN KEY REFERENCES TurnoTrabajo(IdTurnoTrabajo),
+	CONSTRAINT Uniqe_Medico_Especialidad_TurnoTra UNIQUE (IdMedico, IdEspecialidad, IdTurnoTrabajo)
 );
 
