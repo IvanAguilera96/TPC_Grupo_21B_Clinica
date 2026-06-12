@@ -44,5 +44,24 @@ namespace Negocio
 
         }// Listar
 
+        public void Agregar(Medico nuevo)
+        {
+            AccesoDatos datos = new AccesoDatos();
+
+            try
+            {
+                datos.setearConsulta("INSERT INTO Medico (Dni, Nombre, Apellido, Matricula, Estado) VALUES (@Dni, @Nombre, @Apellido, @Matricula, @Estado)");
+                datos.setearParametros("@Dni", nuevo.Dni);
+                datos.setearParametros("@Nombre", nuevo.Nombre);
+                datos.setearParametros("@Apellido", nuevo.Apellido);
+                datos.setearParametros("@Matricula", nuevo.Matricula);
+                datos.setearParametros("@Estado", nuevo.Estado);
+                datos.ejecutarAccion();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }
