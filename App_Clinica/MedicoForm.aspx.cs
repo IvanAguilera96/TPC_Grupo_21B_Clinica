@@ -13,22 +13,53 @@ namespace App_Clinica
     {
         protected void Page_Load(object sender, EventArgs e)
         {
+            if (!IsPostBack)
+            {
+                // Si obtengo ID por la url guardo ID (Quiere modificar)
+                if (Request.QueryString["ID"] != null)
+                {
+                    int IdMedico = int.Parse(Request.QueryString["ID"]);
+                    MedicoNegocio negocio = new MedicoNegocio();
+                    Medico medico = new Medico();
 
+                    medico = negocio.BuscarMedico(IdMedico);
+                    if (medico != null)
+                    {
+                        txtDni.Text = medico.Dni;
+                        txtApellido.Text = medico.Apellido;
+                        txtNombre.Text = medico.Nombre;
+                        txtMatricula.Text = medico.Matricula.ToString();
+                        chkEstado.Checked = medico.Estado;
+                    }
+                }
+            }
         }
 
         protected void btnGuardar_Click(object sender, EventArgs e)
         {
             MedicoNegocio negocio = new MedicoNegocio();
-            Medico nuevo = new Medico();
+            Medico aux = new Medico();
 
             try
             {
-                nuevo.Dni = txtDni.Text;
-                nuevo.Nombre = txtNombre.Text;
-                nuevo.Apellido = txtApellido.Text;
-                nuevo.Matricula = int.Parse(txtMatricula.Text);
-                nuevo.Estado = chkEstado.Checked;
-                negocio.Agregar(nuevo);
+                aux.Dni = txtDni.Text;
+                aux.Nombre = txtNombre.Text;
+                aux.Apellido = txtApellido.Text;
+                aux.Matricula = int.Parse(txtMatricula.Text);
+                aux.Estado = chkEstado.Checked;
+
+                if (Request.QueryString["ID"] != null)
+                {
+                    aux.IdMedico = Convert.ToInt32(Request.QueryString["ID"]);
+                    negocio.Modificar(aux);
+                    Session["MensajeExito"] = "Medico modificado con éxito.";
+                }
+                else
+                {
+                    negocio.Agregar(aux);
+                    Session["MensajeExito"] = "Medico registrado con éxito.";
+                }
+                
                 Response.Redirect("MedicoPag.aspx", false);
             }
             catch (Exception ex)

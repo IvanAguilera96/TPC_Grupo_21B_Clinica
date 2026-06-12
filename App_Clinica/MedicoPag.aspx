@@ -44,6 +44,12 @@
                     </asp:TemplateField>
                 </Columns>
             </asp:GridView>
+
+            <div>
+                <a href="MedicoForm.aspx" class="btn btn-primary py-2 fw-bold">
+                    <i></i>Agregar Nuevo Medico
+                </a>
+            </div>
             <hr class="my-4" />
 
             <div id="contenedorAgenda" runat="server" visible="false" class="p-4 border rounded bg-light mt-3">
@@ -57,12 +63,6 @@
                         <asp:BoundField HeaderText="Hora Salida" DataField="TurnoTrabajo.HoraSalida" />
                     </Columns>
                 </asp:GridView>
-            </div>
-
-            <div>
-                <a href="MedicoForm.aspx" class="btn btn-primary py-2 fw-bold">
-                    <i></i>Agregar Nuevo Medico
-                </a>
             </div>
         </div>
     </div>
