@@ -22,7 +22,7 @@
 
                     <asp:TemplateField HeaderText="Acciones">
                         <ItemTemplate>
-                            <asp:LinkButton ID="btnEditar" runat="server" CssClass="btn btn-sm btn-outline-primary me-2"
+                            <asp:LinkButton ID="btnEditar" runat="server" CssClass="btn btn-sm btn-outline-primary"
                                 CommandName="Editar"
                                 CommandArgument='<%# Eval("IdMedico")%>'>
                                 <i class="bi bi-pencil-square"></i>
@@ -34,10 +34,31 @@
                                 OnClientClick="return confirm('⚠️ ¿Está seguro que quiere eliminar el usuario seleccionado?');">
                                 <i class="bi bi-trash"></i>
                             </asp:LinkButton>
+
+                            <asp:LinkButton ID="btnVerHorario" runat="server" CssClass="btn btn-outline-info btn-sm px-2"
+                                CommandName="VerHorarios"
+                                CommandArgument='<%# Eval("IdMedico")%>'>
+                                <i class="bi bi-calendar3"></i>
+                            </asp:LinkButton>
                         </ItemTemplate>
                     </asp:TemplateField>
                 </Columns>
             </asp:GridView>
+            <hr class="my-4" />
+
+            <div id="contenedorAgenda" runat="server" visible="false" class="p-4 border rounded bg-light mt-3">
+                <h4 class="text-secondary mb-3"><i class="bi bi-clock-history"></i>Agendas y Especialidades del Médico</h4>
+
+                <asp:GridView ID="dgvAgenda" runat="server" AutoGenerateColumns="false" CssClass="table table-sm table-striped align-middle">
+                    <Columns>
+                        <asp:BoundField HeaderText="Especialidad" DataField="Especialidad.Descripcion" />
+                        <asp:BoundField HeaderText="Día" DataField="TurnoTrabajo.DiaDeTrabajo" />
+                        <asp:BoundField HeaderText="Hora Entrada" DataField="TurnoTrabajo.HoraEntrada" />
+                        <asp:BoundField HeaderText="Hora Salida" DataField="TurnoTrabajo.HoraSalida" />
+                    </Columns>
+                </asp:GridView>
+            </div>
+
             <div>
                 <a href="MedicoForm.aspx" class="btn btn-primary py-2 fw-bold">
                     <i></i>Agregar Nuevo Medico

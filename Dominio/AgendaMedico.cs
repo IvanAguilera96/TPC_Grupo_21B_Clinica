@@ -9,7 +9,7 @@ namespace Dominio
     public class AgendaMedico
     {
         public int IdAgendaMedico { get; set; }
-        public Medico IdMedico { get; set; }
+        public Medico Medico { get; set; }
         public Especialidad Especialidad { get; set; }
         public TurnoTrabajo TurnoTrabajo { get; set; }
     }

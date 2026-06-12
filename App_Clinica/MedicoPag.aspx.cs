@@ -1,4 +1,5 @@
-﻿using Negocio;
+﻿using Dominio;
+using Negocio;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,7 +21,19 @@ namespace App_Clinica
 
         protected void dgvMedico_RowCommand(object sender, GridViewCommandEventArgs e)
         {
+            if(e.CommandName == "VerHorarios")
+            {
+                // Recupero el IdMedico que viene en el CommandArgument
+                int IdMedico = Convert.ToInt32(e.CommandArgument);
 
+                AgendaMedicoNegocio negocio = new AgendaMedicoNegocio();
+                List<AgendaMedico> listaAgenda = negocio.ListarAgendaPorMedico(IdMedico);
+
+                // Cargo 2da grilla y muestro
+                dgvAgenda.DataSource = listaAgenda;
+                dgvAgenda.DataBind();
+                contenedorAgenda.Visible = true;
+            }
         }
 
         protected void dgvMedico_PageIndexChanging(object sender, GridViewPageEventArgs e)
