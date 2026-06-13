@@ -60,7 +60,7 @@ namespace App_Clinica
         protected void btnAsignarHorario_Click(object sender, EventArgs e)
         {
             string idMedico = Request.QueryString["idmedico"];
-            
+            Response.Redirect("MedicoAgendaForm.aspx?idmedico=" + idMedico);
         }
 
 
