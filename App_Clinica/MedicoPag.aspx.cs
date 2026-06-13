@@ -48,7 +48,7 @@ namespace App_Clinica
                     negocio.Eliminar(idMedico);
 
                     lblMensajeGrilla.ForeColor = System.Drawing.Color.Green;
-                    lblMensajeGrilla.Text = "Usuario eliminado con éxito.";
+                    lblMensajeGrilla.Text = "Médico eliminado con éxito.";
                     lblMensajeGrilla.Visible = true;
 
                     ActualizarGrillaMedico();

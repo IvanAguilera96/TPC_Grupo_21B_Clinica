@@ -22,6 +22,15 @@ namespace App_Clinica
             if (!IsPostBack)
             {
                 CargarAgenda();
+
+                if (Session["MensajeExito"] != null)
+                {
+                    lblMensajeGrilla.Text = Session["MensajeExito"].ToString();
+                    lblMensajeGrilla.CssClass = "alert alert-success d-block text-center mb-3";
+                    lblMensajeGrilla.Visible = true;
+
+                    Session["MensajeExito"] = null;
+                }
             }
         }
     

@@ -44,6 +44,17 @@ namespace App_Clinica
         {
             try
             {
+                if (string.IsNullOrWhiteSpace(txtDni.Text) ||
+                    string.IsNullOrWhiteSpace(txtNombre.Text) ||
+                    string.IsNullOrWhiteSpace(txtApellido.Text) ||
+                    string.IsNullOrWhiteSpace(txtMatricula.Text))
+                {
+                    lblMensaje.Text = "Todos los campos son obligatorios.";
+                    lblMensaje.ForeColor = System.Drawing.Color.Red;
+                    lblMensaje.Visible = true;
+                    return; 
+                }
+
                 MedicoNegocio negocio = new MedicoNegocio();
                 Medico nuevo = new Medico();
 
