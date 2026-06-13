@@ -70,7 +70,7 @@ namespace Negocio
             }
             catch (Exception ex)
             {
-                throw new Exception("Este turno ya se encuentra asignado.");
+                throw new Exception("Este turno de trabajo ya se encuentra asignado.");
             }
             finally { datos.cerrarConexion(); }
         } // Agregar
