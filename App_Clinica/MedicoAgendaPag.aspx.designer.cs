@@ -11,7 +11,7 @@ namespace App_Clinica
 {
 
 
-    public partial class MedicoPag
+    public partial class MedicoAgendaPag
     {
 
         /// <summary>
@@ -24,12 +24,30 @@ namespace App_Clinica
         protected global::System.Web.UI.WebControls.Label lblMensajeGrilla;
 
         /// <summary>
-        /// Control dgvMedico.
+        /// Control contenedorAgenda.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.GridView dgvMedico;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl contenedorAgenda;
+
+        /// <summary>
+        /// Control dgvAgenda.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.GridView dgvAgenda;
+
+        /// <summary>
+        /// Control btnAsignarHorario.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton btnAsignarHorario;
     }
 }

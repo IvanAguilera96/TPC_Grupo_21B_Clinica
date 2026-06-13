@@ -71,6 +71,7 @@
     <Content Include="EspecialidadForm.aspx" />
     <Content Include="EspecialidadPag.aspx" />
     <Content Include="Login.aspx" />
+    <Content Include="MedicoAgendaPag.aspx" />
     <Content Include="MedicoForm.aspx" />
     <Content Include="MedicoPag.aspx" />
     <Content Include="PacientePag.aspx">
@@ -116,6 +117,13 @@
     </Compile>
     <Compile Include="Clinica.Master.designer.cs">
       <DependentUpon>Clinica.Master</DependentUpon>
+    </Compile>
+    <Compile Include="MedicoAgendaPag.aspx.cs">
+      <DependentUpon>MedicoAgendaPag.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MedicoAgendaPag.aspx.designer.cs">
+      <DependentUpon>MedicoAgendaPag.aspx</DependentUpon>
     </Compile>
     <Compile Include="MedicoForm.aspx.cs">
       <DependentUpon>MedicoForm.aspx</DependentUpon>

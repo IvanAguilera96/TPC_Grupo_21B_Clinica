@@ -21,18 +21,15 @@ namespace App_Clinica
 
         protected void dgvMedico_RowCommand(object sender, GridViewCommandEventArgs e)
         {
-            if(e.CommandName == "VerHorarios")
+            string idMedico = e.CommandArgument.ToString();
+
+            if (e.CommandName == "Editar")
             {
-                // Recupero el IdMedico que viene en el CommandArgument
-                int IdMedico = Convert.ToInt32(e.CommandArgument);
-
-                AgendaMedicoNegocio negocio = new AgendaMedicoNegocio();
-                List<AgendaMedico> listaAgenda = negocio.ListarAgendaPorMedico(IdMedico);
-
-                // Cargo 2da grilla y muestro
-                dgvAgenda.DataSource = listaAgenda;
-                dgvAgenda.DataBind();
-                contenedorAgenda.Visible = true;
+                Response.Redirect("MedicoForm.aspx?id=" + idMedico);
+            }
+            else if(e.CommandName == "VerHorarios")
+            {
+                Response.Redirect("MedicoAgendaPag.aspx?idmedico=" + idMedico);
             }
         }
 
