@@ -18,7 +18,7 @@ namespace Negocio
 
             try
             {
-                datos.setearConsulta("SELECT A.IdAgendaMedico, A.IdMedico, T.IdTurnoTrabajo, T.Descripcion AS NombreTurno, T.HoraEntrada, T.HoraSalida, T.DiaDeTrabajo, E.IdEspecialidad, E.Descripcion AS NombreEspecialidad FROM AgendaMedico A INNER JOIN TurnoTrabajo T ON A.IdTurnoTrabajo = T.IdTurnoTrabajo INNER JOIN especialidad E ON T.IdEspecialidad = E.IdEspecialidad WHERE A.IdMedico = @IdMedico");
+                datos.setearConsulta("SELECT A.IdAgendaMedico, A.IdMedico, T.IdTurnoTrabajo, T.Descripcion AS NombreTurno, T.HoraEntrada, T.HoraSalida, T.DiaDeTrabajo, E.IdEspecialidad, E.Descripcion AS NombreEspecialidad FROM AgendaMedico A INNER JOIN TurnoTrabajo T ON A.IdTurnoTrabajo = T.IdTurnoTrabajo INNER JOIN Especialidad E ON A.IdEspecialidad = E.IdEspecialidad WHERE A.IdMedico = @IdMedico");
                 datos.setearParametros("@IdMedico", IdMedico);
                 datos.ejecutarLectura();
 
@@ -56,5 +56,23 @@ namespace Negocio
             }
 
         } // ListarAgendaPorMedico
+
+        public void Agregar(AgendaMedico nueva)
+        {
+            AccesoDatos datos = new AccesoDatos();
+            try
+            {
+                datos.setearConsulta("INSERT INTO AgendaMedico (IdMedico, IdEspecialidad, IdTurnoTrabajo) VALUES (@idMedico, @idEspecialidad, @idTurnoTrabajo)");
+                datos.setearParametros("@idMedico", nueva.Medico.IdMedico);
+                datos.setearParametros("@idEspecialidad", nueva.Especialidad.IdEspecialidad);
+                datos.setearParametros("@idTurnoTrabajo", nueva.TurnoTrabajo.IdTurnoTrabajo);
+                datos.ejecutarAccion();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally { datos.cerrarConexion(); }
+        } // Agregar
     }
 }
