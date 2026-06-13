@@ -16,20 +16,49 @@ namespace App_Clinica
             if (!IsPostBack)
             {
                 ActualizarGrillaMedico();
+
+                if (Session["MensajeExito"] != null)
+                {
+                    lblMensajeGrilla.Text = Session["MensajeExito"].ToString();
+                    lblMensajeGrilla.CssClass = "alert alert-success d-block text-center mb-3";
+                    lblMensajeGrilla.Visible = true;
+
+                    Session["MensajeExito"] = null;
+                }
             }
         }
 
         protected void dgvMedico_RowCommand(object sender, GridViewCommandEventArgs e)
         {
-            string idMedico = e.CommandArgument.ToString();
+            int idMedico = Convert.ToInt32(e.CommandArgument);
 
             if (e.CommandName == "Editar")
             {
                 Response.Redirect("MedicoForm.aspx?id=" + idMedico);
             }
-            else if(e.CommandName == "VerHorarios")
+            else if (e.CommandName == "VerHorarios")
             {
                 Response.Redirect("MedicoAgendaPag.aspx?idmedico=" + idMedico);
+            }
+            else if (e.CommandName == "Eliminar")
+            {
+                try
+                {
+                    MedicoNegocio negocio = new MedicoNegocio();
+                    negocio.Eliminar(idMedico);
+
+                    lblMensajeGrilla.ForeColor = System.Drawing.Color.Green;
+                    lblMensajeGrilla.Text = "Usuario eliminado con éxito.";
+                    lblMensajeGrilla.Visible = true;
+
+                    ActualizarGrillaMedico();
+                }
+                catch (Exception ex)
+                {
+                    lblMensajeGrilla.ForeColor = System.Drawing.Color.Red;
+                    lblMensajeGrilla.Text = "Error al intentar eliminar: " + ex.Message;
+                    lblMensajeGrilla.Visible = true;
+                }
             }
         }
 
