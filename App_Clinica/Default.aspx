@@ -16,22 +16,26 @@
             <div class="row g-4">
                 <div class="col-12 col-md-4">
                     <div class="card border-0 shadow-sm bg-primary bg-opacity-10 text-primary p-4 rounded">
-                        <h6 class="fw-semibold text-uppercase small">Médicos Activos</h6>
-                        <h2 class="fw-bold mb-0">24</h2>
+                        <h6 class="fw-semibold text-uppercase small">Médicos registrados</h6>
+                        <h2 class="fw-bold mb-0">
+                            <asp:Label ID="lblCantMedicos" runat="server" Text="0"></asp:Label>
+                        </h2>
                     </div>
                 </div>
 
                 <div class="col-12 col-md-4">
                     <div class="card border-0 shadow-sm bg-success bg-opacity-10 text-success p-4 rounded">
                         <h6 class="fw-semibold text-uppercase small">Pacientes Totales</h6>
-                        <h2 class="fw-bold mb-0">1,240</h2>
+                        <h2 class="fw-bold mb-0">
+                            <asp:Label ID="lblCantPacientes" runat="server" Text="0"></asp:Label>
+                        </h2>
                     </div>
                 </div>
 
                 <div class="col-12 col-md-4">
                     <div class="card border-0 shadow-sm bg-dark bg-opacity-10 text-dark p-4 rounded">
                         <h6 class="fw-semibold text-uppercase small text-secondary">Turnos del Mes</h6>
-                        <h2 class="fw-bold mb-0">452</h2>
+                        <h2 class="fw-bold mb-0">0</h2>
                     </div>
                 </div>
             </div>
@@ -53,7 +57,7 @@
             <div class="card bg-white p-4 rounded shadow-sm border">
                 <h4 class="text-primary fw-bold mb-3">Agenda del día:</h4>
                 <div class="table-responsive">
-                    <%-- Grilla simplificada de los turnos del médico logueado --%>
+                    <%-- Grilla con los turnos del día del médico logueado --%>
                     <asp:GridView ID="dgvTurnosDelDia" runat="server" CssClass="table table-hover border-top-0" AutoGenerateColumns="true">
                     </asp:GridView>
                 </div>

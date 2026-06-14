@@ -33,6 +33,24 @@ namespace App_Clinica
         protected global::System.Web.UI.WebControls.Panel pnlAdmin;
 
         /// <summary>
+        /// Control lblCantMedicos.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblCantMedicos;
+
+        /// <summary>
+        /// Control lblCantPacientes.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblCantPacientes;
+
+        /// <summary>
         /// Control pnlRecepcion.
         /// </summary>
         /// <remarks>
