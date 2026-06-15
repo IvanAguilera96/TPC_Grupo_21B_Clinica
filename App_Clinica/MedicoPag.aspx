@@ -44,25 +44,12 @@
                     </asp:TemplateField>
                 </Columns>
             </asp:GridView>
+            <hr class="my-4" />
 
             <div>
                 <a href="MedicoForm.aspx" class="btn btn-primary py-2 fw-bold">
                     <i></i>Agregar Nuevo Medico
                 </a>
-            </div>
-            <hr class="my-4" />
-
-            <div id="contenedorAgenda" runat="server" visible="false" class="p-4 border rounded bg-light mt-3">
-                <h4 class="text-secondary mb-3"><i class="bi bi-clock-history"></i>Agendas y Especialidades del Médico</h4>
-
-                <asp:GridView ID="dgvAgenda" runat="server" AutoGenerateColumns="false" CssClass="table table-sm table-striped align-middle">
-                    <Columns>
-                        <asp:BoundField HeaderText="Especialidad" DataField="Especialidad.Descripcion" />
-                        <asp:BoundField HeaderText="Día" DataField="TurnoTrabajo.DiaDeTrabajo" />
-                        <asp:BoundField HeaderText="Hora Entrada" DataField="TurnoTrabajo.HoraEntrada" />
-                        <asp:BoundField HeaderText="Hora Salida" DataField="TurnoTrabajo.HoraSalida" />
-                    </Columns>
-                </asp:GridView>
             </div>
         </div>
     </div>

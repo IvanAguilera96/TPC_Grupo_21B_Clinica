@@ -44,6 +44,18 @@ namespace App_Clinica
 
             try
             {
+                if (string.IsNullOrWhiteSpace(txtApellido.Text) ||
+                    string.IsNullOrWhiteSpace(txtNombre.Text) ||
+                    string.IsNullOrWhiteSpace(txtDni.Text) ||
+                    string.IsNullOrWhiteSpace(txtEmail.Text) ||
+                    string.IsNullOrWhiteSpace(txtTelefono.Text))
+                {
+                    lblMensaje.Text = "Todos los campos son obligatorios.";
+                    lblMensaje.ForeColor = System.Drawing.Color.Red;
+                    lblMensaje.Visible = true;
+                    return;
+                }
+
                 aux.Apellido = txtApellido.Text;
                 aux.Nombre = txtNombre.Text;
                 // validar que no tenga mas de 8 caracteres DNI

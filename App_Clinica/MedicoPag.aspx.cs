@@ -1,5 +1,4 @@
-﻿using ConexionBD;
-using Dominio;
+﻿using Dominio;
 using Negocio;
 using System;
 using System.Collections.Generic;
@@ -18,17 +17,12 @@ namespace App_Clinica
             {
                 ActualizarGrillaMedico();
 
-
-                //Valida si debe mostrar mensaje guardado en Session
                 if (Session["MensajeExito"] != null)
                 {
+                    lblMensajeGrilla.Text = Session["MensajeExito"].ToString();
+                    lblMensajeGrilla.CssClass = "alert alert-success d-block text-center mb-3";
                     lblMensajeGrilla.Visible = true;
 
-                    //Asigna mensaje almacenado en Session
-                    lblMensajeGrilla.Text = Session["MensajeExito"].ToString();
-                    lblMensajeGrilla.ForeColor = System.Drawing.Color.Green;
-
-                    //Limpia el mensaje
                     Session["MensajeExito"] = null;
                 }
             }
@@ -36,23 +30,25 @@ namespace App_Clinica
 
         protected void dgvMedico_RowCommand(object sender, GridViewCommandEventArgs e)
         {
-            // Recupero el ID de la columna seleccionada
-            string ID = e.CommandArgument.ToString();
+            int idMedico = Convert.ToInt32(e.CommandArgument);
 
-            if(e.CommandName == "Editar")
+            if (e.CommandName == "Editar")
             {
-                //Paso ID de la fila seleccionada
-                Response.Redirect("MedicoForm.aspx?id=" + ID);
-            
+                Response.Redirect("MedicoForm.aspx?id=" + idMedico);
             }
-            else if(e.CommandName == "Eliminar")
+            else if (e.CommandName == "VerHorarios")
+            {
+                Response.Redirect("MedicoAgendaPag.aspx?idmedico=" + idMedico);
+            }
+            else if (e.CommandName == "Eliminar")
             {
                 try
                 {
                     MedicoNegocio negocio = new MedicoNegocio();
-                    negocio.Eliminar(int.Parse(ID));
+                    negocio.Eliminar(idMedico);
+
                     lblMensajeGrilla.ForeColor = System.Drawing.Color.Green;
-                    lblMensajeGrilla.Text = "Medico eliminado con éxito.";
+                    lblMensajeGrilla.Text = "Médico eliminado con éxito.";
                     lblMensajeGrilla.Visible = true;
 
                     ActualizarGrillaMedico();
@@ -64,32 +60,12 @@ namespace App_Clinica
                     lblMensajeGrilla.Visible = true;
                 }
             }
-            else if (e.CommandName == "VerHorarios")
-            {
-                // Recupero el IdMedico que viene en el CommandArgument
-                int IdMedico = Convert.ToInt32(e.CommandArgument);
-
-                AgendaMedicoNegocio negocio = new AgendaMedicoNegocio();
-                List<AgendaMedico> listaAgenda = negocio.ListarAgendaPorMedico(IdMedico);
-
-                // Cargo 2da grilla y muestro
-                dgvAgenda.DataSource = listaAgenda;
-                dgvAgenda.DataBind();
-                contenedorAgenda.Visible = true;
-            }
-
-
         }
 
         protected void dgvMedico_PageIndexChanging(object sender, GridViewPageEventArgs e)
         {
-            dgvMedico.PageIndex = e.NewPageIndex;
 
-            MedicoNegocio negocio = new MedicoNegocio();
-            dgvMedico.DataSource = negocio.Listar();
-            dgvMedico.DataBind();
         }
-
         public void ActualizarGrillaMedico()
         {
             try

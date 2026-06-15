@@ -1,11 +1,12 @@
-﻿using System;
+﻿using Dominio;
+using Negocio;
+using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-using Dominio;
-using Negocio;
 
 namespace App_Clinica
 {
@@ -15,58 +16,74 @@ namespace App_Clinica
         {
             if (!IsPostBack)
             {
-                // Si obtengo ID por la url guardo ID (Quiere modificar)
-                if (Request.QueryString["ID"] != null)
+                //Si viene ID, es modo edición
+                if (Request.QueryString["id"] != null)
                 {
-                    int IdMedico = int.Parse(Request.QueryString["ID"]);
-                    MedicoNegocio negocio = new MedicoNegocio();
-                    Medico medico = new Medico();
+                    int idMedico = int.Parse(Request.QueryString["id"]);
 
-                    medico = negocio.BuscarMedico(IdMedico);
-                    if (medico != null)
+                    MedicoNegocio negocio = new MedicoNegocio();
+                    Medico seleccionado = negocio.BuscarPorId(idMedico);
+
+                    if (seleccionado != null)
                     {
-                        txtDni.Text = medico.Dni;
-                        txtApellido.Text = medico.Apellido;
-                        txtNombre.Text = medico.Nombre;
-                        txtMatricula.Text = medico.Matricula.ToString();
-                        chkEstado.Checked = medico.Estado;
+                        txtDni.Text = seleccionado.Dni;
+                        txtNombre.Text = seleccionado.Nombre;
+                        txtApellido.Text = seleccionado.Apellido;
+                        txtMatricula.Text = seleccionado.Matricula.ToString();
+                        chkEstado.Checked = seleccionado.Estado;
                     }
+                }
+                else
+                {
+                    chkEstado.Checked = true;
                 }
             }
         }
 
         protected void btnGuardar_Click(object sender, EventArgs e)
         {
-            MedicoNegocio negocio = new MedicoNegocio();
-            Medico aux = new Medico();
-
             try
             {
-                aux.Dni = txtDni.Text;
-                aux.Nombre = txtNombre.Text;
-                aux.Apellido = txtApellido.Text;
-                aux.Matricula = int.Parse(txtMatricula.Text);
-                aux.Estado = chkEstado.Checked;
-
-                if (Request.QueryString["ID"] != null)
+                if (string.IsNullOrWhiteSpace(txtDni.Text) ||
+                    string.IsNullOrWhiteSpace(txtNombre.Text) ||
+                    string.IsNullOrWhiteSpace(txtApellido.Text) ||
+                    string.IsNullOrWhiteSpace(txtMatricula.Text))
                 {
-                    aux.IdMedico = Convert.ToInt32(Request.QueryString["ID"]);
-                    negocio.Modificar(aux);
-                    Session["MensajeExito"] = "Medico modificado con éxito.";
+                    lblMensaje.Text = "Todos los campos son obligatorios.";
+                    lblMensaje.ForeColor = System.Drawing.Color.Red;
+                    lblMensaje.Visible = true;
+                    return; 
+                }
+
+                MedicoNegocio negocio = new MedicoNegocio();
+                Medico nuevo = new Medico();
+
+                nuevo.Dni = txtDni.Text;
+                nuevo.Nombre = txtNombre.Text;
+                nuevo.Apellido = txtApellido.Text;
+                nuevo.Matricula = int.Parse(txtMatricula.Text);
+                nuevo.Estado = chkEstado.Checked;
+
+                if (Request.QueryString["id"] != null)
+                {
+                    nuevo.IdMedico = int.Parse(Request.QueryString["id"]);
+                    negocio.Modificar(nuevo);
+                    Session["MensajeExito"] = "Médico modificado correctamente.";
                 }
                 else
                 {
-                    negocio.Agregar(aux);
-                    Session["MensajeExito"] = "Medico registrado con éxito.";
+                    negocio.Agregar(nuevo);
+                    Session["MensajeExito"] = "Médico registrado correctamente.";
                 }
-                
+
                 Response.Redirect("MedicoPag.aspx", false);
             }
             catch (Exception ex)
             {
-                throw ex;
+                lblMensaje.ForeColor = System.Drawing.Color.Red;
+                lblMensaje.Text = "Error: " + ex.Message;
+                lblMensaje.Visible = true;
             }
-
         }
     }
 }
