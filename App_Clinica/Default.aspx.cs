@@ -17,7 +17,7 @@ namespace App_Clinica
                 //Lógica para recuperar el usuario logueado
 
                 //Evaluar según la descripción del Perfil
-                string userLogueado = "Administrador";
+                string userLogueado = "Medico";
 
                 switch (userLogueado)
                 {

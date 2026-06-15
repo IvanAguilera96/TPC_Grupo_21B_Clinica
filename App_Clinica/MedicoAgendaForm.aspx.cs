@@ -37,16 +37,12 @@ namespace App_Clinica
                 ddlEspecialidad.DataTextField = "Descripcion";
                 ddlEspecialidad.DataBind();
 
-                //Carga Turnos de Trabajo
-                AccesoDatos datos = new AccesoDatos();
-                datos.setearConsulta("SELECT IdTurnoTrabajo, Descripcion + ' (' + DiaDeTrabajo + ' ' + CAST(HoraEntrada AS varchar(5)) + ' a ' + CAST(HoraSalida AS varchar(5)) + ')' AS HorarioCompleto FROM TurnoTrabajo");
-                datos.ejecutarLectura();
-
-                ddlTurnoTrabajo.DataSource = datos.Lector;
+                // Carga TurnoTrabajo
+                TurnoTrabajoNegocio ttNegocio = new TurnoTrabajoNegocio();
+                ddlTurnoTrabajo.DataSource = ttNegocio.Listar();
                 ddlTurnoTrabajo.DataValueField = "IdTurnoTrabajo";
-                ddlTurnoTrabajo.DataTextField = "HorarioCompleto";
+                ddlTurnoTrabajo.DataTextField = "Descripcion";
                 ddlTurnoTrabajo.DataBind();
-                datos.cerrarConexion();
             }
             catch (Exception ex)
             {
