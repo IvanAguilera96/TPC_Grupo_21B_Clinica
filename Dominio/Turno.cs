@@ -14,10 +14,9 @@ namespace Dominio
         public TimeSpan Hora { get; set; }
 
         //Relaciones de composición
-        public Medico Medico { get; set; }
-        public Especialidad Especialidad { get; set; }
+        public AgendaMedico Agenda { get; set; } //Contien Médico, Especialidad y Turno de Trabajo
         public Paciente Paciente { get; set; }
-        public EstadoTurno Estado { get; set; }
+        public EstadoTurno Estado { get; set; } //"Disponible", "Asignado", "Cancelado", "Reprogramado", "Atendido"
 
         public string Observacion { get; set; } //Motivo del turno
         public string Diagnostico { get; set; } //Resultado de la consulta
