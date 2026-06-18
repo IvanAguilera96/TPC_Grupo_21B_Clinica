@@ -24,6 +24,11 @@
                 </div>
 
                 <div class="mb-3">
+                    <label for="txtFechaNacimiento" class="form-label fw-semibold text-secondary">Fecha de Nacimiento</label>
+                    <asp:TextBox ID="txtFechaNacimiento" runat="server" CssClass="form-control" Type="Date"></asp:TextBox>
+                </div>
+
+                <div class="mb-3">
                     <label class="form-label fw-semibold text-secondary">DNI</label>
                     <asp:TextBox ID="txtDni" runat="server" CssClass="form-control"></asp:TextBox>
                 </div>

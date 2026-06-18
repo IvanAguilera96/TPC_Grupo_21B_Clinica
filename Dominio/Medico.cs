@@ -15,5 +15,7 @@ namespace Dominio
         public int Matricula { get; set; }
         public bool Estado { get; set; } //true=activo, false=inactivo
         public List<AgendaMedico> ListaAgendaMedico { get; set; }
+
+        //Agregar relacion con usuario.
     }
 }

@@ -31,6 +31,7 @@ namespace App_Clinica
                         txtEmail.Text = paciente.Email;
                         txtTelefono.Text = paciente.Telefono;
                         chkEstado.Checked = paciente.Estado;
+                        txtFechaNacimiento.Text = paciente.FechaNacimiento.ToString("yyyy-MM-dd");
                     }
                 }
             }
@@ -48,7 +49,8 @@ namespace App_Clinica
                     string.IsNullOrWhiteSpace(txtNombre.Text) ||
                     string.IsNullOrWhiteSpace(txtDni.Text) ||
                     string.IsNullOrWhiteSpace(txtEmail.Text) ||
-                    string.IsNullOrWhiteSpace(txtTelefono.Text))
+                    string.IsNullOrWhiteSpace(txtTelefono.Text) ||
+                    string.IsNullOrWhiteSpace(txtFechaNacimiento.Text))
                 {
                     lblMensaje.Text = "Todos los campos son obligatorios.";
                     lblMensaje.ForeColor = System.Drawing.Color.Red;
@@ -56,9 +58,37 @@ namespace App_Clinica
                     return;
                 }
 
+                //Validaciones para la fecha de nac
+                if (DateTime.TryParse(txtFechaNacimiento.Text, out DateTime fechaIngresada))
+                {
+                    // Validamos que el año no sea menor a 1926
+                    if (fechaIngresada.Year < 1926)
+                    {
+                        lblMensaje.Text = "La fecha no puede ser anterior al 1926.";
+                        lblMensaje.ForeColor = System.Drawing.Color.Red;
+                        lblMensaje.Visible = true;
+                        return;
+                    }
+
+                    if (fechaIngresada > DateTime.Today)
+                    {
+                        lblMensaje.Text = "La fecha no puede ser mayor a hoy.";
+                        lblMensaje.ForeColor = System.Drawing.Color.Red;
+                        lblMensaje.Visible = true;
+                        return;
+                    }
+                }
+                else
+                {
+                    lblMensaje.Text = "Formato de fecha inválido";
+                    lblMensaje.ForeColor = System.Drawing.Color.Red;
+                    lblMensaje.Visible = true;
+                    return;
+                }
+
                 aux.Apellido = txtApellido.Text;
                 aux.Nombre = txtNombre.Text;
-                // validar que no tenga mas de 8 caracteres DNI
+                aux.FechaNacimiento = DateTime.Parse(txtFechaNacimiento.Text);
                 aux.Dni = txtDni.Text;
                 aux.Email = txtEmail.Text;
                 aux.Telefono = txtTelefono.Text;

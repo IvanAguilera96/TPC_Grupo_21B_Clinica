@@ -18,7 +18,7 @@ namespace Negocio
 
 			try
 			{
-				datos.setearConsulta("Select IdPaciente, Dni, Nombre, Apellido, Email, Telefono, Estado From Paciente");
+				datos.setearConsulta("Select IdPaciente, Dni, Nombre, Apellido, FechaNacimiento, Email, Telefono, Estado From Paciente");
 				datos.ejecutarLectura();
 
 				while (datos.Lector.Read())
@@ -28,7 +28,8 @@ namespace Negocio
 					aux.Dni = (string)datos.Lector["Dni"];
 					aux.Nombre = (string)datos.Lector["Nombre"];
 					aux.Apellido = (string)datos.Lector["Apellido"];
-					aux.Email = (string)datos.Lector["Email"];
+                    aux.FechaNacimiento = (DateTime)datos.Lector["FechaNacimiento"];
+                    aux.Email = (string)datos.Lector["Email"];
 					aux.Telefono = (string)datos.Lector["Telefono"];
 					aux.Estado = (bool)datos.Lector["Estado"];
 					lista.Add(aux);
@@ -51,10 +52,11 @@ namespace Negocio
 
 			try
 			{
-				datos.setearConsulta("INSERT INTO Paciente (Dni, Nombre, Apellido, Email, Telefono, Estado) VALUES (@Dni, @Nombre, @Apellido, @Email, @Telefono, @Estado)");
+				datos.setearConsulta("INSERT INTO Paciente (Dni, Nombre, Apellido, FechaNacimiento,  Email, Telefono, Estado) VALUES (@Dni, @Nombre, @Apellido, @Email, @Telefono, @Estado)");
 				datos.setearParametros("@Dni", nuevo.Dni);
                 datos.setearParametros("@Nombre", nuevo.Nombre);
                 datos.setearParametros("@Apellido", nuevo.Apellido);
+                datos.setearParametros("@fechaNacimiento", nuevo.FechaNacimiento);
                 datos.setearParametros("@Email", nuevo.Email);
                 datos.setearParametros("@Telefono", nuevo.Telefono);
                 datos.setearParametros("@Estado", nuevo.Estado);
@@ -97,7 +99,7 @@ namespace Negocio
 			AccesoDatos datos = new AccesoDatos();
 			try
 			{
-				datos.setearConsulta("SELECT Dni, Nombre, Apellido, Email, Telefono, Estado FROM Paciente WHERE IdPaciente = @ID");
+				datos.setearConsulta("SELECT Dni, Nombre, Apellido, FechaNacimiento, Email, Telefono, Estado FROM Paciente WHERE IdPaciente = @ID");
 				datos.setearParametros("@ID", ID);
 				datos.ejecutarLectura();
 
@@ -107,7 +109,8 @@ namespace Negocio
 					aux.Dni = (string)datos.Lector["Dni"];
 					aux.Nombre = (string)datos.Lector["Nombre"];
 					aux.Apellido = (string)datos.Lector["Apellido"];
-					aux.Email = (string)datos.Lector["Email"];
+                    aux.FechaNacimiento = (DateTime)datos.Lector["FechaNacimiento"];
+                    aux.Email = (string)datos.Lector["Email"];
 					aux.Telefono = (string)datos.Lector["Telefono"];
 					aux.Estado = (bool)datos.Lector["Estado"];
 
@@ -130,11 +133,12 @@ namespace Negocio
 			AccesoDatos datos = new AccesoDatos();
 			try
 			{
-				datos.setearConsulta("UPDATE Paciente SET Dni = @Dni, Nombre = @Nombre, Apellido = @Apellido, Email = @Email, Telefono = @Telefono, Estado = @Estado WHERE IdPaciente = @ID");
+				datos.setearConsulta("UPDATE Paciente SET Dni = @Dni, Nombre = @Nombre, Apellido = @Apellido, FechaNacimiento = @fechaNacimiento, Email = @Email, Telefono = @Telefono, Estado = @Estado WHERE IdPaciente = @ID");
 				datos.setearParametros("@ID", paciente.IdPaciente);
 				datos.setearParametros("@Dni", paciente.Dni);
                 datos.setearParametros("@Nombre", paciente.Nombre);
                 datos.setearParametros("@Apellido", paciente.Apellido);
+                datos.setearParametros("@fechaNacimiento", paciente.FechaNacimiento);
                 datos.setearParametros("@Email", paciente.Email);
                 datos.setearParametros("@Telefono", paciente.Telefono);
                 datos.setearParametros("@Estado", paciente.Estado);

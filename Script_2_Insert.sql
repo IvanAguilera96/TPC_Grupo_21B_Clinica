@@ -47,12 +47,12 @@ INSERT INTO [dbo].[Medico] (Dni, Nombre, Apellido, Matricula, Estado) VALUES
 GO
 
 --Paciente
-INSERT INTO [dbo].[Paciente] (Apellido, Nombre, Dni, Email, Telefono, Estado) VALUES 
-('Pérez', 'Juan', '40111222', 'juan.perez@email.com', '1144445555', 1),
-('Martínez', 'María', '42333444', 'maria.martinez@email.com', '1155556666', 1),
-('González', 'Diego', '39888777', 'diego.gonzalez@email.com', '1122223333', 1),
-('Álvarez', 'Sofía', '41555666', 'sofia.alvarez@email.com', '1166667777', 1),
-('Romero', 'Lucas', '43222111', 'lucas.romero@email.com', '1133334444', 1);
+INSERT INTO [dbo].[Paciente] (Apellido, Nombre, Dni, FechaNacimiento, Email, Telefono, Estado) VALUES 
+('Pérez', 'Juan', '40111222', '1997-05-12', 'juan.perez@email.com', '1144445555', 1),
+('Martínez', 'María', '42333444', '2000-09-24', 'maria.martinez@email.com', '1155556666', 1),
+('González', 'Diego', '39888777', '1996-02-15', 'diego.gonzalez@email.com', '1122223333', 1),
+('Álvarez', 'Sofía', '41555666', '1999-11-02', 'sofia.alvarez@email.com', '1166667777', 1),
+('Romero', 'Lucas', '43222111', '2001-07-19', 'lucas.romero@email.com', '1133334444', 1);
 GO
 
 --TurnoTrabajo

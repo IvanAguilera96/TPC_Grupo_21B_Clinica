@@ -17,6 +17,7 @@
                     <asp:BoundField HeaderText="DNI" DataField="DNI" />
                     <asp:BoundField HeaderText="Nombre" DataField="Nombre" />
                     <asp:BoundField HeaderText="Apellido" DataField="Apellido" />
+                    <asp:BoundField HeaderText="Fecha de Nacimiento" DataField="FechaNacimiento" DataFormatString="{0:yyyy-MM-dd}" HtmlEncode="false" />
                     <asp:BoundField HeaderText="Email" DataField="Email" />
                     <asp:BoundField HeaderText="Telefono" DataField="Telefono" />
                     <asp:CheckBoxField HeaderText="Estado" DataField="Estado" />
