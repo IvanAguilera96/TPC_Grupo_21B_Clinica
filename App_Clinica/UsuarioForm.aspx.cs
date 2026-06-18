@@ -1,6 +1,7 @@
 ﻿using Dominio;
 using Negocio;
 using System;
+using App_Clinica;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -54,8 +55,13 @@ namespace App_Clinica
         {
             if (string.IsNullOrWhiteSpace(txtNombre.Text) || string.IsNullOrWhiteSpace(txtContrasenia.Text))
             {
-                lblMensaje.ForeColor = System.Drawing.Color.Red;
-                lblMensaje.Text = "Debe completar todos los campos para continuar.";
+                Utils.MostrarAlertaModal(this, "El nombre de usuario y la contraseña son obligatorios.");
+                return;
+            }
+
+            if (txtContrasenia.Text.Length < 6)
+            {
+                Utils.MostrarAlertaModal(this, "La contraseña debe tener al menos 6 caracteres.");
                 return;
             }
 
@@ -94,8 +100,7 @@ namespace App_Clinica
             catch (Exception ex)
             {
 
-                lblMensaje.ForeColor = System.Drawing.Color.Red;
-                lblMensaje.Text = "Error: " + ex.Message;
+                Utils.MostrarAlertaModal(this, ex.Message);
             }
         }
     }

@@ -63,6 +63,109 @@
             </footer>
 
         </div>
+      
+        <div class="modal fade" id="modalAlerta" tabindex="-1" aria-labelledby="modalAlertaLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-sm">
+                <div class="modal-content border-0 shadow-sm" style="background-color: #FAF8F5; border-radius: 16px; overflow: hidden;">
+            
+                    <div class="modal-header border-0 d-flex align-items-center" style="background-color: #FCECEB; color: #C85A53; padding: 14px 18px;">
+                        <h5 class="modal-title fw-bold fs-6 mb-0" id="modalAlertaLabel">
+                            <i class="bi bi-exclamation-triangle-fill me-2" style="color: #C85A53;"></i>Atención
+                        </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="filter: opacity(0.5);"></button>
+                    </div>
+            
+                    <div class="modal-body py-4 px-4">
+                        <p id="lblMensajeModal" class="mb-0" 
+                           style="font-size: 0.95rem; line-height: 1.5; color: #4A4642; font-family: 'Segoe UI', Tahoma, sans-serif; letter-spacing: -0.1px;">
+                            Por favor, verifique los datos ingresados.
+                        </p>
+                    </div>
+
+                    <div class="modal-footer border-0 pt-0 px-4 pb-3">
+                        <button type="button" class="btn border-0 w-100 fw-bold rounded-3" data-bs-dismiss="modal" 
+                                style="background-color: #FCECEB; color: #C85A53; padding: 9px; font-size: 0.9rem; transition: all 0.2s ease-in-out;"
+                                onmouseover="this.style.backgroundColor='#FAD2D0'; this.style.color='#963B35';"
+                                onmouseout="this.style.backgroundColor='#FCECEB'; this.style.color='#C85A53';">
+                            Aceptar
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="modalConfirmarEliminar" tabindex="-1" aria-labelledby="modalConfirmarLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-sm">
+                <div class="modal-content border-0 shadow-sm" style="background-color: #FAF8F5; border-radius: 16px; overflow: hidden;">
+            
+                    <div class="modal-header border-0 d-flex align-items-center" style="background-color: #FCECEB; color: #C85A53; padding: 14px 18px;">
+                        <h5 class="modal-title fw-bold fs-6 mb-0" id="modalConfirmarLabel">
+                            <i class="bi bi-exclamation-triangle-fill me-2" style="color: #C85A53;"></i>¿Eliminar registro?
+                        </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="filter: opacity(0.5);"></button>
+                    </div>
+            
+                    <div class="modal-body py-4 px-4">
+                        <p class="mb-0" style="font-size: 0.95rem; line-height: 1.5; color: #4A4642; font-family: 'Segoe UI', Tahoma, sans-serif; letter-spacing: -0.1px;">
+                            Esta acción no se puede deshacer. ¿Está seguro de que desea continuar?
+                        </p>
+                    </div>
+            
+                    <div class="modal-footer border-0 pt-0 px-4 pb-3 d-flex gap-2">
+                        <button type="button" class="btn border-0 flex-grow-1 fw-bold rounded-3" data-bs-dismiss="modal" 
+                                style="background-color: #EAE6DF; color: #5A5550; padding: 9px; font-size: 0.9rem; transition: all 0.2s ease-in-out;"
+                                onmouseover="this.style.backgroundColor='#DCD7CE'; this.style.color='#3A3733';"
+                                onmouseout="this.style.backgroundColor='#EAE6DF'; this.style.color='#5A5550';">
+                            Cancelar
+                        </button>
+                        <button type="button" id="btnMdlConfirmarBorrado" class="btn border-0 flex-grow-1 fw-bold rounded-3" 
+                                style="background-color: #FCECEB; color: #C85A53; padding: 9px; font-size: 0.9rem; transition: all 0.2s ease-in-out;"
+                                onmouseover="this.style.backgroundColor='#FAD2D0'; this.style.color='#963B35';"
+                                onmouseout="this.style.backgroundColor='#FCECEB'; this.style.color='#C85A53';">
+                            Eliminar
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script type="text/javascript">
+            var clickOriginal = null;
+
+            function confirmarEliminar(boton) {
+                // Si el botón ya fue confirmado por el modal, dejamos que viaje al servidor
+                if (boton.dataset.confirmado === "true") {
+                    boton.dataset.confirmado = "false"; // Reseteamos
+                    return true;
+                }
+
+                // Guardamos la referencia del botón al que le hicieron click
+                clickOriginal = boton;
+
+                // Levantamos el modal de confirmación
+                var modalEl = document.getElementById('modalConfirmarEliminar');
+                var myModal = bootstrap.Modal.getOrCreateInstance(modalEl);
+                myModal.show();
+
+                return false;
+            }
+
+            // Cuando el usuario le da clic al botón "Eliminar" DENTRO del modal:
+            document.addEventListener("DOMContentLoaded", function () {
+                document.getElementById("btnMdlConfirmarBorrado").addEventListener("click", function () {
+                    if (clickOriginal) {
+                        clickOriginal.dataset.confirmado = "true";
+                
+                        // Cerramos el modal
+                        var modalEl = document.getElementById('modalConfirmarEliminar');
+                        bootstrap.Modal.getOrCreateInstance(modalEl).hide();
+                
+                        // Ejecutamos el evento del LinkButton
+                        clickOriginal.click();
+                    }
+                });
+            });
+        </script>
 
     </form>
 </body>

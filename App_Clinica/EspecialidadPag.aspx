@@ -20,7 +20,7 @@
                             <asp:LinkButton ID="btnEditar" runat="server" CssClass="btn btn-sm btn-outline-primary me-2" CommandName="Editar" CommandArgument='<%# Eval("IdEspecialidad") %>'>
                                 <i class="bi bi-pencil-square"></i>
                             </asp:LinkButton>
-                            <asp:LinkButton ID="btnEliminar" runat="server" CssClass="btn btn-sm btn-outline-danger" CommandName="Eliminar" CommandArgument='<%# Eval("IdEspecialidad") %>' OnClientClick="return confirm('⚠️ ¿Seguro que quiere dar de baja esta especialidad?');">
+                            <asp:LinkButton ID="btnEliminar" runat="server" CssClass="btn btn-sm btn-outline-danger" CommandName="Eliminar" CommandArgument='<%# Eval("IdEspecialidad") %>' OnClientClick="return confirmarEliminar(this);">
                                 <i class="bi bi-trash"></i>
                             </asp:LinkButton>
                         </ItemTemplate>

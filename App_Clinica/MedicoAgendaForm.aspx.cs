@@ -46,8 +46,7 @@ namespace App_Clinica
             }
             catch (Exception ex)
             {
-                lblMensaje.ForeColor = System.Drawing.Color.Red;
-                lblMensaje.Text = "Error al cargar los selectores: " + ex.Message;
+                Utils.MostrarAlertaModal(this, "Error al cargar los selectores de la agenda: " + ex.Message);
             }
         } //CargarDesplegables
 
@@ -75,8 +74,7 @@ namespace App_Clinica
             }
             catch (Exception ex)
             {
-                lblMensaje.ForeColor = System.Drawing.Color.Red;
-                lblMensaje.Text = ex.Message;
+                Utils.MostrarAlertaModal(this, "No se pudo asignar el horario: " + ex.Message);
             }
         }
 

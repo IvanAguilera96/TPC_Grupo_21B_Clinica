@@ -31,7 +31,7 @@
                             <asp:LinkButton ID="btnEliminar" runat="server" CssClass="btn btn-sm btn-outline-danger"
                                 CommandName="Eliminar"
                                 CommandArgument='<%# Eval("IdMedico")%>'
-                                OnClientClick="return confirm('⚠️ ¿Está seguro que quiere eliminar el usuario seleccionado?');">
+                                OnClientClick="return confirmarEliminar(this);">
                                 <i class="bi bi-trash"></i>
                             </asp:LinkButton>
 

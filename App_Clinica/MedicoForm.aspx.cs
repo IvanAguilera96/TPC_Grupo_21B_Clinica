@@ -49,10 +49,14 @@ namespace App_Clinica
                     string.IsNullOrWhiteSpace(txtApellido.Text) ||
                     string.IsNullOrWhiteSpace(txtMatricula.Text))
                 {
-                    lblMensaje.Text = "Todos los campos son obligatorios.";
-                    lblMensaje.ForeColor = System.Drawing.Color.Red;
-                    lblMensaje.Visible = true;
+                    Utils.MostrarAlertaModal(this, "Todos los campos son obligatorios.");
                     return; 
+                }
+
+                if (txtDni.Text.Trim().Length != 8)
+                {
+                    Utils.MostrarAlertaModal(this, "El DNI debe tener exactamente 8 caracteres.");
+                    return;
                 }
 
                 MedicoNegocio negocio = new MedicoNegocio();
@@ -80,9 +84,7 @@ namespace App_Clinica
             }
             catch (Exception ex)
             {
-                lblMensaje.ForeColor = System.Drawing.Color.Red;
-                lblMensaje.Text = "Error: " + ex.Message;
-                lblMensaje.Visible = true;
+                Utils.MostrarAlertaModal(this, ex.Message);
             }
         }
     }

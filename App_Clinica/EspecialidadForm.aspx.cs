@@ -42,8 +42,7 @@ namespace App_Clinica
         {
             if (string.IsNullOrWhiteSpace(txtDescripcion.Text))
             {
-                lblMensaje.ForeColor = System.Drawing.Color.Red;
-                lblMensaje.Text = "Debe ingresar una descripción para continuar.";
+                Utils.MostrarAlertaModal(this, "Debe ingresar una descripción para continuar.");
                 return;
             }
 
@@ -76,8 +75,7 @@ namespace App_Clinica
             }
             catch (Exception ex)
             {
-                lblMensaje.ForeColor = System.Drawing.Color.Red;
-                lblMensaje.Text = "Error: " + ex.Message;
+                Utils.MostrarAlertaModal(this, ex.Message);
             }
         }
     }

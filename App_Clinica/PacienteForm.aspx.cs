@@ -52,9 +52,13 @@ namespace App_Clinica
                     string.IsNullOrWhiteSpace(txtTelefono.Text) ||
                     string.IsNullOrWhiteSpace(txtFechaNacimiento.Text))
                 {
-                    lblMensaje.Text = "Todos los campos son obligatorios.";
-                    lblMensaje.ForeColor = System.Drawing.Color.Red;
-                    lblMensaje.Visible = true;
+                    Utils.MostrarAlertaModal(this, "Todos los campos son obligatorios.");
+                    return;
+                }
+
+                if (txtDni.Text.Trim().Length != 8)
+                {
+                    Utils.MostrarAlertaModal(this, "El DNI debe tener exactamente 8 caracteres.");
                     return;
                 }
 
@@ -64,25 +68,19 @@ namespace App_Clinica
                     // Validamos que el año no sea menor a 1926
                     if (fechaIngresada.Year < 1926)
                     {
-                        lblMensaje.Text = "La fecha no puede ser anterior al 1926.";
-                        lblMensaje.ForeColor = System.Drawing.Color.Red;
-                        lblMensaje.Visible = true;
+                        Utils.MostrarAlertaModal(this, "La fecha no puede ser anterior al 1926.");
                         return;
                     }
 
                     if (fechaIngresada > DateTime.Today)
                     {
-                        lblMensaje.Text = "La fecha no puede ser mayor a hoy.";
-                        lblMensaje.ForeColor = System.Drawing.Color.Red;
-                        lblMensaje.Visible = true;
+                        Utils.MostrarAlertaModal(this, "La fecha no puede ser mayor a hoy.");
                         return;
                     }
                 }
                 else
                 {
-                    lblMensaje.Text = "Formato de fecha inválido";
-                    lblMensaje.ForeColor = System.Drawing.Color.Red;
-                    lblMensaje.Visible = true;
+                    Utils.MostrarAlertaModal(this, "Formato de fecha inválido");
                     return;
                 }
 

@@ -176,6 +176,7 @@
     <Compile Include="UsuarioForm.aspx.designer.cs">
       <DependentUpon>UsuarioForm.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Utils\Utils.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Clinica.Master" />
