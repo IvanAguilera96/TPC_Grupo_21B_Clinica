@@ -7,4 +7,5 @@
   <Project Path="ConexionBD/ConexionBD.csproj" Id="b1802722-7523-49de-8aec-96065e2920cc" />
   <Project Path="Dominio/Dominio.csproj" Id="9b74a3aa-4bbc-49ed-8355-34cda57e0b82" />
   <Project Path="Negocio/Negocio.csproj" Id="9fb0816c-7d7e-4465-9481-c7a22ee1801d" />
+  <Project Path="Utiles/Utiles.csproj" Id="528b74f4-198e-4bb2-90f8-bb723e464675" />
 </Solution>

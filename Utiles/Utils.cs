@@ -1,9 +1,13 @@
-using System;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using System.Web.UI;
 
-namespace App_Clinica
+namespace Utiles
 {
-    public static class Utils
+    public class Utils
     {
         public static void MostrarAlertaModal(Page pagina, string mensaje)
         {

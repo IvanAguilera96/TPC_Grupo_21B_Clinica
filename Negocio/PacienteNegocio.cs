@@ -52,11 +52,11 @@ namespace Negocio
 
 			try
 			{
-				datos.setearConsulta("INSERT INTO Paciente (Dni, Nombre, Apellido, FechaNacimiento,  Email, Telefono, Estado) VALUES (@Dni, @Nombre, @Apellido, @Email, @Telefono, @Estado)");
+				datos.setearConsulta("INSERT INTO Paciente (Dni, Nombre, Apellido, FechaNacimiento,  Email, Telefono, Estado) VALUES (@Dni, @Nombre, @Apellido, @FechaNacimiento, @Email, @Telefono, @Estado)");
 				datos.setearParametros("@Dni", nuevo.Dni);
                 datos.setearParametros("@Nombre", nuevo.Nombre);
                 datos.setearParametros("@Apellido", nuevo.Apellido);
-                datos.setearParametros("@fechaNacimiento", nuevo.FechaNacimiento);
+                datos.setearParametros("@FechaNacimiento", nuevo.FechaNacimiento);
                 datos.setearParametros("@Email", nuevo.Email);
                 datos.setearParametros("@Telefono", nuevo.Telefono);
                 datos.setearParametros("@Estado", nuevo.Estado);

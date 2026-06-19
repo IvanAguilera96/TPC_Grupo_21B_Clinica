@@ -176,7 +176,6 @@
     <Compile Include="UsuarioForm.aspx.designer.cs">
       <DependentUpon>UsuarioForm.aspx</DependentUpon>
     </Compile>
-    <Compile Include="Utils\Utils.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Clinica.Master" />
@@ -200,6 +199,10 @@
     <ProjectReference Include="..\Negocio\Negocio.csproj">
       <Project>{9fb0816c-7d7e-4465-9481-c7a22ee1801d}</Project>
       <Name>Negocio</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Utiles\Utiles.csproj">
+      <Project>{528b74f4-198e-4bb2-90f8-bb723e464675}</Project>
+      <Name>Utiles</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>

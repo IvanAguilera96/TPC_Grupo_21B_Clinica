@@ -1,6 +1,7 @@
 ﻿using Dominio;
 using Negocio;
 using System;
+using Utiles;
 using App_Clinica;
 using System.Collections.Generic;
 using System.Linq;
