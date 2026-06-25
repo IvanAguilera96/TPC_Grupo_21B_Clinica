@@ -1,4 +1,4 @@
-CREATE PROCEDURE SP_AsignarAgendaMedico
+﻿CREATE PROCEDURE SP_AsignarAgendaMedico
     @IdMedico INT,
     @IdEspecialidad INT,
     @DiaDeTrabajo VARCHAR(50),
@@ -12,18 +12,17 @@ BEGIN
     BEGIN TRY
         DECLARE @IdTurno INT;
 
-        -- Primero busco si existe ese horario para esa la especialidad elegida
+        -- Primero busco si existe ese horario
         SELECT @IdTurno = IdTurnoTrabajo FROM TurnoTrabajo 
                 WHERE DiaDeTrabajo = @DiaDeTrabajo 
                       AND HoraEntrada = @HoraEntrada 
-                      AND HoraSalida = @HoraSalida
-                      AND IdEspecialidad = @IdEspecialidad;
+                      AND HoraSalida = @HoraSalida;
 
         -- Si no existe, se inserta
         IF @IdTurno IS NULL
         BEGIN
-            INSERT INTO TurnoTrabajo (HoraEntrada, HoraSalida, DiaDeTrabajo, IdEspecialidad)
-            VALUES (@HoraEntrada, @HoraSalida, @DiaDeTrabajo, @IdEspecialidad);
+            INSERT INTO TurnoTrabajo (HoraEntrada, HoraSalida, DiaDeTrabajo)
+            VALUES (@HoraEntrada, @HoraSalida, @DiaDeTrabajo);
             
             -- Recuperamos el ID recién generado
             SET @IdTurno = SCOPE_IDENTITY();
