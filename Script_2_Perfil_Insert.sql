@@ -1,4 +1,4 @@
-﻿USE TPC_Clinica;
+﻿SE TPC_Clinica;
 GO
 
 SET IDENTITY_INSERT [dbo].[Perfil] ON;
