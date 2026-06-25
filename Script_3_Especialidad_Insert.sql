@@ -1,4 +1,5 @@
-﻿USE TPC_Clinica;
+﻿
+USE TPC_Clinica;
 GO
 
 INSERT INTO [dbo].Especialidad (Descripcion, Estado) VALUES 
