@@ -56,17 +56,17 @@ INSERT INTO [dbo].[Paciente] (Apellido, Nombre, Dni, FechaNacimiento, Email, Tel
 GO
 
 --TurnoTrabajo
-INSERT INTO [dbo].[TurnoTrabajo] (Descripcion, DiaDeTrabajo, HoraEntrada, HoraSalida) VALUES 
-('Mañana Lunes', 'Lunes', '08:00', '12:00'),
-('Tarde Lunes', 'Lunes', '13:00', '17:00'),
-('Mañana Martes', 'Martes', '08:00', '12:00'),
-('Tarde Martes', 'Martes', '13:00', '17:00'),
-('Mañana Miércoles', 'Miércoles', '08:00', '12:00'),
-('Tarde Miércoles', 'Miércoles', '13:00', '17:00'),
-('Mañana Jueves', 'Jueves', '08:00', '12:00'),
-('Tarde Jueves', 'Jueves', '13:00', '17:00'),
-('Mañana Viernes', 'Viernes', '08:00', '12:00'),
-('Tarde Viernes', 'Viernes', '13:00', '17:00');
+INSERT INTO [dbo].[TurnoTrabajo] (DiaDeTrabajo, HoraEntrada, HoraSalida) VALUES 
+('Lunes', '08:00', '12:00'),
+('Lunes', '13:00', '17:00'),
+('Martes', '08:00', '12:00'),
+('Martes', '13:00', '17:00'),
+('Miércoles', '08:00', '12:00'),
+('Miércoles', '13:00', '17:00'),
+('Jueves', '08:00', '12:00'),
+('Jueves', '13:00', '17:00'),
+('Viernes', '08:00', '12:00'),
+('Viernes', '13:00', '17:00');
 GO
 
 --Usuario

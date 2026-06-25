@@ -18,7 +18,7 @@ namespace Negocio
 
             try
             {
-                datos.setearConsulta("SELECT A.IdAgendaMedico, A.IdMedico, T.IdTurnoTrabajo, T.Descripcion AS NombreTurno, T.HoraEntrada, T.HoraSalida, T.DiaDeTrabajo, E.IdEspecialidad, E.Descripcion AS NombreEspecialidad FROM AgendaMedico A INNER JOIN TurnoTrabajo T ON A.IdTurnoTrabajo = T.IdTurnoTrabajo INNER JOIN Especialidad E ON A.IdEspecialidad = E.IdEspecialidad WHERE A.IdMedico = @IdMedico");
+                datos.setearConsulta("SELECT A.IdAgendaMedico, A.IdMedico, T.IdTurnoTrabajo, T.HoraEntrada, T.HoraSalida, T.DiaDeTrabajo, E.IdEspecialidad, E.Descripcion AS NombreEspecialidad FROM AgendaMedico A INNER JOIN TurnoTrabajo T ON A.IdTurnoTrabajo = T.IdTurnoTrabajo INNER JOIN Especialidad E ON A.IdEspecialidad = E.IdEspecialidad WHERE A.IdMedico = @IdMedico");
                 datos.setearParametros("@IdMedico", IdMedico);
                 datos.ejecutarLectura();
 
@@ -32,7 +32,7 @@ namespace Negocio
 
                     Agenda.TurnoTrabajo = new TurnoTrabajo();
                     Agenda.TurnoTrabajo.IdTurnoTrabajo = (int)datos.Lector["IdTurnoTrabajo"];
-                    Agenda.TurnoTrabajo.Descripcion = (string)datos.Lector["NombreTurno"];
+                    //Agenda.TurnoTrabajo.Descripcion = (string)datos.Lector["NombreTurno"];
                     Agenda.TurnoTrabajo.HoraEntrada = (TimeSpan)datos.Lector["HoraEntrada"];
                     Agenda.TurnoTrabajo.HoraSalida = (TimeSpan)datos.Lector["HoraSalida"];
                     Agenda.TurnoTrabajo.DiaDeTrabajo = (string)datos.Lector["DiaDeTrabajo"];
@@ -74,5 +74,30 @@ namespace Negocio
             }
             finally { datos.cerrarConexion(); }
         } // Agregar
+
+        public void AgregarConSP(AgendaMedico nueva) {
+
+            AccesoDatos datos = new AccesoDatos();
+
+            try
+            {
+                datos.setearProcedimiento("SP_AsignarAgendaMedico");
+                datos.setearParametros("@IdMedico", nueva.Medico.IdMedico);
+                datos.setearParametros("@IdEspecialidad", nueva.Especialidad.IdEspecialidad);
+                datos.setearParametros("@DiaDeTrabajo", nueva.TurnoTrabajo.DiaDeTrabajo);
+                datos.setearParametros("@HoraEntrada", nueva.TurnoTrabajo.HoraEntrada);
+                datos.setearParametros("@HoraSalida", nueva.TurnoTrabajo.HoraSalida);
+
+                datos.ejecutarAccion();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
     }
 }

@@ -31,7 +31,6 @@ CREATE TABLE Especialidad(
 
 CREATE TABLE TurnoTrabajo(
 	IdTurnoTrabajo INT PRIMARY KEY IDENTITY(1,1),
-	Descripcion VARCHAR(100) NOT NULL,
 	HoraEntrada Time NOT NULL,
 	HoraSalida Time NOT NULL,
 	DiaDeTrabajo VARCHAR(10) NOT NULL,

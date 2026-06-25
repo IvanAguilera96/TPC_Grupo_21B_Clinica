@@ -23,11 +23,11 @@ namespace App_Clinica
 
             if (!IsPostBack)
             {
-                CargarDesplegables();
+                CargarDesplegable();
             }
         }
 
-        private void CargarDesplegables()
+        private void CargarDesplegable()
         {
             try
             {
@@ -38,24 +38,24 @@ namespace App_Clinica
                 ddlEspecialidad.DataTextField = "Descripcion";
                 ddlEspecialidad.DataBind();
 
-                // Carga TurnoTrabajo
-                TurnoTrabajoNegocio ttNegocio = new TurnoTrabajoNegocio();
-                ddlTurnoTrabajo.DataSource = ttNegocio.Listar();
-                ddlTurnoTrabajo.DataValueField = "IdTurnoTrabajo";
-                ddlTurnoTrabajo.DataTextField = "Descripcion";
-                ddlTurnoTrabajo.DataBind();
             }
             catch (Exception ex)
             {
                 Utils.MostrarAlertaModal(this, "Error al cargar los selectores de la agenda: " + ex.Message);
             }
-        } //CargarDesplegables
+        } //CargarDesplegable
 
         protected void btnGuardar_Click(object sender, EventArgs e)
         {
             string idMedico = Request.QueryString["idmedico"];
             try
             {
+                if(string.IsNullOrEmpty(txtHoraEntrada.Text) || string.IsNullOrEmpty(txtHoraSalida.Text))
+                {
+                    Utils.MostrarAlertaModal(this, "Debe completar el horario de entrada y salida.");
+                    return;
+                }
+
                 AgendaMedico nuevaAgenda = new AgendaMedico();
 
                 nuevaAgenda.Medico = new Medico();
@@ -65,10 +65,12 @@ namespace App_Clinica
                 nuevaAgenda.Especialidad.IdEspecialidad = int.Parse(ddlEspecialidad.SelectedValue);
 
                 nuevaAgenda.TurnoTrabajo = new TurnoTrabajo();
-                nuevaAgenda.TurnoTrabajo.IdTurnoTrabajo = int.Parse(ddlTurnoTrabajo.SelectedValue);
+                nuevaAgenda.TurnoTrabajo.DiaDeTrabajo = ddlDia.SelectedValue;
+                nuevaAgenda.TurnoTrabajo.HoraEntrada = TimeSpan.Parse(txtHoraEntrada.Text);
+                nuevaAgenda.TurnoTrabajo.HoraSalida = TimeSpan.Parse(txtHoraSalida.Text);
 
                 AgendaMedicoNegocio negocio = new AgendaMedicoNegocio();
-                negocio.Agregar(nuevaAgenda);
+                negocio.AgregarConSP(nuevaAgenda);
 
                 Session["MensajeExito"] = "Horario asignado con éxito.";
                 Response.Redirect("MedicoAgendaPag.aspx?idmedico=" + idMedico, false);
