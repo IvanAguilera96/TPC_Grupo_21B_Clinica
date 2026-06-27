@@ -1,12 +1,14 @@
 ﻿USE TPC_Clinica;
 GO
 
+DELETE FROM [dbo].[Turno];
 DELETE FROM [dbo].[AgendaMedico];
 DELETE FROM [dbo].[Usuario];
 DELETE FROM [dbo].[Medico];
 DELETE FROM [dbo].[Paciente];
 DELETE FROM [dbo].[TurnoTrabajo];
 DELETE FROM [dbo].[Especialidad];
+DELETE FROM [dbo].[EstadoTurno];
 DELETE FROM [dbo].[Perfil];
 GO
 
@@ -79,18 +81,43 @@ GO
 
 --AgendaMedico
 INSERT INTO [dbo].[AgendaMedico] (IdMedico, IdEspecialidad, IdTurnoTrabajo) VALUES 
-((SELECT IdMedico FROM Medico WHERE Dni = '32111222'), (SELECT IdEspecialidad FROM Especialidad WHERE Descripcion = 'Pediatría'), (SELECT IdTurnoTrabajo FROM TurnoTrabajo WHERE Descripcion = 'Mañana Lunes')),
-((SELECT IdMedico FROM Medico WHERE Dni = '32111222'), (SELECT IdEspecialidad FROM Especialidad WHERE Descripcion = 'Pediatría'), (SELECT IdTurnoTrabajo FROM TurnoTrabajo WHERE Descripcion = 'Mañana Martes')),
+((SELECT IdMedico FROM Medico WHERE Dni = '32111222'), 
+ (SELECT IdEspecialidad FROM Especialidad WHERE Descripcion = 'Pediatría'), 
+ (SELECT IdTurnoTrabajo FROM TurnoTrabajo WHERE DiaDeTrabajo = 'Lunes' AND HoraEntrada = '08:00:00')),
 
-((SELECT IdMedico FROM Medico WHERE Dni = '34555666'), (SELECT IdEspecialidad FROM Especialidad WHERE Descripcion = 'Clínica Médica'), (SELECT IdTurnoTrabajo FROM TurnoTrabajo WHERE Descripcion = 'Tarde Lunes')),
-((SELECT IdMedico FROM Medico WHERE Dni = '34555666'), (SELECT IdEspecialidad FROM Especialidad WHERE Descripcion = 'Clínica Médica'), (SELECT IdTurnoTrabajo FROM TurnoTrabajo WHERE Descripcion = 'Tarde Martes')),
+((SELECT IdMedico FROM Medico WHERE Dni = '32111222'), 
+ (SELECT IdEspecialidad FROM Especialidad WHERE Descripcion = 'Pediatría'), 
+ (SELECT IdTurnoTrabajo FROM TurnoTrabajo WHERE DiaDeTrabajo = 'Martes' AND HoraEntrada = '08:00:00')),
 
-((SELECT IdMedico FROM Medico WHERE Dni = '29888999'), (SELECT IdEspecialidad FROM Especialidad WHERE Descripcion = 'Cardiología'), (SELECT IdTurnoTrabajo FROM TurnoTrabajo WHERE Descripcion = 'Mañana Miércoles')),
-((SELECT IdMedico FROM Medico WHERE Dni = '29888999'), (SELECT IdEspecialidad FROM Especialidad WHERE Descripcion = 'Cardiología'), (SELECT IdTurnoTrabajo FROM TurnoTrabajo WHERE Descripcion = 'Mañana Jueves')),
+((SELECT IdMedico FROM Medico WHERE Dni = '34555666'), 
+ (SELECT IdEspecialidad FROM Especialidad WHERE Descripcion = 'Clínica Médica'), 
+ (SELECT IdTurnoTrabajo FROM TurnoTrabajo WHERE DiaDeTrabajo = 'Lunes' AND HoraEntrada = '13:00:00')),
 
-((SELECT IdMedico FROM Medico WHERE Dni = '31444555'), (SELECT IdEspecialidad FROM Especialidad WHERE Descripcion = 'Traumatología'), (SELECT IdTurnoTrabajo FROM TurnoTrabajo WHERE Descripcion = 'Tarde Miércoles')),
-((SELECT IdMedico FROM Medico WHERE Dni = '31444555'), (SELECT IdEspecialidad FROM Especialidad WHERE Descripcion = 'Traumatología'), (SELECT IdTurnoTrabajo FROM TurnoTrabajo WHERE Descripcion = 'Tarde Jueves')),
+((SELECT IdMedico FROM Medico WHERE Dni = '34555666'), 
+ (SELECT IdEspecialidad FROM Especialidad WHERE Descripcion = 'Clínica Médica'), 
+ (SELECT IdTurnoTrabajo FROM TurnoTrabajo WHERE DiaDeTrabajo = 'Martes' AND HoraEntrada = '13:00:00')),
 
-((SELECT IdMedico FROM Medico WHERE Dni = '35222333'), (SELECT IdEspecialidad FROM Especialidad WHERE Descripcion = 'Ginecología'), (SELECT IdTurnoTrabajo FROM TurnoTrabajo WHERE Descripcion = 'Mañana Viernes')),
-((SELECT IdMedico FROM Medico WHERE Dni = '35222333'), (SELECT IdEspecialidad FROM Especialidad WHERE Descripcion = 'Ginecología'), (SELECT IdTurnoTrabajo FROM TurnoTrabajo WHERE Descripcion = 'Tarde Viernes'));
+((SELECT IdMedico FROM Medico WHERE Dni = '29888999'), 
+ (SELECT IdEspecialidad FROM Especialidad WHERE Descripcion = 'Cardiología'), 
+ (SELECT IdTurnoTrabajo FROM TurnoTrabajo WHERE DiaDeTrabajo = 'Miércoles' AND HoraEntrada = '08:00:00')),
+
+((SELECT IdMedico FROM Medico WHERE Dni = '29888999'), 
+ (SELECT IdEspecialidad FROM Especialidad WHERE Descripcion = 'Cardiología'), 
+ (SELECT IdTurnoTrabajo FROM TurnoTrabajo WHERE DiaDeTrabajo = 'Jueves' AND HoraEntrada = '08:00:00')),
+
+((SELECT IdMedico FROM Medico WHERE Dni = '31444555'), 
+ (SELECT IdEspecialidad FROM Especialidad WHERE Descripcion = 'Traumatología'), 
+ (SELECT IdTurnoTrabajo FROM TurnoTrabajo WHERE DiaDeTrabajo = 'Miércoles' AND HoraEntrada = '13:00:00')),
+
+((SELECT IdMedico FROM Medico WHERE Dni = '31444555'), 
+ (SELECT IdEspecialidad FROM Especialidad WHERE Descripcion = 'Traumatología'), 
+ (SELECT IdTurnoTrabajo FROM TurnoTrabajo WHERE DiaDeTrabajo = 'Jueves' AND HoraEntrada = '13:00:00')),
+
+((SELECT IdMedico FROM Medico WHERE Dni = '35222333'), 
+ (SELECT IdEspecialidad FROM Especialidad WHERE Descripcion = 'Ginecología'), 
+ (SELECT IdTurnoTrabajo FROM TurnoTrabajo WHERE DiaDeTrabajo = 'Viernes' AND HoraEntrada = '08:00:00')),
+
+((SELECT IdMedico FROM Medico WHERE Dni = '35222333'), 
+ (SELECT IdEspecialidad FROM Especialidad WHERE Descripcion = 'Ginecología'), 
+ (SELECT IdTurnoTrabajo FROM TurnoTrabajo WHERE DiaDeTrabajo = 'Viernes' AND HoraEntrada = '13:00:00'));
 GO
