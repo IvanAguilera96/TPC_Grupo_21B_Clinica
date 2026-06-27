@@ -1,12 +1,13 @@
-﻿using System;
+﻿using ConexionBD;
+using Dominio;
+using Negocio;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-using Dominio;
-using ConexionBD;
-using Negocio;
+using static Utiles.Utils;
 
 namespace App_Clinica
 {
@@ -14,6 +15,8 @@ namespace App_Clinica
     {
         protected void Page_Load(object sender, EventArgs e)
         {
+            Seguridad.ValidarAcceso(this, "Administrador", "Recepcionista");
+
             if (!IsPostBack)
             {
                 ActualizarGrillaPaciente();

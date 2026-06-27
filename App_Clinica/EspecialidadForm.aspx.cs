@@ -1,12 +1,13 @@
-﻿using System;
+﻿using Dominio;
+using Negocio;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-using Negocio;
-using Dominio;
 using Utiles;
+using static Utiles.Utils;
 
 namespace App_Clinica
 {
@@ -16,6 +17,8 @@ namespace App_Clinica
         {
             try
             {
+                Seguridad.ValidarAcceso(this, "Administrador");
+
                 if (!IsPostBack)
                 {
                     //Si viene ID, es edición

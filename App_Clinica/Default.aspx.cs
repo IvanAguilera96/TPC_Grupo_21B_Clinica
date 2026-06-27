@@ -1,10 +1,9 @@
-﻿using Negocio;
+﻿using Dominio;
+using Negocio;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.UI;
-using System.Web.UI.WebControls;
+using Utiles;
+using static Utiles.Utils;
 
 namespace App_Clinica
 {
@@ -12,32 +11,45 @@ namespace App_Clinica
     {
         protected void Page_Load(object sender, EventArgs e)
         {
+            Seguridad.ValidarAcceso(this, "Administrador", "Recepcionista", "Medico");
+
             if (!IsPostBack)
             {
-                //Lógica para recuperar el usuario logueado
-
-                //Evaluar según la descripción del Perfil
-                string userLogueado = "Administrador";
-
-                switch (userLogueado)
+                // 1. Recuperamos de forma segura el usuario logueado en la sesión global
+                if (Session["UsuarioLogueado"] != null)
                 {
-                    case "Administrador":
-                        CargarDashboardAdmin();
-                        break;
+                    Dominio.Usuario usuarioLogueado = (Dominio.Usuario)Session["UsuarioLogueado"];
 
-                    case "Recepcionista":
-                        CargarDashboardRecepcion();
-                        break;
+                    lblNombreUsuario.Text = usuarioLogueado.Nombre;
 
-                    case "Medico":
-                        CargarDashboardMedico();
-                        break;
+                    string rolDesc = usuarioLogueado.Perfil.Descripcion;
 
-                    default:
-                        break;
+                    switch (rolDesc)
+                    {
+                        case "Administrador":
+                            CargarDashboardAdmin();
+                            break;
+
+                        case "Recepcionista":
+                            CargarDashboardRecepcion();
+                            break;
+
+                        case "Medico":
+                            CargarDashboardMedico();
+                            break;
+
+                        default:
+                            Utils.MostrarAlertaModal(this, "Su usuario no cuenta con un panel configurado para este sistema.");
+                            break;
+                    }
+                }
+                else
+                {
+                    Response.Redirect("Login.aspx", false);
                 }
             }
         }
+
         private void CargarDashboardAdmin()
         {
             pnlAdmin.Visible = true;
@@ -52,22 +64,32 @@ namespace App_Clinica
                 int totalPacientes = pacNegocio.Listar().Count;
                 lblCantPacientes.Text = totalPacientes.ToString();
 
-                //Lógica para listar turnos del mes
+                //listar turnos del mes (se completará al terminar Turnos)
             }
             catch (Exception ex)
             {
-                throw ex;
+                Utils.MostrarAlertaModal(this, "Error al cargar las estadísticas de administración: " + ex.Message);
             }
         }
 
         private void CargarDashboardRecepcion()
         {
-            pnlRecepcion.Visible = true;        
+            pnlRecepcion.Visible = true;
         }
 
         private void CargarDashboardMedico()
         {
             pnlMedico.Visible = true;
+
+            try
+            {
+                //recuperar el ID del médico asociado al usuario para filtrar y mostrar su grilla
+                Dominio.Usuario usuarioLogueado = (Dominio.Usuario)Session["UsuarioLogueado"];
+            }
+            catch (Exception ex)
+            {
+                Utils.MostrarAlertaModal(this, "Error al cargar la agenda médica: " + ex.Message);
+            }
         }
-    }   
+    }
 }

@@ -187,5 +187,48 @@ namespace Negocio
                 datos.cerrarConexion();
             }
         }
+
+        public Usuario ValidarLogin(string nombre, string contrasenia)
+        {
+            AccesoDatos datos = new AccesoDatos();
+
+            try
+            {
+                //Recupera usuario y perfil
+                string consulta = @"SELECT U.IdUsuario, U.Nombre, U.IdPerfil, P.Descripcion as Perfil 
+                                    FROM Usuario U 
+                                    INNER JOIN Perfil P ON U.IdPerfil = P.IdPerfil 
+                                    WHERE U.Nombre = @nombre AND U.Contrasenia = @contrasenia AND U.Estado = 1";
+
+                datos.setearConsulta(consulta);
+                datos.setearParametros("@nombre", nombre);
+                datos.setearParametros("@contrasenia", contrasenia);
+
+                datos.ejecutarLectura();
+
+                if (datos.Lector.Read())
+                {
+                    Usuario usuarioLogueado = new Usuario();
+                    usuarioLogueado.IdUsuario = (int)datos.Lector["IdUsuario"];
+                    usuarioLogueado.Nombre = (string)datos.Lector["Nombre"];
+
+                    usuarioLogueado.Perfil = new Perfil();
+                    usuarioLogueado.Perfil.IdPerfil = (int)datos.Lector["IdPerfil"];
+                    usuarioLogueado.Perfil.Descripcion = (string)datos.Lector["Perfil"];
+
+                    return usuarioLogueado; //Credenciales correctas, devolvemos el usuario
+                }
+
+                return null; //las credenciales no existen o el usuario está de baja
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
     }
 }

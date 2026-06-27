@@ -29,7 +29,7 @@
                 </div>
 
                 <div class="bg-light border p-2 rounded px-4">
-                    <span class="fw-semibold text-muted">Bienvenido, Mr. X</span>
+                    <span class="fw-semibold text-muted">Bienvenido, <asp:Label ID="lblUserNombre" runat="server" class="text-dark fw-bold"></asp:Label></span>
                 </div>
             </div>
 
@@ -45,7 +45,8 @@
                         <a href="EspecialidadPag.aspx" id="menuEspecialidad" runat="server" class="list-group-item list-group-item-action py-4 text-center border">ESPECIALIDADES</a>
                         <a href="Usuario.aspx" id="menuUsuario" runat="server" class="list-group-item list-group-item-action py-4 text-center border">USUARIOS</a>
 
-                        <asp:Button ID="btnSalir" runat="server" Text="Salir" CssClass="btn btn-outline-danger mt-3 py-4 w-100" />
+                        <asp:Button ID="btnSalir" runat="server" Text="Salir" OnClick="btnSalir_Click" 
+                        OnClientClick="return confirmarSalir(this);" CssClass="btn btn-outline-danger mt-3 py-4 w-100" />
                     </div>
                 </div>
 
@@ -165,6 +166,30 @@
                     }
                 });
             });
+
+            function confirmarSalir(boton) {
+                if (boton.dataset.confirmado === "true") {
+                    boton.dataset.confirmado = "false";
+                    return true;
+                }
+
+                clickOriginal = boton;
+
+                // Cambiamos dinámicamente los textos del modal de eliminación para que sirva de Logout
+                document.getElementById("modalConfirmarLabel").innerHTML = '<i class="bi bi-door-open-fill me-2" style="color: #C85A53;"></i>¿Cerrar Sesión?';
+                document.querySelector("#modalConfirmarEliminar .modal-body p").innerText = "Está a punto de salir del sistema. ¿Desea continuar?";
+
+                // Cambiamos el texto del botón verde/rojo de confirmación
+                var btnConfirmar = document.getElementById("btnMdlConfirmarBorrado");
+                btnConfirmar.innerText = "Salir";
+                btnConfirmar.className = "btn btn-danger flex-grow-1 fw-bold rounded-3"; // Un rojo sutil
+
+                var modalEl = document.getElementById('modalConfirmarEliminar');
+                var myModal = bootstrap.Modal.getOrCreateInstance(modalEl);
+                myModal.show();
+
+                return false;
+            }
         </script>
 
     </form>
