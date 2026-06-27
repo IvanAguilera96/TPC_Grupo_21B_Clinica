@@ -43,7 +43,6 @@
   <ItemGroup>
     <Compile Include="AgendaMedicoNegocio.cs" />
     <Compile Include="EspecialidadNegocio.cs" />
-    <Compile Include="EstadoTurno.cs" />
     <Compile Include="MedicoNegocio.cs" />
     <Compile Include="PacienteNegocio.cs" />
     <Compile Include="PerfilNegocio.cs" />

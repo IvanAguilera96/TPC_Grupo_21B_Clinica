@@ -15,7 +15,10 @@ namespace Dominio
         public int Matricula { get; set; }
         public bool Estado { get; set; } //true=activo, false=inactivo
         public List<AgendaMedico> ListaAgendaMedico { get; set; }
-
+        public string NombreCompleto
+        {
+            get { return Nombre + " " + Apellido; }
+        }
         //Agregar relacion con usuario.
     }
 }
