@@ -34,8 +34,8 @@
                 <asp:BoundField HeaderText="Fecha" DataField="Fecha" DataFormatString="{0:dd/MM/yyyy}" />
                 <asp:BoundField HeaderText="Hora" DataField="Hora" DataFormatString="{0:hh\:mm}" />
                 
-                <asp:BoundField HeaderText="Paciente" DataField="Paciente.Apellido" /> 
-                <asp:BoundField HeaderText="Médico" DataField="Agenda.Medico.Apellido" />
+                <asp:BoundField HeaderText="Paciente" DataField="Paciente.NombreCompleto" /> 
+                <asp:BoundField HeaderText="Médico" DataField="Agenda.Medico.NombreCompleto" />
                 <asp:BoundField HeaderText="Especialidad" DataField="Agenda.Especialidad.Descripcion" />
                 
                 <%-- Estado con Badge de color dinámico --%>
