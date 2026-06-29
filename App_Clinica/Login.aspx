@@ -23,7 +23,7 @@
                 
                 <asp:Label ID="lblMensajeError" runat="server" 
                     CssClass="alert alert-danger d-block text-center mb-3 fw-medium border-0" 
-                    style="background-color: #E2EEF9; color: #2C5282; font-size: 0.9rem; border-radius: 8px;" 
+                    style="background-color: #F8D7DA; color: #842029; font-size: 0.9rem; border-radius: 8px;" 
                     Visible="false">
                 </asp:Label>
 

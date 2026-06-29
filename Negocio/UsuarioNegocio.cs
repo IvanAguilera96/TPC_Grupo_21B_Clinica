@@ -195,10 +195,10 @@ namespace Negocio
             try
             {
                 //Recupera usuario y perfil
-                string consulta = @"SELECT U.IdUsuario, U.Nombre, U.IdPerfil, P.Descripcion as Perfil 
+                string consulta = @"SELECT U.IdUsuario, U.Nombre, U.IdPerfil, U.Estado, P.Descripcion as Perfil 
                                     FROM Usuario U 
                                     INNER JOIN Perfil P ON U.IdPerfil = P.IdPerfil 
-                                    WHERE U.Nombre = @nombre AND U.Contrasenia = @contrasenia AND U.Estado = 1";
+                                    WHERE U.Nombre = @nombre AND U.Contrasenia = @contrasenia";
 
                 datos.setearConsulta(consulta);
                 datos.setearParametros("@nombre", nombre);
@@ -211,6 +211,7 @@ namespace Negocio
                     Usuario usuarioLogueado = new Usuario();
                     usuarioLogueado.IdUsuario = (int)datos.Lector["IdUsuario"];
                     usuarioLogueado.Nombre = (string)datos.Lector["Nombre"];
+                    usuarioLogueado.Estado = (bool)datos.Lector["Estado"];
 
                     usuarioLogueado.Perfil = new Perfil();
                     usuarioLogueado.Perfil.IdPerfil = (int)datos.Lector["IdPerfil"];

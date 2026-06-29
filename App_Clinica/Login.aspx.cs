@@ -35,12 +35,18 @@ namespace App_Clinica
             try
             {
                 UsuarioNegocio negocio = new UsuarioNegocio();
-
                 Dominio.Usuario usuarioValido = negocio.ValidarLogin(txtUsuario.Text.Trim(), txtContrasenia.Text.Trim());
 
                 if (usuarioValido != null)
                 {
-                    //Guarda objeto completo en la Sesión global
+                    if (!usuarioValido.Estado)
+                    {
+                        lblMensajeError.Text = "Su usuario se encuentra deshabilitado. Contacte al administrador.";
+                        lblMensajeError.Visible = true;
+                        return; // Frenamos el flujo aquí
+                    }
+
+                    // Si está todo OK y activo (Estado = true), ingresa normalmente
                     Session["UsuarioLogueado"] = usuarioValido;
                     Response.Redirect("Default.aspx", false);
                 }
