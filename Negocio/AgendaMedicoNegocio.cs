@@ -32,7 +32,6 @@ namespace Negocio
 
                     Agenda.TurnoTrabajo = new TurnoTrabajo();
                     Agenda.TurnoTrabajo.IdTurnoTrabajo = (int)datos.Lector["IdTurnoTrabajo"];
-                    //Agenda.TurnoTrabajo.Descripcion = (string)datos.Lector["NombreTurno"];
                     Agenda.TurnoTrabajo.HoraEntrada = (TimeSpan)datos.Lector["HoraEntrada"];
                     Agenda.TurnoTrabajo.HoraSalida = (TimeSpan)datos.Lector["HoraSalida"];
                     Agenda.TurnoTrabajo.DiaDeTrabajo = (string)datos.Lector["DiaDeTrabajo"];
@@ -89,6 +88,48 @@ namespace Negocio
                 datos.setearParametros("@HoraSalida", nueva.TurnoTrabajo.HoraSalida);
 
                 datos.ejecutarAccion();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        } // AgregarConSP
+
+        public List<AgendaMedico> ListarAgendasPorMedico(int IdMedico, int IdEspecialidad)
+        {
+            List<AgendaMedico> lista = new List<AgendaMedico>();
+            AccesoDatos datos = new AccesoDatos();
+
+            try
+            {
+                datos.setearConsulta("SELECT A.IdAgendaMedico, T.IdTurnoTrabajo, T.DiaDeTrabajo, T.HoraEntrada, T.HoraSalida " +
+                                     "FROM AgendaMedico A INNER JOIN TurnoTrabajo T ON A.IdTurnoTrabajo = T.IdTurnoTrabajo " +
+                                     "WHERE A.IdMedico = @IdMedico AND A.IdEspecialidad = @IdEspecialidad");
+
+                datos.setearParametros("@IdMedico", IdMedico);
+                datos.setearParametros("@IdEspecialidad", IdEspecialidad);
+
+                datos.ejecutarLectura();
+
+                while (datos.Lector.Read())
+                {
+                    AgendaMedico aux = new AgendaMedico();
+                    aux.IdAgendaMedico = (int)datos.Lector["IdAgendaMedico"];
+
+                    aux.TurnoTrabajo = new TurnoTrabajo();
+                    aux.TurnoTrabajo.IdTurnoTrabajo = (int)datos.Lector["IdTurnoTrabajo"];
+                    aux.TurnoTrabajo.DiaDeTrabajo = (string)datos.Lector["DiaDeTrabajo"];
+                    aux.TurnoTrabajo.HoraEntrada = (TimeSpan)datos.Lector["HoraEntrada"];
+                    aux.TurnoTrabajo.HoraSalida = (TimeSpan)datos.Lector["HoraSalida"];
+
+                    lista.Add(aux);
+                }
+
+                return lista;
             }
             catch (Exception ex)
             {

@@ -33,7 +33,7 @@ namespace Negocio
                     INNER JOIN Especialidad E ON A.IdEspecialidad = E.IdEspecialidad
                     INNER JOIN EstadoTurno EST ON T.IdEstadoTurno = EST.IdEstadoTurno";
 
-                // Evaluamos los filtros
+                // Revisamos los filtros
                 if (IdMedico > 0)
                 {
                     Query += " AND M.IdMedico = @IdMedico";
@@ -52,7 +52,7 @@ namespace Negocio
                     datos.setearParametros("@Fecha", Fecha);
                 }
 
-                // Ordenamos para que muestre primero los turnos más recientes
+                // Ordenamos para que muestre primero los turnos mas recientes
                 Query += " ORDER BY T.Fecha DESC, T.Hora ASC";
 
                 datos.setearConsulta(Query);
@@ -62,12 +62,12 @@ namespace Negocio
                 {
                     Turno aux = new Turno();
 
-                    // Datos primitivos del Turno
+                    // Datos del Turno
                     aux.IdTurno = (int)datos.Lector["IdTurno"];
                     aux.Fecha = (DateTime)datos.Lector["Fecha"];
                     aux.Hora = (TimeSpan)datos.Lector["Hora"];
 
-                    // Manejo de nulos para observaciones y diagnósticos
+                    // Manejo de nulos para observaciones y diagnosticos
                     aux.Observacion = datos.Lector["Observacion"] != DBNull.Value ? (string)datos.Lector["Observacion"] : "";
                     aux.Diagnostico = datos.Lector["Diagnostico"] != DBNull.Value ? (string)datos.Lector["Diagnostico"] : "";
 
@@ -126,5 +126,36 @@ namespace Negocio
                 datos.cerrarConexion();
             }
         } // Cambiar Estado
+
+        public void Agregar(Turno nuevo)
+        {
+            AccesoDatos datos = new AccesoDatos();
+            try
+            {
+                datos.setearConsulta(@"
+                                        INSERT INTO Turno (Fecha, Hora, IdAgendaMedico, IdPaciente, IdEstadoTurno, Observacion) 
+                                        VALUES (@Fecha, @Hora, @IdAgenda, @IdPaciente, @IdEstado, @Observacion)");
+
+                datos.setearParametros("@Fecha", nuevo.Fecha);
+                datos.setearParametros("@Hora", nuevo.Hora);
+                datos.setearParametros("@IdAgenda", nuevo.Agenda.IdAgendaMedico);
+                datos.setearParametros("@IdPaciente", nuevo.Paciente.IdPaciente);
+
+                // Al ser un alta, por defecto pasamos ID correspondiente a "Asignado" 2
+                datos.setearParametros("@IdEstado", 2);
+
+                datos.setearParametros("@Observacion", nuevo.Observacion ?? (object)DBNull.Value);
+
+                datos.ejecutarAccion();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
     }
 }

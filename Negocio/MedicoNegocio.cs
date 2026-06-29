@@ -167,6 +167,41 @@ namespace Negocio
             }
         } // Eliminar
 
+        public List<Medico> ListarMedicoPorEspecialidad(int IdEspecialidad)
+        {
+            List<Medico> lista = new List<Medico>();
+            AccesoDatos datos = new AccesoDatos();
+            try
+            {
+                datos.setearConsulta("SELECT DISTINCT M.IdMedico, M.Nombre, M.Apellido FROM Medico M INNER JOIN AgendaMedico A ON M.IdMedico = A.IdMedico WHERE A.IdEspecialidad = @IdEspecialidad");
+                datos.setearParametros("@IdEspecialidad", IdEspecialidad);
+                        
+                datos.ejecutarLectura();
+
+                while (datos.Lector.Read())
+                {
+                    Medico aux = new Medico();
+                    aux.IdMedico = (int)datos.Lector["IdMedico"];
+                    aux.Nombre = (string)datos.Lector["Nombre"];
+                    aux.Apellido = (string)datos.Lector["Apellido"];
+
+                    lista.Add(aux);
+                }
+
+                return lista;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+
+        }// ListarMedicoPorEspecialidad
+
+        // Metodos Privados para usar dentro de la clase
         private bool ExisteDni(string dni, int idMedicoActual = 0)
         {
             AccesoDatos datos = new AccesoDatos();
@@ -219,5 +254,6 @@ namespace Negocio
                 datos.cerrarConexion();
             }
         } //ExisteMatricula
+
     }
 }

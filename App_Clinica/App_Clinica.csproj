@@ -79,6 +79,7 @@
       <BrowseToURL>~/Paciente.aspx</BrowseToURL>
     </Content>
     <Content Include="PacienteForm.aspx" />
+    <Content Include="TurnoForm.aspx" />
     <Content Include="TurnosPag.aspx" />
     <Content Include="Usuario.aspx" />
     <Content Include="UsuarioForm.aspx" />
@@ -163,6 +164,13 @@
       <DependentUpon>PacienteForm.aspx</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TurnoForm.aspx.cs">
+      <DependentUpon>TurnoForm.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="TurnoForm.aspx.designer.cs">
+      <DependentUpon>TurnoForm.aspx</DependentUpon>
+    </Compile>
     <Compile Include="TurnosPag.aspx.cs">
       <DependentUpon>TurnosPag.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>

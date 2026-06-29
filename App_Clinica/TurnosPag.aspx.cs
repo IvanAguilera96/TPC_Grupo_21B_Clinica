@@ -40,7 +40,7 @@ namespace App_Clinica
 
         protected void btnNuevoTurno_Click(object sender, EventArgs e)
         {
-
+            Response.Redirect("TurnoForm.aspx");
         }
 
         protected void dgvTurnos_RowCommand(object sender, GridViewCommandEventArgs e)
