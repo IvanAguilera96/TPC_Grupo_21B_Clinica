@@ -1,6 +1,7 @@
 ﻿using Dominio;
 using Negocio;
 using System;
+using System.Linq;
 using System.Web.UI;
 using Utiles;
 using static Utiles.Utils;
@@ -58,6 +59,7 @@ namespace App_Clinica
 
             try
             {
+                // 1. Carga de métricas de contadores existentes
                 MedicoNegocio medNegocio = new MedicoNegocio();
                 int totalMedicos = medNegocio.Listar().Count;
                 lblCantMedicos.Text = totalMedicos.ToString();
@@ -66,8 +68,15 @@ namespace App_Clinica
                 int totalPacientes = pacNegocio.Listar().Count;
                 lblCantPacientes.Text = totalPacientes.ToString();
 
-                // Inicializado en 0 por ahora hasta mapear la capa de Turnos
-                lblCantTurnosMes.Text = "0";
+                // 2. Carga del total de turnos 
+                TurnoNegocio turnoNegocio = new TurnoNegocio();
+                var listaGlobalTurnos = turnoNegocio.ListarConFiltros(0, 0, ""); 
+
+                lblCantTurnosMes.Text = listaGlobalTurnos.Count.ToString(); 
+
+                // 3. Enlazamos sólo los últimos 5 movimientos del sistema
+                dgvAuditoriaTurnos.DataSource = listaGlobalTurnos.Take(5).ToList();
+                dgvAuditoriaTurnos.DataBind();
             }
             catch (Exception ex)
             {

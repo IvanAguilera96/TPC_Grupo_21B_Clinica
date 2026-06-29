@@ -19,9 +19,9 @@
             </div>
         </div>
 
-        <%-- PANEL PARA EL ADMINISTRADOR (CON TONO CELESTE UNIFICADO) --%>
+        <%-- PANEL PARA EL ADMINISTRADOR --%>
         <asp:Panel ID="pnlAdmin" runat="server" Visible="false">
-            <div class="row g-4">
+            <div class="row g-4 mb-4">
                 
                 <div class="col-12 col-md-4">
                     <div class="card border-0 shadow-sm p-4 rounded-3 position-relative" style="background-color: #D0E4F7; color: #1C3345;">
@@ -65,6 +65,53 @@
                             <i class="bi bi-calendar-check-fill fs-1 opacity-25"></i>
                         </div>
                         <a href="TurnosPag.aspx" class="stretched-link small text-decoration-none mt-3 d-inline-block fw-bold" style="color: #1C3345;">Auditar agenda global →</a>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="row g-4">
+                
+                <div class="col-12 col-lg-8">
+                    <div class="card bg-white p-4 rounded-3 shadow-sm border-0 h-100">
+                        <h5 class="text-dark fw-bold mb-3">
+                            <i class="bi bi-shield-check text-primary me-2"></i>Últimos Turnos Registrados
+                        </h5>
+                        <div class="table-responsive">
+                            <asp:GridView ID="dgvAuditoriaTurnos" runat="server" CssClass="table table-hover align-middle border-0 small" 
+                                AutoGenerateColumns="false" GridLines="None">
+                                <Columns>
+                                    <asp:BoundField HeaderText="Fecha" DataField="Fecha" DataFormatString="{0:dd/MM/yyyy}" ItemStyle-Width="100px" />
+                                    <asp:BoundField HeaderText="Hora" DataField="Hora" DataFormatString="{0:hh\:mm}" ItemStyle-CssClass="fw-semibold" />
+                                    <asp:BoundField HeaderText="Paciente" DataField="Paciente.NombreCompleto" />
+                                    <asp:BoundField HeaderText="MédicoAsignado" DataField="Agenda.Medico.NombreCompleto" />
+                                    <asp:TemplateField HeaderText="Estado">
+                                        <ItemTemplate>
+                                            <span class="badge <%# Eval("Estado.Descripcion").ToString() == "Asignado" ? "bg-warning text-dark" : "bg-danger" %>">
+                                                <%# Eval("Estado.Descripcion") %>
+                                            </span>
+                                        </ItemTemplate>
+                                    </asp:TemplateField>
+                                </Columns>
+                            </asp:GridView>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12 col-lg-4">
+                    <div class="card bg-white p-4 rounded-3 shadow-sm border-0 h-100">
+                        <h5 class="text-dark fw-bold mb-3">
+                            <i class="bi bi-gear-fill text-secondary me-2"></i>Configuración Clínica
+                        </h5>
+                        
+                        <div class="d-grid gap-2 mt-2">
+                            <a href="EspecialidadPag.aspx" class="btn border-0 fw-bold py-2 text-start ps-3 rounded-3 small" style="background-color: #E2EEF9; color: #2C5282;">
+                                <i class="bi bi-tags me-2"></i> Gestionar Especialidades
+                            </a>
+                            <a href="Usuario.aspx" class="btn border-0 fw-bold py-2 text-start ps-3 rounded-3 small" style="background-color: #E2EEF9; color: #2C5282;">
+                                <i class="bi bi-person-lock me-2"></i> Control de Usuarios Internos
+                            </a>
+                        </div>
                     </div>
                 </div>
 
