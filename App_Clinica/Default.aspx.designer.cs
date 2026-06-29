@@ -51,6 +51,15 @@ namespace App_Clinica
         protected global::System.Web.UI.WebControls.Label lblCantPacientes;
 
         /// <summary>
+        /// Control lblCantTurnosMes.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblCantTurnosMes;
+
+        /// <summary>
         /// Control pnlRecepcion.
         /// </summary>
         /// <remarks>
@@ -58,6 +67,15 @@ namespace App_Clinica
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Panel pnlRecepcion;
+
+        /// <summary>
+        /// Control dgvProximosTurnos.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.GridView dgvProximosTurnos;
 
         /// <summary>
         /// Control pnlMedico.

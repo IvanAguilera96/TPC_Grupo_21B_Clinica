@@ -11,19 +11,21 @@ namespace App_Clinica
     {
         protected void Page_Load(object sender, EventArgs e)
         {
+            // 🔒 El cerrojo unificado protege la página completa ante cualquier ingreso ilegal por URL
             Seguridad.ValidarAcceso(this, "Administrador", "Recepcionista", "Medico");
 
             if (!IsPostBack)
             {
-                // 1. Recuperamos de forma segura el usuario logueado en la sesión global
                 if (Session["UsuarioLogueado"] != null)
                 {
                     Dominio.Usuario usuarioLogueado = (Dominio.Usuario)Session["UsuarioLogueado"];
 
+                    // Asignamos la bienvenida dinámica al Label
                     lblNombreUsuario.Text = usuarioLogueado.Nombre;
 
                     string rolDesc = usuarioLogueado.Perfil.Descripcion;
 
+                    // Encendemos y cargamos el panel correspondiente al rol
                     switch (rolDesc)
                     {
                         case "Administrador":
@@ -64,7 +66,8 @@ namespace App_Clinica
                 int totalPacientes = pacNegocio.Listar().Count;
                 lblCantPacientes.Text = totalPacientes.ToString();
 
-                //listar turnos del mes (se completará al terminar Turnos)
+                // Inicializado en 0 por ahora hasta mapear la capa de Turnos
+                lblCantTurnosMes.Text = "0";
             }
             catch (Exception ex)
             {
@@ -75,6 +78,21 @@ namespace App_Clinica
         private void CargarDashboardRecepcion()
         {
             pnlRecepcion.Visible = true;
+
+            try
+            {
+                TurnoNegocio turnoNegocio = new TurnoNegocio();
+                string fechaHoy = DateTime.Today.ToString("yyyy-MM-dd");
+
+                var turnosDeHoy = turnoNegocio.ListarConFiltros(0, 0, fechaHoy);
+
+                dgvProximosTurnos.DataSource = turnosDeHoy;
+                dgvProximosTurnos.DataBind();
+            }
+            catch (Exception ex)
+            {
+                Utils.MostrarAlertaModal(this, "Error al cargar el monitor de recepción: " + ex.Message);
+            }
         }
 
         private void CargarDashboardMedico()
@@ -83,13 +101,23 @@ namespace App_Clinica
 
             try
             {
-                //recuperar el ID del médico asociado al usuario para filtrar y mostrar su grilla
                 Dominio.Usuario usuarioLogueado = (Dominio.Usuario)Session["UsuarioLogueado"];
+                int idMedicoLogueado = usuarioLogueado.IdUsuario;
+
+                TurnoNegocio turnoNegocio = new TurnoNegocio();
+                string fechaHoy = DateTime.Today.ToString("yyyy-MM-dd");
+
+                // Filtramos: IdMedico de la sesión, IdEspecialidad = 0 (Todas), Fecha = Hoy
+                var agendaDelDia = turnoNegocio.ListarConFiltros(idMedicoLogueado, 0, fechaHoy);
+
+                dgvTurnosDelDia.DataSource = agendaDelDia;
+                dgvTurnosDelDia.DataBind();
             }
             catch (Exception ex)
             {
                 Utils.MostrarAlertaModal(this, "Error al cargar la agenda médica: " + ex.Message);
             }
         }
+
     }
 }
