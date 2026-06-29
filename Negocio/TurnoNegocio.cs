@@ -18,7 +18,7 @@ namespace Negocio
             try
             {
                 // Query base con todos los INNER JOIN correspondientes
-                string query = @"
+                string Query = @"
                     SELECT 
                         T.IdTurno, T.Fecha, T.Hora, T.Observacion, T.Diagnostico,
                         P.IdPaciente, P.Nombre AS NombrePaciente, P.Apellido AS ApellidoPaciente,
@@ -36,26 +36,26 @@ namespace Negocio
                 // Evaluamos los filtros
                 if (IdMedico > 0)
                 {
-                    query += " AND M.IdMedico = @IdMedico";
+                    Query += " AND M.IdMedico = @IdMedico";
                     datos.setearParametros("@IdMedico", IdMedico);
                 }
 
                 if (IdEspecialidad > 0)
                 {
-                    query += " AND E.IdEspecialidad = @IdEspecialidad";
+                    Query += " AND E.IdEspecialidad = @IdEspecialidad";
                     datos.setearParametros("@IdEspecialidad", IdEspecialidad);
                 }
 
                 if (!string.IsNullOrEmpty(Fecha))
                 {
-                    query += " AND T.Fecha = @Fecha";
+                    Query += " AND T.Fecha = @Fecha";
                     datos.setearParametros("@Fecha", Fecha);
                 }
 
                 // Ordenamos para que muestre primero los turnos más recientes
-                query += " ORDER BY T.Fecha DESC, T.Hora ASC";
+                Query += " ORDER BY T.Fecha DESC, T.Hora ASC";
 
-                datos.setearConsulta(query);
+                datos.setearConsulta(Query);
                 datos.ejecutarLectura();
 
                 while (datos.Lector.Read())
@@ -105,6 +105,26 @@ namespace Negocio
             {
                 datos.cerrarConexion();
             }
-        }
+        } // Listar Con Filtro
+
+        public void CambiarEstado(int IdTurno, int IdEstadoCancelado)
+        {
+            AccesoDatos datos = new AccesoDatos();
+            try
+            {
+                datos.setearConsulta("UPDATE turno SET IdEstadoTurno = @IdEstadoCancelado WHERE IdTurno = @IdTurno");
+                datos.setearParametros("@IdEstadoCancelado", IdEstadoCancelado);
+                datos.setearParametros("@IdTurno", IdTurno);
+                datos.ejecutarAccion();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        } // Cambiar Estado
     }
 }

@@ -50,7 +50,8 @@
                 <%-- Acciones --%>
                 <asp:TemplateField HeaderText="Acciones">
                     <ItemTemplate>
-                        <asp:LinkButton ID="btnCancelar" runat="server" CommandName="CancelarTurno" 
+                        <asp:LinkButton ID="btnCancelar" runat="server" 
+                            CommandName="CancelarTurno" 
                             CommandArgument='<%# Eval("IdTurno") %>' CssClass="btn btn-sm btn-outline-danger"
                             Visible='<%# Eval("Estado.Descripcion").ToString() == "Asignado" %>'>
                             Cancelar

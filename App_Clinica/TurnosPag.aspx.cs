@@ -5,12 +5,13 @@ using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using Utiles;
 
 namespace App_Clinica
 {
     public partial class TurnoPag : System.Web.UI.Page
     {
-        private TurnoNegocio turnoNegocio = new TurnoNegocio();
+        
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -44,7 +45,28 @@ namespace App_Clinica
 
         protected void dgvTurnos_RowCommand(object sender, GridViewCommandEventArgs e)
         {
+            if (e.CommandName == "CancelarTurno")
+            {
+                TurnoNegocio turnoNegocio = new TurnoNegocio();
+                // Recuperamos el IdTurno que viaja en el CommandArgument
+                int IdTurno = Convert.ToInt32(e.CommandArgument);
 
+                try
+                {
+                    // Cambiamos el estado en la base de datos a "Cancelado"
+                    int IdEstadoCancelado = 1; // 1 = Cancelado en BD
+
+                    turnoNegocio.CambiarEstado(IdTurno, IdEstadoCancelado);
+
+                    Utils.MostrarAlertaModal(this, "El turno fue cancelado correctamente.");
+
+                    CargarGrilla();
+                }
+                catch (Exception ex)
+                {
+                    Utils.MostrarAlertaModal(this, "No se pudo cancelar el turno: " + ex.Message);
+                }
+            }
         }
         private void CargarFiltros()
         {
@@ -70,6 +92,7 @@ namespace App_Clinica
 
         private void CargarGrilla()
         {
+            TurnoNegocio turnoNegocio = new TurnoNegocio();
             // Pasamos los valores de los filtros al método listar
             int idMedico = int.Parse(ddlFiltroMedico.SelectedValue ?? "0");
             int idEspecialidad = int.Parse(ddlFiltroEspecialidad.SelectedValue ?? "0");
