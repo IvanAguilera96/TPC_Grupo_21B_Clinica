@@ -28,49 +28,56 @@
         </div>
 
         <!-- Grilla de Turnos -->
-        <asp:GridView ID="dgvTurnos" runat="server" CssClass="table table-striped table-hover table-bordered"
-            AutoGenerateColumns="false" DataKeyNames="IdTurno" OnRowCommand="dgvTurnos_RowCommand">
+        <div class="card bg-white p-4 rounded-3 shadow-sm border-0 mb-4 mt-2">
+    <div class="table-responsive" style="max-height: 450px; overflow-y: auto;">
+        <asp:GridView ID="dgvTurnos" runat="server" CssClass="table table-hover align-middle border-0 small"
+            AutoGenerateColumns="false" GridLines="None" DataKeyNames="IdTurno" OnRowCommand="dgvTurnos_RowCommand">
             <Columns>
-                <asp:BoundField HeaderText="ID" DataField="IdTurno" ItemStyle-Width="50px" />
-                <asp:BoundField HeaderText="Fecha" DataField="Fecha" DataFormatString="{0:dd/MM/yyyy}" />
-                <asp:BoundField HeaderText="Hora" DataField="Hora" DataFormatString="{0:hh\:mm}" />
+                <asp:BoundField HeaderText="ID" DataField="IdTurno" ItemStyle-CssClass="text-muted fw-semibold" ItemStyle-Width="60px" />
+                
+                <asp:BoundField HeaderText="Fecha" DataField="Fecha" DataFormatString="{0:dd/MM/yyyy}" ItemStyle-Width="110px" />
+                
+                <asp:BoundField HeaderText="Hora" DataField="Hora" DataFormatString="{0:hh\:mm}" ItemStyle-CssClass="fw-bold text-dark" ItemStyle-Width="90px" />
 
                 <asp:BoundField HeaderText="Paciente" DataField="Paciente.NombreCompleto" />
                 <asp:BoundField HeaderText="Médico" DataField="Agenda.Medico.NombreCompleto" />
                 <asp:BoundField HeaderText="Especialidad" DataField="Agenda.Especialidad.Descripcion" />
 
-                <%-- Estado con Badge de color dinámico --%>
-                <asp:TemplateField HeaderText="Estado">
+                <asp:TemplateField HeaderText="Estado" ItemStyle-Width="120px">
                     <ItemTemplate>
-                        <span class="badge <%# Eval("Estado.Descripcion").ToString() == "Asignado" ? "bg-warning text-dark" : "bg-danger" %>">
+                        <span class="badge <%# Eval("Estado.Descripcion").ToString() == "Asignado" ? "bg-warning text-dark" : "bg-danger bg-opacity-10 text-danger" %> px-2.5 py-1.5 rounded-2 fw-semibold">
                             <%# Eval("Estado.Descripcion") %>
                         </span>
                     </ItemTemplate>
                 </asp:TemplateField>
 
-                <%-- Acciones --%>
-
-                <asp:TemplateField HeaderText="Acciones">
+                <asp:TemplateField HeaderText="Acciones" ItemStyle-Width="200px" ItemStyle-CssClass="text-end">
                     <ItemTemplate>
-                        <!-- Botón Cancelar (solo visible si NO está Cancelado) -->
-                        <asp:LinkButton ID="btnCancelar" runat="server"
-                            CommandName="CancelarTurno"
-                            CommandArgument='<%# Eval("IdTurno") %>'
-                            CssClass="btn btn-sm btn-outline-danger me-1"
-                            Visible='<%# Eval("Estado.Descripcion").ToString() != "Cancelado" && Eval("Estado.Descripcion").ToString() != "Cerrado" %>'
-                            OnClientClick="return confirm('¿Está seguro de que desea cancelar este turno?');"> Cancelar
-                        </asp:LinkButton>
+                        <div class="d-inline-flex justify-content-end w-100">
+                            
+                            <asp:LinkButton ID="btnReprogramar" runat="server"
+                                CommandName="ReprogramarTurno"
+                                CommandArgument='<%# Eval("IdTurno") %>'
+                                CssClass="btn btn-sm btn-link text-primary text-decoration-none fw-bold p-0 me-3"
+                                Visible='<%# Eval("Estado.Descripcion").ToString() != "Cancelado" && Eval("Estado.Descripcion").ToString() != "Cerrado" %>'>
+                                <i class="bi bi-arrow-repeat me-1"></i>Reprogramar
+                            </asp:LinkButton>
 
-                        <!-- Botón Reprogramar (solo visible bajo las mismas condiciones) -->
-                        <asp:LinkButton ID="btnReprogramar" runat="server"
-                            CommandName="ReprogramarTurno"
-                            CommandArgument='<%# Eval("IdTurno") %>'
-                            CssClass="btn btn-sm btn-outline-primary"
-                            Visible='<%# Eval("Estado.Descripcion").ToString() != "Cancelado" && Eval("Estado.Descripcion").ToString() != "Cerrado" %>'> Reprogramar
-                        </asp:LinkButton>
+                            <asp:LinkButton ID="btnCancelar" runat="server"
+                                CommandName="CancelarTurno"
+                                CommandArgument='<%# Eval("IdTurno") %>'
+                                CssClass="btn btn-sm btn-link text-danger text-decoration-none fw-bold p-0"
+                                Visible='<%# Eval("Estado.Descripcion").ToString() != "Cancelado" && Eval("Estado.Descripcion").ToString() != "Cerrado" %>'
+                                OnClientClick="return confirmarEliminar(this);">
+                                <i class="bi bi-x-circle me-1"></i>Cancelar
+                            </asp:LinkButton>
+                            
+                        </div>
                     </ItemTemplate>
                 </asp:TemplateField>
             </Columns>
         </asp:GridView>
+    </div>
+</div>
     </div>
 </asp:Content>

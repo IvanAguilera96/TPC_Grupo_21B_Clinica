@@ -129,7 +129,7 @@
                     <a href="PacienteForm.aspx" class="btn border-0 fw-bold py-3 text-start ps-3 rounded-3" style="background-color: #E6F0FA; color: #1C3345;">
                         <i class="bi bi-person-plus me-2"></i> Nuevo Paciente
                     </a>
-                    <a href="TurnosForm.aspx" class="btn border-0 fw-bold py-3 text-start ps-3 rounded-3" style="background-color: #BEE3F8; color: #2C5282;">
+                    <a href="TurnosPag.aspx" class="btn border-0 fw-bold py-3 text-start ps-3 rounded-3" style="background-color: #BEE3F8; color: #2C5282;">
                         <i class="bi bi-calendar-plus me-2"></i> Asignar Turno Nuevo
                     </a>
                 </div>
