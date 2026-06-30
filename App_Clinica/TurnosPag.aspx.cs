@@ -44,6 +44,7 @@ namespace App_Clinica
         {
             TurnoNegocio turnoNegocio = new TurnoNegocio();
             int IdTurno = Convert.ToInt32(e.CommandArgument);
+            lblMensajeExito.Visible = false;
 
             if (e.CommandName == "CancelarTurno")
             {
@@ -52,7 +53,8 @@ namespace App_Clinica
                     int IdEstadoCancelado = 1; // 1 = Cancelado en BD
                     turnoNegocio.CambiarEstado(IdTurno, IdEstadoCancelado);
 
-                    Utils.MostrarAlertaModal(this, "El turno fue cancelado correctamente.");
+                    lblMensajeExito.Text = "El turno fue cancelado correctamente.";
+                    lblMensajeExito.Visible = true;
                     CargarGrilla();
                 }
                 catch (Exception ex)
@@ -67,7 +69,8 @@ namespace App_Clinica
                     int IdEstadoAusente = 5; // 5 = No Asistió en BD
                     turnoNegocio.CambiarEstado(IdTurno, IdEstadoAusente);
 
-                    Utils.MostrarAlertaModal(this, "Se registró correctamente la inasistencia del paciente.");
+                    lblMensajeExito.Text = "Se registró correctamente la inasistencia del paciente.";
+                    lblMensajeExito.Visible = true;
                     CargarGrilla();
                 }
                 catch (Exception ex)
@@ -81,7 +84,6 @@ namespace App_Clinica
             }
         }
 
-        //Captura los datos del Modal, actualiza el estado a Cerrado (6) y agrega diagnóstico
         protected void btnGuardarCierre_Click(object sender, EventArgs e)
         {
             if (string.IsNullOrEmpty(hfIdTurnoACerrar.Value)) return;
@@ -97,16 +99,15 @@ namespace App_Clinica
 
             try
             {
+                lblMensajeExito.Visible = false;
                 TurnoNegocio turnoNegocio = new TurnoNegocio();
 
-                // 1. Cambiamos el estado a Cerrado (ID = 6 en BD)
-                int IdEstadoCerrado = 6;
+                int IdEstadoCerrado = 6; // 6 = Cerrado en BD
                 turnoNegocio.CambiarEstado(idTurno, IdEstadoCerrado);
-
-                // 2. Guardamos el diagnóstico en la base de datos
                 turnoNegocio.ActualizarDiagnostico(idTurno, comentarioDiagnostico);
 
-                Utils.MostrarAlertaModal(this, "El turno ha sido cerrado y el diagnóstico se registró con éxito.");
+                lblMensajeExito.Text = "El turno ha sido cerrado y el diagnóstico se registró con éxito.";
+                lblMensajeExito.Visible = true;
 
                 CargarGrilla();
             }

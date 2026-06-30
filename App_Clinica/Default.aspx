@@ -87,7 +87,10 @@
                                     <asp:BoundField HeaderText="MédicoAsignado" DataField="Agenda.Medico.NombreCompleto" />
                                     <asp:TemplateField HeaderText="Estado">
                                         <ItemTemplate>
-                                            <span class="badge <%# Eval("Estado.Descripcion").ToString() == "Asignado" ? "bg-warning text-dark" : "bg-danger" %>">
+                                            <span class="badge <%# Eval("Estado.Descripcion").ToString() == "Asignado" ? "bg-warning text-dark" : 
+                                                                   Eval("Estado.Descripcion").ToString() == "Cerrado" ? "bg-success bg-opacity-10 text-success" :
+                                                                   Eval("Estado.Descripcion").ToString() == "Reprogramado" ? "bg-info bg-opacity-10 text-info" :
+                                                                   Eval("Estado.Descripcion").ToString() == "No Asistió" ? "bg-secondary bg-opacity-20 text-dark" : "bg-danger bg-opacity-10 text-danger" %> px-2.5 py-1.5 rounded-2 fw-semibold">
                                                 <%# Eval("Estado.Descripcion") %>
                                             </span>
                                         </ItemTemplate>
@@ -120,53 +123,49 @@
 
         <%-- PANEL PARA LA RECEPCIONISTA --%>
         <asp:Panel ID="pnlRecepcion" runat="server" Visible="false">
-    <div class="row g-4">
-        <!-- Columna de Acciones Rápidas -->
-        <div class="col-12 col-md-4">
-            <div class="card bg-white p-4 rounded-3 shadow-sm border-0 h-100">
-                <h5 class="text-dark fw-bold mb-3"><i class="bi bi-lightning-charge-fill text-warning me-1"></i>Acciones Rápidas</h5>
-                <div class="d-grid gap-3">
-                    <a href="PacienteForm.aspx" class="btn border-0 fw-bold py-3 text-start ps-3 rounded-3" style="background-color: #E6F0FA; color: #1C3345;">
-                        <i class="bi bi-person-plus me-2"></i> Nuevo Paciente
-                    </a>
-                    <a href="TurnosPag.aspx" class="btn border-0 fw-bold py-3 text-start ps-3 rounded-3" style="background-color: #BEE3F8; color: #2C5282;">
-                        <i class="bi bi-calendar-plus me-2"></i> Asignar Turno Nuevo
-                    </a>
+            <div class="row g-4">
+                <div class="col-12 col-md-4">
+                    <div class="card bg-white p-4 rounded-3 shadow-sm border-0 h-100">
+                        <h5 class="text-dark fw-bold mb-3"><i class="bi bi-lightning-charge-fill text-warning me-1"></i>Acciones Rápidas</h5>
+                        <div class="d-grid gap-3">
+                            <a href="PacienteForm.aspx" class="btn border-0 fw-bold py-3 text-start ps-3 rounded-3" style="background-color: #E6F0FA; color: #1C3345;">
+                                <i class="bi bi-person-plus me-2"></i> Nuevo Paciente
+                            </a>
+                            <a href="TurnosPag.aspx" class="btn border-0 fw-bold py-3 text-start ps-3 rounded-3" style="background-color: #BEE3F8; color: #2C5282;">
+                                <i class="bi bi-calendar-plus me-2"></i> Asignar Turno Nuevo
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-12 col-md-8">
+                    <div class="card bg-white p-4 rounded-3 shadow-sm border-0 h-100">
+                        <h5 class="text-dark fw-bold mb-3"><i class="bi bi-clock text-primary me-1"></i>Turnos Programados para Hoy</h5>
+                        <div class="table-responsive">
+                            <asp:GridView ID="dgvProximosTurnos" runat="server" CssClass="table table-hover align-middle border-0 small" 
+                                AutoGenerateColumns="false" GridLines="None">
+                                <Columns>
+                                    <asp:BoundField HeaderText="Hora" DataField="Hora" DataFormatString="{0:hh\:mm}" ItemStyle-CssClass="fw-bold text-secondary" />
+                                    <asp:BoundField HeaderText="Paciente" DataField="Paciente.NombreCompleto" />
+                                    <asp:BoundField HeaderText="Médico" DataField="Agenda.Medico.NombreCompleto" />
+                                    <asp:BoundField HeaderText="Especialidad" DataField="Agenda.Especialidad.Descripcion" />
+                                    <asp:TemplateField HeaderText="Estado">
+                                        <ItemTemplate>
+                                            <span class="badge <%# Eval("Estado.Descripcion").ToString() == "Asignado" ? "bg-warning text-dark" : 
+                                                                   Eval("Estado.Descripcion").ToString() == "Cerrado" ? "bg-success bg-opacity-10 text-success" :
+                                                                   Eval("Estado.Descripcion").ToString() == "Reprogramado" ? "bg-info bg-opacity-10 text-info" :
+                                                                   Eval("Estado.Descripcion").ToString() == "No Asistió" ? "bg-secondary bg-opacity-20 text-dark" : "bg-danger bg-opacity-10 text-danger" %> px-2.5 py-1.5 rounded-2 fw-semibold">
+                                                <%# Eval("Estado.Descripcion") %>
+                                            </span>
+                                        </ItemTemplate>
+                                    </asp:TemplateField>
+                                </Columns>
+                            </asp:GridView>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-        
-        <!-- Columna del Monitor de Turnos del Día -->
-        <div class="col-12 col-md-8">
-            <div class="card bg-white p-4 rounded-3 shadow-sm border-0 h-100">
-                <h5 class="text-dark fw-bold mb-3"><i class="bi bi-clock text-primary me-1"></i>Turnos Programados para Hoy</h5>
-                <div class="table-responsive">
-                    <asp:GridView ID="dgvProximosTurnos" runat="server" CssClass="table table-hover align-middle border-0 small" 
-                        AutoGenerateColumns="false" GridLines="None">
-                        <Columns>
-                            <%-- Formateamos el TimeSpan de la hora a un formato amigable hh:mm --%>
-                            <asp:BoundField HeaderText="Hora" DataField="Hora" DataFormatString="{0:hh\:mm}" ItemStyle-CssClass="fw-bold text-secondary" />
-                            
-                            <%-- Navegamos las propiedades del objeto Turno tal como lo hiciste en la grilla principal --%>
-                            <asp:BoundField HeaderText="Paciente" DataField="Paciente.NombreCompleto" />
-                            <asp:BoundField HeaderText="Médico" DataField="Agenda.Medico.NombreCompleto" />
-                            <asp:BoundField HeaderText="Especialidad" DataField="Agenda.Especialidad.Descripcion" />
-                            
-                            <%-- Badge dinámico para identificar el estado visualmente --%>
-                            <asp:TemplateField HeaderText="Estado">
-                                <ItemTemplate>
-                                    <span class="badge <%# Eval("Estado.Descripcion").ToString() == "Asignado" ? "bg-warning text-dark" : "bg-danger" %>">
-                                        <%# Eval("Estado.Descripcion") %>
-                                    </span>
-                                </ItemTemplate>
-                            </asp:TemplateField>
-                        </Columns>
-                    </asp:GridView>
-                </div>
-            </div>
-        </div>
-    </div>
-</asp:Panel>
+        </asp:Panel>
 
         <%-- PANEL PARA EL MÉDICO --%>
         <asp:Panel ID="pnlMedico" runat="server" Visible="false">
@@ -184,19 +183,15 @@
                     <asp:GridView ID="dgvTurnosDelDia" runat="server" CssClass="table table-hover align-middle border-0 small" 
                         AutoGenerateColumns="false" GridLines="None">
                         <Columns>
-                            <%-- Hora del Turno destacada --%>
                             <asp:BoundField HeaderText="Hora" DataField="Hora" DataFormatString="{0:hh\:mm}" ItemStyle-CssClass="fw-bold text-success" ItemStyle-Width="100px" />
-                            
-                            <%-- Datos esenciales del paciente --%>
                             <asp:BoundField HeaderText="Paciente" DataField="Paciente.NombreCompleto" />
-                            
-                            <%-- Por si el médico atiende por más de una especialidad (Ej: Clínica y Guardia) --%>
                             <asp:BoundField HeaderText="Especialidad" DataField="Agenda.Especialidad.Descripcion" />
-                            
-                            <%-- Estado visual del turno --%>
                             <asp:TemplateField HeaderText="Estado" ItemStyle-Width="120px">
                                 <ItemTemplate>
-                                    <span class="badge <%# Eval("Estado.Descripcion").ToString() == "Asignado" ? "bg-warning text-dark" : "bg-danger" %>">
+                                    <span class="badge <%# Eval("Estado.Descripcion").ToString() == "Asignado" ? "bg-warning text-dark" : 
+                                                           Eval("Estado.Descripcion").ToString() == "Cerrado" ? "bg-success bg-opacity-10 text-success" :
+                                                           Eval("Estado.Descripcion").ToString() == "Reprogramado" ? "bg-info bg-opacity-10 text-info" :
+                                                           Eval("Estado.Descripcion").ToString() == "No Asistió" ? "bg-secondary bg-opacity-20 text-dark" : "bg-danger bg-opacity-10 text-danger" %> px-2.5 py-1.5 rounded-2 fw-semibold">
                                         <%# Eval("Estado.Descripcion") %>
                                     </span>
                                 </ItemTemplate>
