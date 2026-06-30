@@ -59,6 +59,12 @@
                         <asp:TemplateField HeaderText="Acciones" ItemStyle-Width="140px" ItemStyle-CssClass="text-end">
                             <ItemTemplate>
                                 <div class="d-inline-flex justify-content-end w-100 gap-1">
+
+                                    <asp:LinkButton ID="btnVerDetalle" runat="server"
+                                        CommandName="VerDetalle" CommandArgument='<%# Eval("IdTurno") %>'
+                                        CssClass="btn btn-sm p-1 text-primary fs-5" title="Ver Detalle del Turno">
+                                        <i class="bi bi-eye-fill"></i>
+                                    </asp:LinkButton>
             
                                     <button type="button" class="btn btn-sm p-1 text-success fs-5" title="Cerrar Turno"
                                         style='<%# Eval("Estado.Descripcion").ToString() == "Cancelado" || Eval("Estado.Descripcion").ToString() == "Cerrado" || Eval("Estado.Descripcion").ToString() == "No Asistió" || Eval("Estado.Descripcion").ToString() == "Reprogramado" ? "display:none;" : "" %>'
@@ -123,6 +129,60 @@
         </div>
     </div>
 
+    <div class="modal fade" id="modalDetalleTurno" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow" style="background-color: #f0f8ff;">
+                <div class="modal-header border-0" style="background-color: #d0e7ff; color: #2c3e50;">
+                    <h5 class="modal-title fw-bold"><i class="bi bi-info-circle-fill me-2" style="color: #4a90e2;"></i>Detalle del Turno</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-4 text-dark">
+                    <div class="row g-3 small">
+                        <div class="col-6">
+                            <span class="text-muted d-block fw-medium">Paciente:</span>
+                            <asp:Label ID="lblDetallePaciente" runat="server" CssClass="fw-bold text-dark fs-6"></asp:Label>
+                        </div>
+                        <div class="col-6 text-end">
+                            <span class="text-muted d-block fw-medium text-end">Estado:</span>
+                            <asp:Label ID="lblDetalleEstado" runat="server" CssClass="fw-bold"></asp:Label>
+                        </div>
+                        <div class="col-6">
+                            <span class="text-muted d-block fw-medium">Médico:</span>
+                            <asp:Label ID="lblDetalleMedico" runat="server" CssClass="fw-semibold text-dark"></asp:Label>
+                        </div>
+                        <div class="col-6">
+                            <span class="text-muted d-block fw-medium">Fecha y Hora:</span>
+                            <asp:Label ID="lblDetalleFechaHora" runat="server" CssClass="fw-semibold text-dark"></asp:Label>
+                        </div>
+                        <div class="col-12">
+                            <span class="text-muted d-block fw-medium">Especialidad:</span>
+                            <asp:Label ID="lblDetalleEspecialidad" runat="server" CssClass="fw-semibold text-dark"></asp:Label>
+                        </div>
+                    
+                        <hr class="text-muted opacity-25 my-3" />
+
+                        <div class="col-12">
+                            <label class="form-label fw-bold text-secondary mb-1"><i class="bi bi-chat-left-text me-1"></i>Motivo de la Consulta (Observación):</label>
+                            <div class="p-3 bg-white rounded-3 border-0 shadow-sm text-dark text-start" style="min-height: 50px; white-space: pre-wrap;">
+                                <asp:Label ID="lblDetalleObservacion" runat="server"></asp:Label>
+                            </div>
+                        </div>
+
+                        <div class="col-12 mt-3">
+                            <label class="form-label fw-bold text-secondary mb-1"><i class="bi bi-heart-pulse me-1"></i>Diagnóstico / Evolución Médica:</label>
+                            <div class="p-3 bg-white rounded-3 border-0 shadow-sm text-dark text-start" style="min-height: 70px; white-space: pre-wrap;">
+                                <asp:Label ID="lblDetalleDiagnostico" runat="server"></asp:Label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer border-0 p-3" style="background-color: #e6f2ff;">
+                    <button type="button" class="btn btn-light border px-4 fw-semibold rounded-3" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script type="text/javascript">
         function abrirModalDiagnostico(idTurno) {
             document.getElementById('<%= hfIdTurnoACerrar.ClientID %>').value = idTurno;
@@ -150,6 +210,11 @@
             }
 
             return confirmarEliminar(boton);
+        }
+
+        function abrirModalDetalle() {
+            var modal = new bootstrap.Modal(document.getElementById('modalDetalleTurno'));
+            modal.show();
         }
     </script>
 </asp:Content>

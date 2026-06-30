@@ -82,6 +82,76 @@ namespace App_Clinica
             {
                 Response.Redirect($"TurnoForm.aspx?reprogramar={IdTurno}");
             }
+            else if (e.CommandName == "VerDetalle")
+            {
+                try
+                {
+                    var listado = turnoNegocio.ListarConFiltros(0, 0, "").Where(x => x.IdTurno == IdTurno).ToList();
+
+                    if (listado.Count > 0)
+                    {
+                        var turnoSeleccionado = listado[0];
+
+                        lblDetallePaciente.Text = turnoSeleccionado.Paciente?.NombreCompleto ?? "N/A";
+                        lblDetalleMedico.Text = turnoSeleccionado.Agenda?.Medico?.NombreCompleto ?? "N/A";
+                        lblDetalleEspecialidad.Text = turnoSeleccionado.Agenda?.Especialidad?.Descripcion ?? "N/A";
+                        lblDetalleFechaHora.Text = $"{turnoSeleccionado.Fecha:dd/MM/yyyy} a las {turnoSeleccionado.Hora:hh\\:mm} hs.";
+                        lblDetalleEstado.Text = turnoSeleccionado.Estado?.Descripcion ?? "Sin Estado";
+
+                        lblDetalleEspecialidad.Text = turnoSeleccionado.Agenda?.Especialidad?.Descripcion ?? "N/A";
+                        lblDetalleFechaHora.Text = $"{turnoSeleccionado.Fecha:dd/MM/yyyy} a las {turnoSeleccionado.Hora:hh\\:mm} hs.";
+                        lblDetalleEstado.Text = turnoSeleccionado.Estado?.Descripcion ?? "Sin Estado";
+
+                        //Mapeo de la Observación (Motivo del turno)
+                        if (!string.IsNullOrEmpty(turnoSeleccionado.Observacion))
+                        {
+                            lblDetalleObservacion.Text = turnoSeleccionado.Observacion;
+                            lblDetalleObservacion.CssClass = "text-dark fw-medium small";
+                        }
+                        else
+                        {
+                            lblDetalleObservacion.Text = "No se especificó un motivo al agendar el turno.";
+                            lblDetalleObservacion.CssClass = "fst-italic text-muted small";
+                        }
+
+                        //Mapeo del Diagnóstico (Resultado de la consulta)
+                        if (!string.IsNullOrEmpty(turnoSeleccionado.Diagnostico))
+                        {
+                            lblDetalleDiagnostico.Text = turnoSeleccionado.Diagnostico;
+                            lblDetalleDiagnostico.CssClass = "text-dark fw-medium small";
+                        }
+                        else
+                        {
+                            lblDetalleDiagnostico.Text = "Pendiente de atención o no registra diagnósticos cargados.";
+                            lblDetalleDiagnostico.CssClass = "fst-italic text-muted small";
+                        }
+
+                        string descEstado = turnoSeleccionado.Estado?.Descripcion;
+                        lblDetalleEstado.CssClass = "badge rounded-2 px-2.5 py-1.5 fw-semibold " +
+                            (descEstado == "Asignado" ? "bg-warning text-dark" :
+                             descEstado == "Cerrado" ? "bg-success bg-opacity-10 text-success" :
+                             descEstado == "Reprogramado" ? "bg-info bg-opacity-10 text-info" :
+                             descEstado == "No Asistió" ? "bg-secondary bg-opacity-20 text-dark" : "bg-danger bg-opacity-10 text-danger");
+
+                        if (turnoSeleccionado != null && !string.IsNullOrEmpty(turnoSeleccionado.Diagnostico))
+                        {
+                            lblDetalleDiagnostico.Text = turnoSeleccionado.Diagnostico;
+                            lblDetalleDiagnostico.CssClass = "text-dark";
+                        }
+                        else
+                        {
+                            lblDetalleDiagnostico.Text = "No se registraron diagnósticos ni observaciones para este turno todavía.";
+                            lblDetalleDiagnostico.CssClass = "fst-italic text-muted small";
+                        }
+
+                        ScriptManager.RegisterStartupScript(this, this.GetType(), "PopDetalle", "abrirModalDetalle();", true);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Utils.MostrarAlertaModal(this, "Error al cargar el detalle del turno: " + ex.Message);
+                }
+            }
         }
 
         protected void btnGuardarCierre_Click(object sender, EventArgs e)
