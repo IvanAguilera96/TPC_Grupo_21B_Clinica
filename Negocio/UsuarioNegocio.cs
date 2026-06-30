@@ -92,7 +92,7 @@ namespace Negocio
 
             try
             {
-                datos.setearConsulta("INSERT INTO Usuario (Nombre, Contrasenia, IdPerfil) VALUES (@usuario, @contrasenia, @idPerfil, 1)");
+                datos.setearConsulta("INSERT INTO Usuario (Nombre, Contrasenia, IdPerfil, Estado) VALUES (@usuario, @contrasenia, @idPerfil, 1)");
                 datos.setearParametros("@usuario", nuevo.Nombre);
                 datos.setearParametros("@contrasenia", nuevo.Contrasenia);
                 datos.setearParametros("@idPerfil", nuevo.Perfil.IdPerfil);
