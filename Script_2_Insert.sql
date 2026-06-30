@@ -121,3 +121,12 @@ INSERT INTO [dbo].[AgendaMedico] (IdMedico, IdEspecialidad, IdTurnoTrabajo) VALU
  (SELECT IdEspecialidad FROM Especialidad WHERE Descripcion = 'Ginecología'), 
  (SELECT IdTurnoTrabajo FROM TurnoTrabajo WHERE DiaDeTrabajo = 'Viernes' AND HoraEntrada = '13:00:00'));
 GO
+
+-- EstadoTurno
+INSERT INTO EstadoTurno (Descripcion) VALUES 
+('Cancelado'),
+('Asignado'),
+('Nuevo'),
+('Reprogramado'),
+('No Asistió'),
+('Cerrado');

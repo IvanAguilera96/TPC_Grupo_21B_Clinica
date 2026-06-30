@@ -156,6 +156,45 @@ namespace Negocio
             {
                 datos.cerrarConexion();
             }
-        }
+        } // Agregar
+
+        public List<string> ObtenerHorasOcupadas(int idMedico, string fecha)
+        {
+            List<string> ocupadas = new List<string>();
+            AccesoDatos datos = new AccesoDatos();
+
+            try
+            {
+                // Buscamos las horas de los turnos de este médico que NO estén cancelados
+                datos.setearConsulta(@"
+                        SELECT T.Hora 
+                        FROM Turno T
+                            INNER JOIN AgendaMedico A ON T.IdAgendaMedico = A.IdAgendaMedico
+                        WHERE A.IdMedico = @IdMedico 
+                            AND T.Fecha = @Fecha
+                            AND T.IdEstadoTurno <> 3"); // Supongamos que 3 es "Cancelado". Si está cancelado, la hora se libera.
+
+                datos.setearParametros("@IdMedico", idMedico);
+                datos.setearParametros("@Fecha", fecha);
+                datos.ejecutarLectura();
+
+                while (datos.Lector.Read())
+                {
+                    // Convertimos el TimeSpan de la BD a string estructurado "hh:mm:ss" para mapear directo con el slot
+                    TimeSpan hora = (TimeSpan)datos.Lector["Hora"];
+                    ocupadas.Add(hora.ToString(@"hh\:mm\:ss"));
+                }
+
+                return ocupadas;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        } // ObtenerHorasOcupadas
     }
 }

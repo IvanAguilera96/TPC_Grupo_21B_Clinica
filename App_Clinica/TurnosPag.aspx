@@ -19,7 +19,7 @@
             </div>
             <div class="col-md-3">
                 <label class="form-label">Filtrar por Fecha:</label>
-                <asp:TextBox ID="txtFiltroFecha" runat="server" TextMode="Date" CssClass="form-control" AutoPostBack="true" OnTextChanged="txtFiltroFecha_TextChanged"></asp:TextBox>
+                <asp:TextBox ID="txtFiltroFecha" runat="server" TextMode="Date" CssClass="form-control" AutoPostBack="true" onkeydown="return false;" OnTextChanged="txtFiltroFecha_TextChanged"></asp:TextBox>
             </div>
             <div class="col-md-3 text-end">
                 <asp:Button ID="btnNuevoTurno" runat="server" Text="Nuevo Turno ➕" CssClass="btn btn-primary w-100" OnClick="btnNuevoTurno_Click" />
