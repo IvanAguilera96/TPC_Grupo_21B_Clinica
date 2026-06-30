@@ -11,13 +11,10 @@ namespace App_Clinica
 {
     public partial class TurnoPag : System.Web.UI.Page
     {
-        
-
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!IsPostBack)
             {
-                // Cargar los DropDownList de los filtros por primera vez
                 CargarFiltros();
                 CargarGrilla();
             }
@@ -45,21 +42,17 @@ namespace App_Clinica
 
         protected void dgvTurnos_RowCommand(object sender, GridViewCommandEventArgs e)
         {
+            TurnoNegocio turnoNegocio = new TurnoNegocio();
+            int IdTurno = Convert.ToInt32(e.CommandArgument);
+
             if (e.CommandName == "CancelarTurno")
             {
-                TurnoNegocio turnoNegocio = new TurnoNegocio();
-                // Recuperamos el IdTurno que viaja en el CommandArgument
-                int IdTurno = Convert.ToInt32(e.CommandArgument);
-
                 try
                 {
-                    // Cambiamos el estado en la base de datos a "Cancelado"
                     int IdEstadoCancelado = 1; // 1 = Cancelado en BD
-
                     turnoNegocio.CambiarEstado(IdTurno, IdEstadoCancelado);
 
                     Utils.MostrarAlertaModal(this, "El turno fue cancelado correctamente.");
-
                     CargarGrilla();
                 }
                 catch (Exception ex)
@@ -67,25 +60,69 @@ namespace App_Clinica
                     Utils.MostrarAlertaModal(this, "No se pudo cancelar el turno: " + ex.Message);
                 }
             }
-            else if(e.CommandName == "ReprogramarTurno")
+            else if (e.CommandName == "AusenteTurno")
             {
-                int idTurno = Convert.ToInt32(e.CommandArgument);
+                try
+                {
+                    int IdEstadoAusente = 5; // 5 = No Asistió en BD
+                    turnoNegocio.CambiarEstado(IdTurno, IdEstadoAusente);
 
-                // Vamos a TurnoForm y le pasamos el ID a reprogramar
-                Response.Redirect($"TurnoForm.aspx?reprogramar={idTurno}");
+                    Utils.MostrarAlertaModal(this, "Se registró correctamente la inasistencia del paciente.");
+                    CargarGrilla();
+                }
+                catch (Exception ex)
+                {
+                    Utils.MostrarAlertaModal(this, "No se pudo cambiar el estado: " + ex.Message);
+                }
             }
-            
+            else if (e.CommandName == "ReprogramarTurno")
+            {
+                Response.Redirect($"TurnoForm.aspx?reprogramar={IdTurno}");
+            }
         }
+
+        //Captura los datos del Modal, actualiza el estado a Cerrado (6) y agrega diagnóstico
+        protected void btnGuardarCierre_Click(object sender, EventArgs e)
+        {
+            if (string.IsNullOrEmpty(hfIdTurnoACerrar.Value)) return;
+
+            int idTurno = int.Parse(hfIdTurnoACerrar.Value);
+            string comentarioDiagnostico = txtDiagnostico.Text.Trim();
+
+            if (string.IsNullOrEmpty(comentarioDiagnostico))
+            {
+                Utils.MostrarAlertaModal(this, "Debe ingresar un diagnóstico para poder cerrar el turno.");
+                return;
+            }
+
+            try
+            {
+                TurnoNegocio turnoNegocio = new TurnoNegocio();
+
+                // 1. Cambiamos el estado a Cerrado (ID = 6 en BD)
+                int IdEstadoCerrado = 6;
+                turnoNegocio.CambiarEstado(idTurno, IdEstadoCerrado);
+
+                // 2. Guardamos el diagnóstico en la base de datos
+                turnoNegocio.ActualizarDiagnostico(idTurno, comentarioDiagnostico);
+
+                Utils.MostrarAlertaModal(this, "El turno ha sido cerrado y el diagnóstico se registró con éxito.");
+
+                CargarGrilla();
+            }
+            catch (Exception ex)
+            {
+                Utils.MostrarAlertaModal(this, "Error al cerrar el turno: " + ex.Message);
+            }
+        }
+
         private void CargarFiltros()
         {
-    
-            //Carga Especialidades
             MedicoNegocio medNegocio = new MedicoNegocio();
             ddlFiltroMedico.DataSource = medNegocio.Listar();
             ddlFiltroMedico.DataValueField = "IdMedico";
             ddlFiltroMedico.DataTextField = "NombreCompleto";
             ddlFiltroMedico.DataBind();
-            // Seteamos el primer valor en 0
             ddlFiltroMedico.Items.Insert(0, new ListItem("", "0"));
 
             EspecialidadNegocio espNegocio = new EspecialidadNegocio();
@@ -93,20 +130,16 @@ namespace App_Clinica
             ddlFiltroEspecialidad.DataValueField = "IdEspecialidad";
             ddlFiltroEspecialidad.DataTextField = "Descripcion";
             ddlFiltroEspecialidad.DataBind();
-            // Seteamos el primer valor en 0
             ddlFiltroEspecialidad.Items.Insert(0, new ListItem("", "0"));
-
         }
 
         private void CargarGrilla()
         {
             TurnoNegocio turnoNegocio = new TurnoNegocio();
-            // Pasamos los valores de los filtros al método listar
             int idMedico = int.Parse(ddlFiltroMedico.SelectedValue ?? "0");
             int idEspecialidad = int.Parse(ddlFiltroEspecialidad.SelectedValue ?? "0");
             string fecha = txtFiltroFecha.Text;
 
-            // El metodo ListarConFiltros devuelve una List<Turno>
             dgvTurnos.DataSource = turnoNegocio.ListarConFiltros(idMedico, idEspecialidad, fecha);
             dgvTurnos.DataBind();
         }

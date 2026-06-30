@@ -172,7 +172,7 @@ namespace Negocio
                             INNER JOIN AgendaMedico A ON T.IdAgendaMedico = A.IdAgendaMedico
                         WHERE A.IdMedico = @IdMedico 
                             AND T.Fecha = @Fecha
-                            AND T.IdEstadoTurno <> 3"); // Supongamos que 3 es "Cancelado". Si está cancelado, la hora se libera.
+                            AND T.IdEstadoTurno <> 1 AND T.IdEstadoTurno <> 4 "); // Supongamos que 1 es "Cancelado". Si está cancelado, la hora se libera.
 
                 datos.setearParametros("@IdMedico", idMedico);
                 datos.setearParametros("@Fecha", fecha);
@@ -269,5 +269,25 @@ namespace Negocio
                 datos.cerrarConexion();
             }
         } // BuscarPorId
+
+        public void ActualizarDiagnostico(int IdTurno, string Diagnostico)
+        {
+            AccesoDatos datos = new AccesoDatos();
+            try
+            {
+                datos.setearConsulta("UPDATE Turno SET Diagnostico = @Diagnostico WHERE IdTurno = @IdTurno");
+                datos.setearParametros("@Diagnostico", Diagnostico);
+                datos.setearParametros("@IdTurno", IdTurno);
+                datos.ejecutarAccion();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        } // Actualizar Diagnostico
     }
 }
