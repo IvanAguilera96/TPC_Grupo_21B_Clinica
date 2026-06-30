@@ -196,5 +196,78 @@ namespace Negocio
                 datos.cerrarConexion();
             }
         } // ObtenerHorasOcupadas
+
+        public Turno BuscarPorId(int id)
+        {
+            AccesoDatos datos = new AccesoDatos();
+            Turno aux = null;
+
+            try
+            {
+                //  Query unificada: Traemos Turno, Paciente, Estado, Agenda y Especialidad de una
+                string query = @"
+            SELECT 
+                T.IdTurno, T.Fecha, T.Hora, T.Observacion, T.Diagnostico,
+                T.IdPaciente, P.Nombre AS NombrePaciente, P.Apellido AS ApellidoPaciente,
+                T.IdEstadoTurno, ET.Descripcion AS NombreEstado,
+                T.IdAgendaMedico,
+                AM.IdMedico, AM.IdEspecialidad,
+                ESP.Descripcion AS NombreEspecialidad
+            FROM Turno T
+            INNER JOIN Paciente P ON T.IdPaciente = P.IdPaciente
+            INNER JOIN EstadoTurno ET ON T.IdEstadoTurno = ET.IdEstadoTurno
+            INNER JOIN AgendaMedico AM ON T.IdAgendaMedico = AM.IdAgendaMedico
+            INNER JOIN Especialidad ESP ON AM.IdEspecialidad = ESP.IdEspecialidad
+            WHERE T.IdTurno = @id";
+
+                datos.setearConsulta(query);
+                datos.setearParametros("@id", id);
+                datos.ejecutarLectura();
+
+                if (datos.Lector.Read())
+                {
+                    aux = new Turno();
+                    aux.IdTurno = (int)datos.Lector["IdTurno"];
+                    aux.Fecha = (DateTime)datos.Lector["Fecha"];
+                    aux.Hora = (TimeSpan)datos.Lector["Hora"];
+
+                    aux.Observacion = datos.Lector["Observacion"] != DBNull.Value ? (string)datos.Lector["Observacion"] : "";
+                    aux.Diagnostico = datos.Lector["Diagnostico"] != DBNull.Value ? (string)datos.Lector["Diagnostico"] : "";
+
+                    // Mapeamos el Paciente
+                    aux.Paciente = new Paciente();
+                    aux.Paciente.IdPaciente = (int)datos.Lector["IdPaciente"];
+                    aux.Paciente.Nombre = (string)datos.Lector["NombrePaciente"];
+                    aux.Paciente.Apellido = (string)datos.Lector["ApellidoPaciente"];
+
+                    // Mapeamos el Estado
+                    aux.Estado = new EstadoTurno();
+                    aux.Estado.IdEstado = (int)datos.Lector["IdEstadoTurno"];
+                    aux.Estado.Descripcion = (string)datos.Lector["NombreEstado"];
+
+                    // Mapeamos la Agenda COMPLETA con su Especialidad adentro
+                    aux.Agenda = new AgendaMedico();
+                    aux.Agenda.IdAgendaMedico = (int)datos.Lector["IdAgendaMedico"];
+
+                    aux.Agenda.Medico = new Medico();
+                    aux.Agenda.Medico.IdMedico = (int)datos.Lector["IdMedico"];
+
+                    // Creamos el objeto Especialidad dentro de la Agenda para que no de NullReference
+                    aux.Agenda.Especialidad = new Especialidad();
+                    aux.Agenda.Especialidad.IdEspecialidad = (int)datos.Lector["IdEspecialidad"];
+                    aux.Agenda.Especialidad.Descripcion = (string)datos.Lector["NombreEspecialidad"];
+                }
+
+                return aux;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        } // BuscarPorId
     }
 }

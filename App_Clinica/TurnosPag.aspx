@@ -1,4 +1,5 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Clinica.Master" AutoEventWireup="true" CodeBehind="TurnosPag.aspx.cs" Inherits="App_Clinica.TurnoPag" %>
+
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
@@ -27,17 +28,17 @@
         </div>
 
         <!-- Grilla de Turnos -->
-        <asp:GridView ID="dgvTurnos" runat="server" CssClass="table table-striped table-hover table-bordered" 
+        <asp:GridView ID="dgvTurnos" runat="server" CssClass="table table-striped table-hover table-bordered"
             AutoGenerateColumns="false" DataKeyNames="IdTurno" OnRowCommand="dgvTurnos_RowCommand">
             <Columns>
                 <asp:BoundField HeaderText="ID" DataField="IdTurno" ItemStyle-Width="50px" />
                 <asp:BoundField HeaderText="Fecha" DataField="Fecha" DataFormatString="{0:dd/MM/yyyy}" />
                 <asp:BoundField HeaderText="Hora" DataField="Hora" DataFormatString="{0:hh\:mm}" />
-                
-                <asp:BoundField HeaderText="Paciente" DataField="Paciente.NombreCompleto" /> 
+
+                <asp:BoundField HeaderText="Paciente" DataField="Paciente.NombreCompleto" />
                 <asp:BoundField HeaderText="Médico" DataField="Agenda.Medico.NombreCompleto" />
                 <asp:BoundField HeaderText="Especialidad" DataField="Agenda.Especialidad.Descripcion" />
-                
+
                 <%-- Estado con Badge de color dinámico --%>
                 <asp:TemplateField HeaderText="Estado">
                     <ItemTemplate>
@@ -48,13 +49,24 @@
                 </asp:TemplateField>
 
                 <%-- Acciones --%>
+
                 <asp:TemplateField HeaderText="Acciones">
                     <ItemTemplate>
-                        <asp:LinkButton ID="btnCancelar" runat="server" 
-                            CommandName="CancelarTurno" 
-                            CommandArgument='<%# Eval("IdTurno") %>' CssClass="btn btn-sm btn-outline-danger"
-                            Visible='<%# Eval("Estado.Descripcion").ToString() == "Asignado" %>'>
-                            Cancelar
+                        <!-- Botón Cancelar (solo visible si NO está Cancelado) -->
+                        <asp:LinkButton ID="btnCancelar" runat="server"
+                            CommandName="CancelarTurno"
+                            CommandArgument='<%# Eval("IdTurno") %>'
+                            CssClass="btn btn-sm btn-outline-danger me-1"
+                            Visible='<%# Eval("Estado.Descripcion").ToString() != "Cancelado" && Eval("Estado.Descripcion").ToString() != "Cerrado" %>'
+                            OnClientClick="return confirm('¿Está seguro de que desea cancelar este turno?');"> Cancelar
+                        </asp:LinkButton>
+
+                        <!-- Botón Reprogramar (solo visible bajo las mismas condiciones) -->
+                        <asp:LinkButton ID="btnReprogramar" runat="server"
+                            CommandName="ReprogramarTurno"
+                            CommandArgument='<%# Eval("IdTurno") %>'
+                            CssClass="btn btn-sm btn-outline-primary"
+                            Visible='<%# Eval("Estado.Descripcion").ToString() != "Cancelado" && Eval("Estado.Descripcion").ToString() != "Cerrado" %>'> Reprogramar
                         </asp:LinkButton>
                     </ItemTemplate>
                 </asp:TemplateField>

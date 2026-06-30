@@ -20,6 +20,20 @@ namespace App_Clinica
             {
                 CargarEspecialidades();
                 CargarPacientes();
+
+                // Si viene por Reprogramnar
+                if (Request.QueryString["reprogramar"] != null)
+                {
+                    int IdTurnoViejo = int.Parse(Request.QueryString["reprogramar"]);
+                    // Guardamos el ID en el ViewState para tenerlo a mano al guardar
+                    ViewState["IdTurnoAReprogramar"] = IdTurnoViejo;
+
+                    // Cambiamos el título de la tarjeta para avisar al usuario
+                    // (Si le pusiste un ID al h3 en el aspx, ej: id="lblTituloForm")
+                    //lblTituloForm.InnerText = "Reprogramar Turno";
+
+                    PrecargarDatosTurnoViejo(IdTurnoViejo);
+                }
             }
         }
 
@@ -185,7 +199,7 @@ namespace App_Clinica
                 nuevo.Fecha = DateTime.Parse(txtFecha.Text);
                 nuevo.Hora = TimeSpan.Parse(hfHoraSeleccionada.Value);
                 nuevo.Observacion = txtObservacion.Text;
-                nuevo.Diagnostico = ""; // Arranca vacío obviamente
+                nuevo.Diagnostico = "";
 
                 nuevo.Paciente = new Paciente();
                 nuevo.Paciente.IdPaciente = int.Parse(ddlPaciente.SelectedValue);
@@ -193,10 +207,23 @@ namespace App_Clinica
                 nuevo.Agenda = new AgendaMedico();
                 nuevo.Agenda.IdAgendaMedico = (int)ViewState["IdAgendaMedicoElegida"];
 
-                // El método de alta que armamos previamente
-                turnoNegocio.Agregar(nuevo);
+                if (ViewState["IdTurnoAReprogramar"] != null)
+                {
+                    int idViejo = (int)ViewState["IdTurnoAReprogramar"];
 
-                Session["MensajeExito"] = "¡Turno agendado con éxito!";
+                    // Insertamos el nuevo, y al viejo le hacemos un UPDATE cambiando el estado a "Reprogramado" o "Cancelado"
+                    turnoNegocio.Agregar(nuevo);
+                    turnoNegocio.CambiarEstado(idViejo, 4); // 4 es "Reprogramado" en la tabla EstadoTurno
+
+                    Session["MensajeExito"] = "¡El turno se reprogramó con éxito!";
+                }
+                else
+                {
+                    // Flujo normal de un alta común y corriente
+                    turnoNegocio.Agregar(nuevo);
+                    Session["MensajeExito"] = "¡Turno agendado con éxito!";
+                }
+
                 Response.Redirect("TurnosPag.aspx", false);
             }
             catch (Exception ex)
@@ -289,6 +316,38 @@ namespace App_Clinica
             else
             {
                 lblDiasAtencion.Text = "⚠️ El profesional no posee horarios configurados para esta especialidad.";
+            }
+        }
+
+        private void PrecargarDatosTurnoViejo(int idTurno)
+        {
+            try
+            {
+                // Buscamos el turno completo con sus relaciones en la base de datos
+                Turno turnoViejo = new Turno();
+                turnoViejo = turnoNegocio.BuscarPorId(idTurno);
+
+                if (turnoViejo != null)
+                {
+                    // Pre-seleccionamos Especialidad y disparamos su evento manualmente para llenar los medicos
+                    ddlEspecialidad.SelectedValue = turnoViejo.Agenda.Especialidad.IdEspecialidad.ToString();
+                    ddlEspecialidad_SelectedIndexChanged(null, null);
+
+                    // Pre-seleccionamos el Medico
+                    ddlMedico.SelectedValue = turnoViejo.Agenda.Medico.IdMedico.ToString();
+
+                    // Pre-seleccionamos el Paciente
+                    ddlPaciente.SelectedValue = turnoViejo.Paciente.IdPaciente.ToString();
+
+                    // Cargamos la observacion vieja si quieren mantenerla de referencia
+                    txtObservacion.Text = turnoViejo.Observacion;
+
+                    ActualizarAvisoDiasAtencion();
+                }
+            }
+            catch (Exception ex)
+            {
+                Utils.MostrarAlertaModal(this, "Error al recuperar el turno para reprogramar: " + ex.Message);
             }
         }
     }

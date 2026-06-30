@@ -67,6 +67,14 @@ namespace App_Clinica
                     Utils.MostrarAlertaModal(this, "No se pudo cancelar el turno: " + ex.Message);
                 }
             }
+            else if(e.CommandName == "ReprogramarTurno")
+            {
+                int idTurno = Convert.ToInt32(e.CommandArgument);
+
+                // Vamos a TurnoForm y le pasamos el ID a reprogramar
+                Response.Redirect($"TurnoForm.aspx?reprogramar={idTurno}");
+            }
+            
         }
         private void CargarFiltros()
         {
