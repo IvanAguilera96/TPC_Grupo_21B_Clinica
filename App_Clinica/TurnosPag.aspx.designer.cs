@@ -24,6 +24,15 @@ namespace App_Clinica
         protected global::System.Web.UI.WebControls.HiddenField hfIdTurnoACerrar;
 
         /// <summary>
+        /// Control ScriptManager1.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.ScriptManager ScriptManager1;
+
+        /// <summary>
         /// Control btnNuevoTurno.
         /// </summary>
         /// <remarks>
@@ -31,6 +40,15 @@ namespace App_Clinica
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btnNuevoTurno;
+
+        /// <summary>
+        /// Control UpdatePanelCombos.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.UpdatePanel UpdatePanelCombos;
 
         /// <summary>
         /// Control ddlFiltroMedico.

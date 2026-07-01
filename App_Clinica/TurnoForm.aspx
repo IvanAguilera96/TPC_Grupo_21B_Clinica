@@ -4,8 +4,7 @@
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
 
-    <!-- El ScriptManager es obligatorio para que funcione el UpdatePanel -->
-    <asp:ScriptManager ID="ScriptManager1" runat="server"></asp:ScriptManager>
+
 
     <div class="container mt-4" style="max-width: 600px;">
         <div class="card shadow">
@@ -14,8 +13,7 @@
             </div>
             <div class="card-body">
 
-                <asp:UpdatePanel ID="UpdatePanelCombos" runat="server">
-                    <ContentTemplate>
+          
                         <!-- Especialidad -->
                         <div class="mb-3">
                             <label class="form-label">Seleccione Especialidad:</label>
@@ -31,10 +29,11 @@
                                 AutoPostBack="true" OnSelectedIndexChanged="ddlMedico_SelectedIndexChanged">
                             </asp:DropDownList>
                         </div>
-                    </ContentTemplate>
-                </asp:UpdatePanel>
-                <!-- El Label para el aviso de dias de atencion -->
+
+                                        <!-- El Label para el aviso de dias de atencion -->
                 <asp:Label ID="lblDiasAtencion" runat="server" CssClass="d-block text-muted small mb-2" Font-Italic="true"></asp:Label>
+          
+
 
                 <!-- Fecha del Turno con AutoPostBack -->
                 <div class="mb-3">

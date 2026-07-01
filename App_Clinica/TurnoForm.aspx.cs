@@ -42,6 +42,7 @@ namespace App_Clinica
         // AL CAMBIAR ESPECIALIDAD -> FILTRAMOS MEDICOS
         protected void ddlEspecialidad_SelectedIndexChanged(object sender, EventArgs e)
         {
+            txtFecha.Text = null;
             int IdEspecialidad = int.Parse(ddlEspecialidad.SelectedValue);
             if (IdEspecialidad > 0)
             {
@@ -66,6 +67,7 @@ namespace App_Clinica
         // AL CAMBIAR MEDICO -> RE-EVALUAMOS SI YA HABIA UNA FECHA CARGADA
         protected void ddlMedico_SelectedIndexChanged(object sender, EventArgs e)
         {
+            txtFecha.Text = null;
             ActualizarAvisoDiasAtencion();
 
             LimpiarSlots();
@@ -318,6 +320,7 @@ namespace App_Clinica
         {
             ddlMedico.Enabled = false;
             ddlMedico.Items.Clear();
+            txtFecha.Text = null;
         }
 
         private string TraducirDiaSemana(DayOfWeek day)

@@ -4,6 +4,8 @@
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
 
     <asp:HiddenField ID="hfIdTurnoACerrar" runat="server" />
+       <!-- El ScriptManager es obligatorio para que funcione el UpdatePanel -->
+   <asp:ScriptManager ID="ScriptManager1" runat="server"></asp:ScriptManager>
 
     <div class="row justify-content-center">
         <div class="col-12 col-md-11 col-lg-10">
@@ -18,47 +20,49 @@
                     OnClick="btnNuevoTurno_Click" />
             </div>
 
-           
-          <!-- FILTROS CON MEJOR TAMAÑO Y LECTURA -->
-            <div class="row g-3 mb-3 align-items-end">
-                <!-- Filtrar por Médico -->
-                <div class="col-12 col-md-4">
-                    <label class="form-label fw-semibold text-secondary mb-1" style="font-size: 0.85rem;">Filtrar por Médico:</label>
-                    <asp:DropDownList ID="ddlFiltroMedico" runat="server" CssClass="form-select"
-                        AutoPostBack="true" OnSelectedIndexChanged="ddlFiltroMedico_SelectedIndexChanged">
-                    </asp:DropDownList>
-                </div>
 
-                <!-- Filtrar por Especialidad -->
-                <div class="col-12 col-md-4">
-                    <label class="form-label fw-semibold text-secondary mb-1" style="font-size: 0.85rem;">Filtrar por Especialidad:</label>
-                    <asp:DropDownList ID="ddlFiltroEspecialidad" runat="server" CssClass="form-select"
-                        AutoPostBack="true" OnSelectedIndexChanged="ddlFiltroEspecialidad_SelectedIndexChanged">
-                    </asp:DropDownList>
-                </div>
+            <asp:UpdatePanel ID="UpdatePanelCombos" runat="server">
+                <ContentTemplate>
+                    <div class="row g-3 mb-3 align-items-end">
+                        <!-- Filtrar por Médico -->
+                        <div class="col-12 col-md-4">
+                            <label class="form-label fw-semibold text-secondary mb-1" style="font-size: 0.85rem;">Filtrar por Médico:</label>
+                            <asp:DropDownList ID="ddlFiltroMedico" runat="server" CssClass="form-select"
+                                AutoPostBack="true" OnSelectedIndexChanged="ddlFiltroMedico_SelectedIndexChanged">
+                            </asp:DropDownList>
+                        </div>
 
-                <!-- Filtrar por Fecha -->
-                <div class="col-12 col-md-4">
-                    <label class="form-label fw-semibold text-secondary mb-1" style="font-size: 0.85rem;">Filtrar por Fecha:</label>
-                    <asp:TextBox ID="txtFiltroFecha" runat="server" TextMode="Date" CssClass="form-control"
-                        AutoPostBack="true" onkeydown="return false;" OnTextChanged="txtFiltroFecha_TextChanged">
-                    </asp:TextBox>
-                </div>
-            </div>
+                        <!-- Filtrar por Especialidad -->
+                        <div class="col-12 col-md-4">
+                            <label class="form-label fw-semibold text-secondary mb-1" style="font-size: 0.85rem;">Filtrar por Especialidad:</label>
+                            <asp:DropDownList ID="ddlFiltroEspecialidad" runat="server" CssClass="form-select"
+                                AutoPostBack="true" OnSelectedIndexChanged="ddlFiltroEspecialidad_SelectedIndexChanged">
+                            </asp:DropDownList>
+                        </div>
 
+                        <!-- Filtrar por Fecha -->
+                        <div class="col-12 col-md-4">
+                            <label class="form-label fw-semibold text-secondary mb-1" style="font-size: 0.85rem;">Filtrar por Fecha:</label>
+                            <asp:TextBox ID="txtFiltroFecha" runat="server" TextMode="Date" CssClass="form-control"
+                                AutoPostBack="true" onkeydown="return false;" OnTextChanged="txtFiltroFecha_TextChanged">
+                            </asp:TextBox>
+                        </div>
+                    </div>
+                </ContentTemplate>
+            </asp:UpdatePanel>
             <div class="mt-2 mb-2">
                 <asp:Label ID="lblMensajeExito" runat="server" CssClass="alert alert-success d-block fw-semibold small py-2 px-3 shadow-sm rounded-3" Visible="false">
                         <i class="bi bi-check-circle-fill me-2"></i>
                 </asp:Label>
             </div>
 
-            
+
             <div class="card bg-white p-3 rounded-3 shadow-sm border-0 mb-4">
                 <div class="table-responsive" style="max-height: 500px; overflow-y: auto;">
                     <asp:GridView ID="dgvTurnos" runat="server" CssClass="table table-hover align-middle border-0 small mb-0"
                         AutoGenerateColumns="false" GridLines="None" DataKeyNames="IdTurno" OnRowCommand="dgvTurnos_RowCommand">
                         <Columns>
-                           
+
                             <asp:BoundField HeaderText="Fecha" DataField="Fecha" DataFormatString="{0:dd/MM/yyyy}" ItemStyle-Width="110px" />
                             <asp:BoundField HeaderText="Hora" DataField="Hora" DataFormatString="{0:hh\:mm}" ItemStyle-CssClass="fw-bold text-dark" ItemStyle-Width="90px" />
 

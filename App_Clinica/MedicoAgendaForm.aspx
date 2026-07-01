@@ -31,11 +31,11 @@
                 <div class="row">
                     <div class="col-md-6 mb-3">
                         <label class="form-label">Hora Entrada:</label>
-                        <asp:TextBox ID="txtHoraEntrada" runat="server" TextMode="Time" CssClass="form-control"></asp:TextBox>
+                        <asp:DropDownList ID="txtHoraEntrada" runat="server" CssClass="form-select"></asp:DropDownList>
                     </div>
                     <div class="col-md-6 mb-3">
                         <label class="form-label">Hora Salida:</label>
-                        <asp:TextBox ID="txtHoraSalida" runat="server" TextMode="Time" CssClass="form-control"></asp:TextBox>
+                        <asp:DropDownList ID="txtHoraSalida" runat="server" CssClass="form-select"></asp:DropDownList>
                     </div>
                 </div>
 

@@ -98,7 +98,7 @@ namespace App_Clinica
                 catch (Exception ex)
                 {
                     lblMensajeGrilla.ForeColor = System.Drawing.Color.Red;
-                    lblMensajeGrilla.Text = "Error al intentar eliminar: " + ex.Message;
+                    lblMensajeGrilla.Text = "Error al intentar eliminar: Existe un turno en el horario seleccionado..";
                     lblMensajeGrilla.Visible = true;
                 }
             }

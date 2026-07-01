@@ -27,6 +27,7 @@ namespace App_Clinica
             if (!IsPostBack)
             {
                 CargarDesplegable();
+                CargarComboHorarios();
             }
         }
 
@@ -53,7 +54,7 @@ namespace App_Clinica
             string idMedico = Request.QueryString["idmedico"];
             try
             {
-                if (string.IsNullOrEmpty(txtHoraEntrada.Text) || string.IsNullOrEmpty(txtHoraSalida.Text))
+                if (txtHoraEntrada.SelectedValue == "" || txtHoraSalida.SelectedValue == "")
                 {
                     Utils.MostrarAlertaModal(this, "Debe completar el horario de entrada y salida.");
                     return;
@@ -61,8 +62,10 @@ namespace App_Clinica
 
                 int medicoId = int.Parse(idMedico);
                 string diaTrabajo = ddlDia.SelectedValue;
-                TimeSpan horaEntrada = TimeSpan.Parse(txtHoraEntrada.Text);
-                TimeSpan horaSalida = TimeSpan.Parse(txtHoraSalida.Text);
+
+                // El parseo funciona directo porque el SelectedValue tiene formato "HH:mm"
+                TimeSpan horaEntrada = TimeSpan.Parse(txtHoraEntrada.SelectedValue);
+                TimeSpan horaSalida = TimeSpan.Parse(txtHoraSalida.SelectedValue);
 
                 if (horaEntrada >= horaSalida)
                 {
@@ -72,11 +75,11 @@ namespace App_Clinica
 
                 AgendaMedicoNegocio negocio = new AgendaMedicoNegocio();
 
-                //Evaluamos la superposición de horarios en el mismo día
+                // Evaluamos la superposición de horarios en el mismo día (Sigue igual)
                 if (negocio.ValidarSuperposicionAgenda(medicoId, diaTrabajo, horaEntrada, horaSalida))
                 {
                     Utils.MostrarAlertaModal(this, "El profesional ya tiene una agenda asignada en ese día que se superpone con el horario ingresado.");
-                    return; 
+                    return;
                 }
 
                 // Si pasa la validación, continúa el flujo normal:
@@ -107,6 +110,31 @@ namespace App_Clinica
         protected void btnCancelar_Click(object sender, EventArgs e)
         {
             Response.Redirect("MedicoAgendaPag.aspx?idmedico=" + Request.QueryString["idmedico"]);
+        }
+
+        private void CargarComboHorarios()
+        {
+            // Configuramos el rango: de 08:00 AM a 22:00 PM
+            TimeSpan hora = new TimeSpan(8, 0, 0);
+            TimeSpan fin = new TimeSpan(22, 0, 0);
+            TimeSpan intervalo = new TimeSpan(0, 30, 0); // Bloques de 30 minutos
+
+            txtHoraEntrada.Items.Clear();
+            txtHoraSalida.Items.Clear();
+
+            // Opción vacía por defecto para forzar la selección
+            txtHoraEntrada.Items.Add(new ListItem("-- Seleccione --", ""));
+            txtHoraSalida.Items.Add(new ListItem("-- Seleccione --", ""));
+
+            while (hora <= fin)
+            {
+                string formatoHora = hora.ToString(@"hh\:mm");
+
+                txtHoraEntrada.Items.Add(new ListItem(formatoHora, formatoHora));
+                txtHoraSalida.Items.Add(new ListItem(formatoHora, formatoHora));
+
+                hora = hora.Add(intervalo);
+            }
         }
     }
 }
