@@ -16,6 +16,7 @@ namespace App_Clinica
             if (!IsPostBack)
             {
                 CargarFiltros();
+                ControlarAccesoPorRol();
                 CargarGrilla();
             }
         }
@@ -213,6 +214,31 @@ namespace App_Clinica
 
             dgvTurnos.DataSource = turnoNegocio.ListarConFiltros(idMedico, idEspecialidad, fecha);
             dgvTurnos.DataBind();
+        }
+
+        private void ControlarAccesoPorRol()
+        {
+            if (Session["UsuarioLogueado"] != null)
+            {
+                Dominio.Usuario usuarioLogueado = (Dominio.Usuario)Session["UsuarioLogueado"];
+
+                // Si el perfil corresponde al de un Médico
+                if (usuarioLogueado.Perfil != null && usuarioLogueado.Perfil.Descripcion == "Medico")
+                {
+                    if (usuarioLogueado.Medico != null && usuarioLogueado.Medico.IdMedico > 0)
+                    {
+                        // Preseleccionamos su propio ID en el desplegable de filtros
+                        ddlFiltroMedico.SelectedValue = usuarioLogueado.Medico.IdMedico.ToString();
+
+                        // Deshabilitamos el combo para que no pueda cambiarse a otro colega
+                        ddlFiltroMedico.Enabled = false;
+                    }
+                    else
+                    {
+                        Utils.MostrarAlertaModal(this, "Atención: Su usuario tiene perfil Médico pero no se encuentra vinculado a ningún profesional en el sistema.");
+                    }
+                }
+            }
         }
     }
 }
