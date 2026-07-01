@@ -24,12 +24,12 @@
 
             <div class="mb-3">
                 <label class="form-label fw-semibold text-secondary">DNI</label>
-                <asp:TextBox ID="txtDni" runat="server" CssClass="form-control"></asp:TextBox>
+                <asp:TextBox ID="txtDni" runat="server" CssClass="form-control" MaxLength="8" onkeypress="return event.charCode >= 48 && event.charCode <= 57;"></asp:TextBox>
             </div>
 
             <div class="mb-3">
                 <label class="form-label fw-semibold text-secondary">Matricula</label>
-                <asp:TextBox ID="txtMatricula" runat="server" CssClass="form-control"> </asp:TextBox>
+                <asp:TextBox ID="txtMatricula" runat="server" CssClass="form-control" onkeypress="return event.charCode >= 48 && event.charCode <= 57;"> </asp:TextBox>
             </div>
 
             <div class="mb-4">
