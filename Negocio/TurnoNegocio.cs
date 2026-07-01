@@ -127,14 +127,15 @@ namespace Negocio
             }
         } // Cambiar Estado
 
-        public void Agregar(Turno nuevo)
+        public int Agregar(Turno nuevo)
         {
             AccesoDatos datos = new AccesoDatos();
             try
             {
                 datos.setearConsulta(@"
                                         INSERT INTO Turno (Fecha, Hora, IdAgendaMedico, IdPaciente, IdEstadoTurno, Observacion) 
-                                        VALUES (@Fecha, @Hora, @IdAgenda, @IdPaciente, @IdEstado, @Observacion)");
+                                        VALUES (@Fecha, @Hora, @IdAgenda, @IdPaciente, @IdEstado, @Observacion);
+                                        SELECT SCOPE_IDENTITY();");
 
                 datos.setearParametros("@Fecha", nuevo.Fecha);
                 datos.setearParametros("@Hora", nuevo.Hora);
@@ -143,10 +144,15 @@ namespace Negocio
 
                 // Al ser un alta, por defecto pasamos ID correspondiente a "Asignado" 2
                 datos.setearParametros("@IdEstado", 2);
-
                 datos.setearParametros("@Observacion", nuevo.Observacion ?? (object)DBNull.Value);
 
-                datos.ejecutarAccion();
+                datos.ejecutarLectura();
+
+                if (datos.Lector.Read())
+                {
+                    return Convert.ToInt32(datos.Lector[0]);
+                }
+                return 0;
             }
             catch (Exception ex)
             {

@@ -183,13 +183,13 @@ namespace App_Clinica
         {
             try
             {
-                if(ddlEspecialidad.SelectedValue == "0")
+                if (ddlEspecialidad.SelectedValue == "0")
                 {
                     Utils.MostrarAlertaModal(this, "Debe seleccionar una Especialidad.");
                     return;
                 }
 
-                if(ddlMedico.SelectedValue == "0")
+                if (ddlMedico.SelectedValue == "0")
                 {
                     Utils.MostrarAlertaModal(this, "Debe seleccionar un Medico.");
                     return;
@@ -219,12 +219,14 @@ namespace App_Clinica
                 nuevo.Agenda = new AgendaMedico();
                 nuevo.Agenda.IdAgendaMedico = (int)ViewState["IdAgendaMedicoElegida"];
 
+                int idNuevoTurno = 0;
+
                 if (ViewState["IdTurnoAReprogramar"] != null)
                 {
                     int idViejo = (int)ViewState["IdTurnoAReprogramar"];
 
-                    // Insertamos el nuevo, y al viejo le hacemos un UPDATE cambiando el estado a "Reprogramado" o "Cancelado"
-                    turnoNegocio.Agregar(nuevo);
+                    // Insertamos el nuevo, y al viejo le hacemos un UPDATE cambiando el estado a "Reprogramado"
+                    idNuevoTurno = turnoNegocio.Agregar(nuevo); 
                     turnoNegocio.CambiarEstado(idViejo, 4); // 4 es "Reprogramado" en la tabla EstadoTurno
 
                     Session["MensajeExito"] = "¡El turno se reprogramó con éxito!";
@@ -232,8 +234,37 @@ namespace App_Clinica
                 else
                 {
                     // Flujo normal de un alta de turnos
-                    turnoNegocio.Agregar(nuevo);
+                    idNuevoTurno = turnoNegocio.Agregar(nuevo);
                     Session["MensajeExito"] = "¡Turno agendado con éxito!";
+                }
+
+                try
+                {
+
+                    string nombrePaciente = ddlPaciente.SelectedItem.Text;
+                    string nombreMedico = ddlMedico.SelectedItem.Text;
+
+                    PacienteNegocio negocio = new PacienteNegocio();
+                    //string emailPaciente = negocio.ObtenerEmailPorId(nuevo.Paciente.IdPaciente);
+                    string emailPaciente = "invokerk868@gmail.com";
+
+                    if (!string.IsNullOrEmpty(emailPaciente))
+                    {
+                        EmailService emailService = new EmailService();
+                        emailService.EnviarConfirmacionTurno(
+                                                            emailPaciente,
+                                                            nombrePaciente,
+                                                            idNuevoTurno.ToString(),
+                                                            nuevo.Fecha.ToString("dd/MM/yyyy"),
+                                                            nuevo.Hora.ToString(@"hh\:mm"),
+                                                            nombreMedico);
+                    }
+                }
+                catch (Exception)
+                {
+                    // Importante: Dejamos el catch vacío o registramos el error de manera silenciosa.
+                    // Si el mail falla (por falta de internet temporal, etc.), NO queremos interrumpir el flujo.
+                    // El turno ya se guardó en la base de datos, por lo que el programa debe continuar a la siguiente línea.
                 }
 
                 Response.Redirect("TurnosPag.aspx", false);
@@ -242,6 +273,7 @@ namespace App_Clinica
             {
                 Utils.MostrarAlertaModal(this, "Error al confirmar el turno: " + ex.Message);
             }
+
         }
 
         protected void btnCancelar_Click(object sender, EventArgs e)

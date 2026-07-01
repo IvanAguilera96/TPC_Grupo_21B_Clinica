@@ -152,7 +152,39 @@ namespace Negocio
 			{
 				datos.cerrarConexion();
 			}
-		}
-    } // PacienteNegocio
+        }// Modificar
+
+        public string ObtenerEmailPorId(int idPaciente)
+        {
+            AccesoDatos datos = new AccesoDatos();
+            try
+            {
+                datos.setearConsulta("SELECT Email FROM Paciente WHERE IdPaciente = @IdPaciente");
+                datos.setearParametros("@IdPaciente", idPaciente);
+
+                datos.ejecutarLectura();
+
+                if (datos.Lector.Read())
+                {
+                    // Validamos que el campo no sea nulo en la base de datos
+                    if (!(datos.Lector["Email"] is DBNull))
+                    {
+                        return datos.Lector["Email"].ToString();
+                    }
+                }
+
+                return "";
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
+    } 
+
 }
 
