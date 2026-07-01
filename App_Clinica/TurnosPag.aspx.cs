@@ -6,6 +6,7 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using Utiles;
+using static Utiles.Utils;
 
 namespace App_Clinica
 {
@@ -13,6 +14,8 @@ namespace App_Clinica
     {
         protected void Page_Load(object sender, EventArgs e)
         {
+            Seguridad.ValidarAcceso(this, "Administrador", "Recepcionista", "Medico");
+
             if (!IsPostBack)
             {
                 CargarFiltros();
@@ -236,6 +239,8 @@ namespace App_Clinica
                 {
                     if (usuarioLogueado.Medico != null && usuarioLogueado.Medico.IdMedico > 0)
                     {
+                        btnNuevoTurno.Visible = false;
+
                         // Preseleccionamos su propio ID en el desplegable de filtros
                         ddlFiltroMedico.SelectedValue = usuarioLogueado.Medico.IdMedico.ToString();
 
