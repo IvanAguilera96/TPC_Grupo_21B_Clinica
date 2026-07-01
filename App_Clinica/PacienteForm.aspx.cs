@@ -63,6 +63,19 @@ namespace App_Clinica
                     return;
                 }
 
+                //Validación de servidor para asegurar que el DNI sea solo numérico
+                if (!long.TryParse(txtDni.Text.Trim(), out _))
+                {
+                    Utils.MostrarAlertaModal(this, "El DNI debe contener únicamente números.");
+                    return;
+                }
+                //Validación de servidor para asegurar que el Teléfono sea solo numérico
+                if (!long.TryParse(txtTelefono.Text.Trim(), out _))
+                {
+                    Utils.MostrarAlertaModal(this, "El Teléfono debe contener únicamente números.");
+                    return;
+                }
+
                 if (txtDni.Text.Trim().Length != 8)
                 {
                     Utils.MostrarAlertaModal(this, "El DNI debe tener exactamente 8 caracteres.");
@@ -94,9 +107,9 @@ namespace App_Clinica
                 aux.Apellido = txtApellido.Text;
                 aux.Nombre = txtNombre.Text;
                 aux.FechaNacimiento = DateTime.Parse(txtFechaNacimiento.Text);
-                aux.Dni = txtDni.Text;
+                aux.Dni = txtDni.Text.Trim();
                 aux.Email = txtEmail.Text;
-                aux.Telefono = txtTelefono.Text;
+                aux.Telefono = txtTelefono.Text.Trim();
                 aux.Estado = chkEstado.Checked;
 
                 if (Request.QueryString["ID"] != null)
@@ -117,7 +130,6 @@ namespace App_Clinica
             {
                 throw ex;
             }
-
         }
     }
 }
