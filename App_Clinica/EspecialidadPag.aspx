@@ -25,8 +25,6 @@
                     <asp:GridView ID="dgvEspecialidades" runat="server" CssClass="table table-hover align-middle border-0 small" 
                         AutoGenerateColumns="false" GridLines="None" DataKeyNames="IdEspecialidad" OnRowCommand="dgvEspecialidades_RowCommand">
                         <Columns>
-
-                            <asp:BoundField DataField="IdEspecialidad" HeaderText="ID" ItemStyle-CssClass="text-muted fw-semibold" ItemStyle-Width="70px" />
                             
                             <asp:BoundField DataField="Descripcion" HeaderText="Especialidad" ItemStyle-CssClass="fw-bold text-dark" />
                             

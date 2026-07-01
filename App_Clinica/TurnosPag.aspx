@@ -58,7 +58,7 @@
                     <asp:GridView ID="dgvTurnos" runat="server" CssClass="table table-hover align-middle border-0 small mb-0"
                         AutoGenerateColumns="false" GridLines="None" DataKeyNames="IdTurno" OnRowCommand="dgvTurnos_RowCommand">
                         <Columns>
-                            <asp:BoundField HeaderText="ID" DataField="IdTurno" ItemStyle-CssClass="text-muted fw-semibold" ItemStyle-Width="60px" />
+                           
                             <asp:BoundField HeaderText="Fecha" DataField="Fecha" DataFormatString="{0:dd/MM/yyyy}" ItemStyle-Width="110px" />
                             <asp:BoundField HeaderText="Hora" DataField="Hora" DataFormatString="{0:hh\:mm}" ItemStyle-CssClass="fw-bold text-dark" ItemStyle-Width="90px" />
 

@@ -18,6 +18,15 @@ namespace App_Clinica
                 CargarFiltros();
                 ControlarAccesoPorRol();
                 CargarGrilla();
+            
+                if (Session["MensajeExito"] != null)
+                {
+                    lblMensajeExito.Text = Session["MensajeExito"].ToString();
+                    lblMensajeExito.CssClass = "alert alert-success d-block text-center mb-3";
+                    lblMensajeExito.Visible = true;
+
+                    Session["MensajeExito"] = null;
+                }
             }
         }
 

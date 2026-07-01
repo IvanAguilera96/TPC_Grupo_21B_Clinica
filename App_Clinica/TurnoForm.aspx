@@ -14,11 +14,9 @@
             </div>
             <div class="card-body">
 
-                <!-- Envolvemos el corazón del formulario en el UpdatePanel -->
-                <asp:UpdatePanel ID="UpdatePanelFormulario" runat="server">
+                <asp:UpdatePanel ID="UpdatePanelCombos" runat="server">
                     <ContentTemplate>
-
-                        <!--Especialidad -->
+                        <!-- Especialidad -->
                         <div class="mb-3">
                             <label class="form-label">Seleccione Especialidad:</label>
                             <asp:DropDownList ID="ddlEspecialidad" runat="server" CssClass="form-select"
@@ -26,49 +24,49 @@
                             </asp:DropDownList>
                         </div>
 
-                        <!--Medico (Se habilita al elegir especialidad) -->
+                        <!-- Medico -->
                         <div class="mb-3">
                             <label class="form-label">Seleccione Médico:</label>
                             <asp:DropDownList ID="ddlMedico" runat="server" CssClass="form-select" Enabled="false"
                                 AutoPostBack="true" OnSelectedIndexChanged="ddlMedico_SelectedIndexChanged">
                             </asp:DropDownList>
                         </div>
-
-                        <!-- El Label para el aviso de dias de atencion -->
-                        <asp:Label ID="lblDiasAtencion" runat="server" CssClass="d-block text-muted small mb-2" Font-Italic="true"></asp:Label>
-
-                        <!-- Fecha del Turno con AutoPostBack -->
-                        <div class="mb-3">
-                            <label class="form-label">Seleccione la Fecha del Turno:</label>
-                            <asp:TextBox ID="txtFecha" runat="server" TextMode="Date" CssClass="form-control"
-                                AutoPostBack="true" OnTextChanged="txtFecha_TextChanged"></asp:TextBox>
-                        </div>
-
-                        <!-- Selector de Horarios en Bloques Modificado -->
-                        <div class="mb-3">
-                            <label class="form-label d-block">Horarios Disponibles para esta fecha:</label>
-
-                            <!-- Input oculto para guardar la hora exacta en la que el usuario hizo clic -->
-                            <asp:HiddenField ID="hfHoraSeleccionada" runat="server" />
-
-                            <div class="row row-cols-4 g-2">
-                                <asp:Repeater ID="repHorarios" runat="server" OnItemCommand="repHorarios_ItemCommand">
-                                    <ItemTemplate>
-                                        <div class="col">
-                                            <asp:Button ID="btnSlot" runat="server"
-                                                Text='<%# Container.DataItem.ToString().Substring(0, 5) %>'
-                                                CommandName="SeleccionarHora"
-                                                CommandArgument='<%# Container.DataItem.ToString() %>'
-                                                CssClass='<%# ValidarEstiloSlot(Container.DataItem.ToString()) %>'
-                                                Enabled='<%# !EsTurnoOcupado(Container.DataItem.ToString()) %>' />
-                                        </div>
-                                    </ItemTemplate>
-                                </asp:Repeater>
-                            </div>
-                        </div>
                     </ContentTemplate>
                 </asp:UpdatePanel>
-     
+                <!-- El Label para el aviso de dias de atencion -->
+                <asp:Label ID="lblDiasAtencion" runat="server" CssClass="d-block text-muted small mb-2" Font-Italic="true"></asp:Label>
+
+                <!-- Fecha del Turno con AutoPostBack -->
+                <div class="mb-3">
+                    <label class="form-label">Seleccione la Fecha del Turno:</label>
+                    <asp:TextBox ID="txtFecha" runat="server" TextMode="Date" CssClass="form-control"
+                        AutoPostBack="true" OnTextChanged="txtFecha_TextChanged"></asp:TextBox>
+                </div>
+
+                <!-- Selector de Horarios en Bloques Modificado -->
+                <div class="mb-3">
+                    <label class="form-label d-block">Horarios Disponibles para esta fecha:</label>
+
+                    <!-- Input oculto para guardar la hora exacta en la que el usuario hizo clic -->
+                    <asp:HiddenField ID="hfHoraSeleccionada" runat="server" />
+
+                    <div class="row row-cols-4 g-2">
+                        <asp:Repeater ID="repHorarios" runat="server" OnItemCommand="repHorarios_ItemCommand">
+                            <ItemTemplate>
+                                <div class="col">
+                                    <asp:Button ID="btnSlot" runat="server"
+                                        Text='<%# Container.DataItem.ToString().Substring(0, 5) %>'
+                                        CommandName="SeleccionarHora"
+                                        CommandArgument='<%# Container.DataItem.ToString() %>'
+                                        CssClass='<%# ValidarEstiloSlot(Container.DataItem.ToString()) %>'
+                                        Enabled='<%# !EsTurnoOcupado(Container.DataItem.ToString()) %>' />
+                                </div>
+                            </ItemTemplate>
+                        </asp:Repeater>
+                    </div>
+                </div>
+
+
                 <!--Paciente-->
                 <div class="mb-3">
                     <label class="form-label">5. Seleccione Paciente:</label>

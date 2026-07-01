@@ -246,7 +246,7 @@ namespace App_Clinica
 
                     PacienteNegocio negocio = new PacienteNegocio();
                     //string emailPaciente = negocio.ObtenerEmailPorId(nuevo.Paciente.IdPaciente);
-                    string emailPaciente = "invokerk868@gmail.com";
+                    string emailPaciente = "";//"invokerk868@gmail.com";
 
                     if (!string.IsNullOrEmpty(emailPaciente))
                     {
