@@ -12,7 +12,7 @@ namespace Dominio
         public string Nombre { get; set; }
         public string Contrasenia { get; set; }
         public Perfil Perfil { get; set; } //Define los permisos del usuario.
-
+        public Medico Medico { get; set; }
         public bool Estado { get; set; } //true=activo, false=inactivo
         //Propiedades
         public string DescripcionPerfil

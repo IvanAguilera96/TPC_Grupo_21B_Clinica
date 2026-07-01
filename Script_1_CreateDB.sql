@@ -70,6 +70,7 @@ CREATE TABLE Usuario(
 	Nombre VARCHAR(50) NOT NULL,
 	Contrasenia VARCHAR(20) NOT NULL,
 	IdPerfil INT FOREIGN KEY REFERENCES Perfil(IdPerfil),
+	IdMedico INT NULL FOREIGN KEY REFERENCES Medico(IdMedico),
 	Estado BIT NOT NULL DEFAULT 1
 );
 

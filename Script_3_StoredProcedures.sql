@@ -1,4 +1,7 @@
-﻿CREATE PROCEDURE SP_AsignarAgendaMedico
+﻿USE TPC_Clinica;
+GO
+
+CREATE PROCEDURE SP_AsignarAgendaMedico
     @IdMedico INT,
     @IdEspecialidad INT,
     @DiaDeTrabajo VARCHAR(50),

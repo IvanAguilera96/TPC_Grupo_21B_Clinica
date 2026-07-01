@@ -16,26 +16,33 @@ namespace App_Clinica
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-                try
-                {
-
-                //Configuración inicial
+            try
+            {
                 Seguridad.ValidarAcceso(this, "Administrador");
+
                 if (!IsPostBack)
-                    {
-                        PerfilNegocio negocioPerfil = new PerfilNegocio();
-                        UsuarioNegocio negocioUsuario = new UsuarioNegocio();
+                {
+                    PerfilNegocio negocioPerfil = new PerfilNegocio();
+                    UsuarioNegocio negocioUsuario = new UsuarioNegocio();
+                    MedicoNegocio negocioMedico = new MedicoNegocio();
 
-                        ddlPerfil.DataSource = negocioPerfil.Listar();
-                        ddlPerfil.DataValueField = "IdPerfil";
-                        ddlPerfil.DataTextField = "Descripcion";
-                        ddlPerfil.DataBind();
+                    // 1. Cargar Perfiles
+                    ddlPerfil.DataSource = negocioPerfil.Listar();
+                    ddlPerfil.DataValueField = "IdPerfil";
+                    ddlPerfil.DataTextField = "Descripcion";
+                    ddlPerfil.DataBind();
 
-                    //Configuración si recibe ID (modificar)
+                    // 2. Cargar Médicos Activos para el campo opcional
+                    ddlMedico.DataSource = negocioMedico.Listar().Where(x => x.Estado == true).ToList();
+                    ddlMedico.DataValueField = "IdMedico";
+                    ddlMedico.DataTextField = "NombreCompleto";
+                    ddlMedico.DataBind();
+                    ddlMedico.Items.Insert(0, new ListItem("-- Seleccione un Médico --", "0"));
+
+                    // 3. Configuración si recibe ID (Modificar)
                     if (Request.QueryString["id"] != null)
                     {
                         int idUrl = int.Parse(Request.QueryString["id"]);
-
                         Dominio.Usuario seleccionado = negocioUsuario.BuscarPorId(idUrl);
 
                         if (seleccionado != null)
@@ -44,18 +51,22 @@ namespace App_Clinica
                             txtContrasenia.Text = seleccionado.Contrasenia;
                             ddlPerfil.SelectedValue = seleccionado.Perfil.IdPerfil.ToString();
                             chkEstado.Checked = seleccionado.Estado;
+
+                            // Si tiene médico asignado lo seleccionamos en el combo
+                            if (seleccionado.Medico != null && seleccionado.Medico.IdMedico > 0)
+                            {
+                                ddlMedico.SelectedValue = seleccionado.Medico.IdMedico.ToString();
+                            }
                         }
 
-                        // Modificar titulo
                         lblTitulo.InnerText = "Modificar Usuario";
                     }
                 }
-
-                }
-                catch (Exception ex)
-                {
-                    throw ex;
-                }
+            }
+            catch (Exception ex)
+            {
+                Utils.MostrarAlertaModal(this, "Error al iniciar el formulario: " + ex.Message);
+            }
         }
 
         protected void btnGuardar_Click(object sender, EventArgs e)
@@ -72,6 +83,13 @@ namespace App_Clinica
                 return;
             }
 
+            // Validación si seleccionó perfil médico pero no enlazó ningún profesional
+            if (ddlPerfil.SelectedValue == "3" && ddlMedico.SelectedValue == "0")
+            {
+                Utils.MostrarAlertaModal(this, "Debe seleccionar un profesional médico para asignarle este usuario.");
+                return;
+            }
+
             try
             {
                 Dominio.Usuario nuevo = new Dominio.Usuario();
@@ -82,7 +100,17 @@ namespace App_Clinica
                 nuevo.Perfil = new Perfil();
                 nuevo.Perfil.IdPerfil = int.Parse(ddlPerfil.SelectedValue);
 
-                //Asigna el id para que viaje al metodo modificar
+                // Lógica de asignación de médico
+                if (ddlPerfil.SelectedValue == "3" && ddlMedico.SelectedValue != "0")
+                {
+                    nuevo.Medico = new Medico();
+                    nuevo.Medico.IdMedico = int.Parse(ddlMedico.SelectedValue);
+                }
+                else
+                {
+                    nuevo.Medico = null; // No corresponde médico o no se eligió ninguno
+                }
+
                 if (Request.QueryString["id"] != null)
                 {
                     nuevo.IdUsuario = int.Parse(Request.QueryString["id"]);
@@ -90,7 +118,6 @@ namespace App_Clinica
 
                 UsuarioNegocio negocio = new UsuarioNegocio();
 
-                //Evalua si es alta o editar
                 if (Request.QueryString["id"] != null)
                 {
                     negocio.Modificar(nuevo);
@@ -101,12 +128,11 @@ namespace App_Clinica
                     negocio.Agregar(nuevo);
                     Session["MensajeExito"] = "Usuario registrado con éxito.";
                 }
-                
+
                 Response.Redirect("Usuario.aspx", false);
             }
             catch (Exception ex)
             {
-
                 Utils.MostrarAlertaModal(this, ex.Message);
             }
         }

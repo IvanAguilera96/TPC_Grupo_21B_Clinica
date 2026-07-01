@@ -12,7 +12,6 @@ namespace App_Clinica
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            // 🔒 El cerrojo unificado protege la página completa ante cualquier ingreso ilegal por URL
             Seguridad.ValidarAcceso(this, "Administrador", "Recepcionista", "Medico");
 
             if (!IsPostBack)
@@ -21,12 +20,9 @@ namespace App_Clinica
                 {
                     Dominio.Usuario usuarioLogueado = (Dominio.Usuario)Session["UsuarioLogueado"];
 
-                    // Asignamos la bienvenida dinámica al Label
                     lblNombreUsuario.Text = usuarioLogueado.Nombre;
-
                     string rolDesc = usuarioLogueado.Perfil.Descripcion;
 
-                    // Encendemos y cargamos el panel correspondiente al rol
                     switch (rolDesc)
                     {
                         case "Administrador":
@@ -56,10 +52,8 @@ namespace App_Clinica
         private void CargarDashboardAdmin()
         {
             pnlAdmin.Visible = true;
-
             try
             {
-                // 1. Carga de métricas de contadores existentes
                 MedicoNegocio medNegocio = new MedicoNegocio();
                 int totalMedicos = medNegocio.Listar().Count;
                 lblCantMedicos.Text = totalMedicos.ToString();
@@ -68,13 +62,11 @@ namespace App_Clinica
                 int totalPacientes = pacNegocio.Listar().Count;
                 lblCantPacientes.Text = totalPacientes.ToString();
 
-                // 2. Carga del total de turnos 
                 TurnoNegocio turnoNegocio = new TurnoNegocio();
-                var listaGlobalTurnos = turnoNegocio.ListarConFiltros(0, 0, ""); 
+                var listaGlobalTurnos = turnoNegocio.ListarConFiltros(0, 0, "");
 
-                lblCantTurnosMes.Text = listaGlobalTurnos.Count.ToString(); 
+                lblCantTurnosMes.Text = listaGlobalTurnos.Count.ToString();
 
-                // 3. Enlazamos sólo los últimos 5 movimientos del sistema
                 dgvAuditoriaTurnos.DataSource = listaGlobalTurnos.Take(5).ToList();
                 dgvAuditoriaTurnos.DataBind();
             }
@@ -87,7 +79,6 @@ namespace App_Clinica
         private void CargarDashboardRecepcion()
         {
             pnlRecepcion.Visible = true;
-
             try
             {
                 TurnoNegocio turnoNegocio = new TurnoNegocio();
@@ -111,12 +102,19 @@ namespace App_Clinica
             try
             {
                 Dominio.Usuario usuarioLogueado = (Dominio.Usuario)Session["UsuarioLogueado"];
-                int idMedicoLogueado = usuarioLogueado.IdUsuario;
+
+                if (usuarioLogueado.Medico == null || usuarioLogueado.Medico.IdMedico == 0)
+                {
+                    Utils.MostrarAlertaModal(this, "Atención: Este usuario de perfil Médico no se encuentra vinculado a ningún profesional en el sistema. Contacte al Administrador.");
+                    return;
+                }
+
+                int idMedicoLogueado = usuarioLogueado.Medico.IdMedico;
 
                 TurnoNegocio turnoNegocio = new TurnoNegocio();
                 string fechaHoy = DateTime.Today.ToString("yyyy-MM-dd");
 
-                // Filtramos: IdMedico de la sesión, IdEspecialidad = 0 (Todas), Fecha = Hoy
+                // Filtramos: Pasamos el idMedico verificado, Especialidad = 0, Fecha = Hoy
                 var agendaDelDia = turnoNegocio.ListarConFiltros(idMedicoLogueado, 0, fechaHoy);
 
                 dgvTurnosDelDia.DataSource = agendaDelDia;
@@ -127,6 +125,5 @@ namespace App_Clinica
                 Utils.MostrarAlertaModal(this, "Error al cargar la agenda médica: " + ex.Message);
             }
         }
-
     }
 }

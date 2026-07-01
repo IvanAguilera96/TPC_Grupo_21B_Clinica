@@ -17,7 +17,8 @@ namespace Negocio
 
             try
             {
-                datos.setearConsulta("SELECT U.IdUsuario, U.Nombre, U.Estado, P.IdPerfil, P.Descripcion FROM Usuario U INNER JOIN Perfil P ON U.IdPerfil = P.IdPerfil");
+                // Agregamos U.IdMedico a la consulta (Usa LEFT JOIN si quisieras traer datos del médico, pero con el ID alcanza para el mapeo base)
+                datos.setearConsulta("SELECT U.IdUsuario, U.Nombre, U.Estado, U.IdMedico, P.IdPerfil, P.Descripcion FROM Usuario U INNER JOIN Perfil P ON U.IdPerfil = P.IdPerfil");
                 datos.ejecutarLectura();
 
                 while (datos.Lector.Read())
@@ -26,9 +27,17 @@ namespace Negocio
                     aux.IdUsuario = (int)datos.Lector["IdUsuario"];
                     aux.Nombre = (string)datos.Lector["Nombre"];
                     aux.Estado = (bool)datos.Lector["Estado"];
+
                     aux.Perfil = new Perfil();
                     aux.Perfil.IdPerfil = (int)datos.Lector["IdPerfil"];
                     aux.Perfil.Descripcion = (string)datos.Lector["Descripcion"];
+
+                    // Manejo seguro de nulos para IdMedico
+                    if (!(datos.Lector["IdMedico"] is DBNull))
+                    {
+                        aux.Medico = new Medico();
+                        aux.Medico.IdMedico = (int)datos.Lector["IdMedico"];
+                    }
 
                     lista.Add(aux);
                 }
@@ -36,7 +45,6 @@ namespace Negocio
             }
             catch (Exception ex)
             {
-
                 throw ex;
             }
             finally
@@ -51,7 +59,7 @@ namespace Negocio
 
             try
             {
-                datos.setearConsulta("SELECT U.IdUsuario, U.Nombre, U.Contrasenia, U.Estado, P.IdPerfil, P.Descripcion FROM Usuario U INNER JOIN Perfil P ON U.IdPerfil = P.IdPerfil WHERE U.IdUsuario = @id");
+                datos.setearConsulta("SELECT U.IdUsuario, U.Nombre, U.Contrasenia, U.Estado, U.IdMedico, P.IdPerfil, P.Descripcion FROM Usuario U INNER JOIN Perfil P ON U.IdPerfil = P.IdPerfil WHERE U.IdUsuario = @id");
                 datos.setearParametros("@id", id);
                 datos.ejecutarLectura();
 
@@ -62,9 +70,17 @@ namespace Negocio
                     user.Nombre = datos.Lector["Nombre"].ToString();
                     user.Contrasenia = datos.Lector["Contrasenia"].ToString();
                     user.Estado = (bool)datos.Lector["Estado"];
+
                     user.Perfil = new Perfil();
                     user.Perfil.IdPerfil = (int)datos.Lector["IdPerfil"];
                     user.Perfil.Descripcion = datos.Lector["Descripcion"].ToString();
+
+                    // Manejo seguro de nulos para IdMedico al editar
+                    if (!(datos.Lector["IdMedico"] is DBNull))
+                    {
+                        user.Medico = new Medico();
+                        user.Medico.IdMedico = (int)datos.Lector["IdMedico"];
+                    }
 
                     return user;
                 }
@@ -73,7 +89,6 @@ namespace Negocio
             }
             catch (Exception ex)
             {
-
                 throw ex;
             }
             finally
@@ -81,6 +96,7 @@ namespace Negocio
                 datos.cerrarConexion();
             }
         }
+
         public void Agregar(Usuario nuevo)
         {
             if (ExisteUsuario(nuevo.Nombre, 0))
@@ -92,15 +108,19 @@ namespace Negocio
 
             try
             {
-                datos.setearConsulta("INSERT INTO Usuario (Nombre, Contrasenia, IdPerfil, Estado) VALUES (@usuario, @contrasenia, @idPerfil, 1)");
+                // Modificado para soportar la columna IdMedico
+                datos.setearConsulta("INSERT INTO Usuario (Nombre, Contrasenia, IdPerfil, IdMedico, Estado) VALUES (@usuario, @contrasenia, @idPerfil, @idMedico, 1)");
                 datos.setearParametros("@usuario", nuevo.Nombre);
                 datos.setearParametros("@contrasenia", nuevo.Contrasenia);
                 datos.setearParametros("@idPerfil", nuevo.Perfil.IdPerfil);
+
+                // Si el médico es null, enviamos DBNull.Value a la base de datos de manera prolija
+                datos.setearParametros("@idMedico", (object)nuevo.Medico?.IdMedico ?? DBNull.Value);
+
                 datos.ejecutarAccion();
             }
             catch (Exception ex)
             {
-
                 throw ex;
             }
             finally
@@ -120,17 +140,21 @@ namespace Negocio
 
             try
             {
-                datos.setearConsulta("UPDATE Usuario SET Nombre = @nombre, Contrasenia = @contrasenia, Estado = @estado, IdPerfil = @idPerfil WHERE IdUsuario = @id");
+                // Modificado para actualizar dinámicamente el IdMedico
+                datos.setearConsulta("UPDATE Usuario SET Nombre = @nombre, Contrasenia = @contrasenia, Estado = @estado, IdPerfil = @idPerfil, IdMedico = @idMedico WHERE IdUsuario = @id");
                 datos.setearParametros("@nombre", user.Nombre);
                 datos.setearParametros("@contrasenia", user.Contrasenia);
                 datos.setearParametros("@estado", user.Estado);
                 datos.setearParametros("@idPerfil", user.Perfil.IdPerfil);
                 datos.setearParametros("@id", user.IdUsuario);
+
+                // Mapeo condicional por si se le remueve el rol médico o se cambia la vinculación
+                datos.setearParametros("@idMedico", (object)user.Medico?.IdMedico ?? DBNull.Value);
+
                 datos.ejecutarAccion();
             }
             catch (Exception ex)
             {
-
                 throw ex;
             }
             finally
@@ -138,6 +162,7 @@ namespace Negocio
                 datos.cerrarConexion();
             }
         }
+
         public void Eliminar(int IdEliminar)
         {
             AccesoDatos datos = new AccesoDatos();
@@ -150,7 +175,6 @@ namespace Negocio
             }
             catch (Exception ex)
             {
-
                 throw ex;
             }
             finally
@@ -194,8 +218,8 @@ namespace Negocio
 
             try
             {
-                //Recupera usuario y perfil
-                string consulta = @"SELECT U.IdUsuario, U.Nombre, U.IdPerfil, U.Estado, P.Descripcion as Perfil 
+                // Agregamos U.IdMedico al SELECT para recuperarlo al iniciar sesión
+                string consulta = @"SELECT U.IdUsuario, U.Nombre, U.IdPerfil, U.Estado, U.IdMedico, P.Descripcion as Perfil 
                                     FROM Usuario U 
                                     INNER JOIN Perfil P ON U.IdPerfil = P.IdPerfil 
                                     WHERE U.Nombre = @nombre AND U.Contrasenia = @contrasenia";
@@ -217,10 +241,17 @@ namespace Negocio
                     usuarioLogueado.Perfil.IdPerfil = (int)datos.Lector["IdPerfil"];
                     usuarioLogueado.Perfil.Descripcion = (string)datos.Lector["Perfil"];
 
-                    return usuarioLogueado; //Credenciales correctas, devolvemos el usuario
+                    // Recuperación crucial del Médico durante el login
+                    if (!(datos.Lector["IdMedico"] is DBNull))
+                    {
+                        usuarioLogueado.Medico = new Medico();
+                        usuarioLogueado.Medico.IdMedico = (int)datos.Lector["IdMedico"];
+                    }
+
+                    return usuarioLogueado;
                 }
 
-                return null; //las credenciales no existen o el usuario está de baja
+                return null;
             }
             catch (Exception ex)
             {

@@ -51,6 +51,15 @@ namespace App_Clinica
         protected global::System.Web.UI.WebControls.DropDownList ddlPerfil;
 
         /// <summary>
+        /// Control ddlMedico.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList ddlMedico;
+
+        /// <summary>
         /// Control chkEstado.
         /// </summary>
         /// <remarks>
