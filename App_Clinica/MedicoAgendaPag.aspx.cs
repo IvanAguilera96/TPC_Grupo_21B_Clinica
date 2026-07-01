@@ -6,6 +6,7 @@ using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using Utiles;
 using static Utiles.Utils;
 
 namespace App_Clinica
@@ -73,6 +74,34 @@ namespace App_Clinica
         {
             string idMedico = Request.QueryString["idmedico"];
             Response.Redirect("MedicoAgendaForm.aspx?idmedico=" + idMedico);
+        }
+
+        protected void dgvAgenda_RowCommand(object sender, GridViewCommandEventArgs e)
+        {
+            if (e.CommandName == "EliminarAgenda")
+            {
+                try
+                {
+                    int index = Convert.ToInt32(e.CommandArgument);
+                    // Obtenemos el ID de la AgendaMedico guardado en las DataKeys de la fila correspondiente
+                    int idAgendaMedico = Convert.ToInt32(dgvAgenda.DataKeys[index].Value);
+
+                    AgendaMedicoNegocio agendaNegocio = new AgendaMedicoNegocio();
+                    agendaNegocio.Eliminar(idAgendaMedico);
+
+                    CargarAgenda();
+
+                    lblMensajeGrilla.ForeColor = System.Drawing.Color.Green;
+                    lblMensajeGrilla.Text = "El horario de la agenda se eliminó correctamente.";
+                    lblMensajeGrilla.Visible = true;
+                }
+                catch (Exception ex)
+                {
+                    lblMensajeGrilla.ForeColor = System.Drawing.Color.Red;
+                    lblMensajeGrilla.Text = "Error al intentar eliminar: " + ex.Message;
+                    lblMensajeGrilla.Visible = true;
+                }
+            }
         }
 
 

@@ -67,7 +67,7 @@ namespace App_Clinica
                     negocio.Eliminar(int.Parse(idUsuario));
 
                     lblMensajeGrilla.ForeColor = System.Drawing.Color.Green;
-                    lblMensajeGrilla.Text = "<i class='bi bi-check-circle-fill me-2'></i>Usuario eliminado con éxito.";
+                    lblMensajeGrilla.Text = "Usuario eliminado con éxito.";
                     lblMensajeGrilla.Visible = true;
 
                     ActualizarGrillaUsuarios();

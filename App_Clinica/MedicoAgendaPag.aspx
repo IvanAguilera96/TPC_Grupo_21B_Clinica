@@ -13,12 +13,23 @@
             <div id="contenedorAgenda" runat="server" class="p-4 border rounded bg-light mt-3">
                 <h4 class="text-secondary mb-3"><i class="bi bi-clock-history"></i>Agendas y Especialidades del Médico</h4>
 
-                <asp:GridView ID="dgvAgenda" runat="server" AutoGenerateColumns="false" CssClass="table table-sm table-striped align-middle">
+                <asp:GridView ID="dgvAgenda" runat="server" AutoGenerateColumns="false" DataKeyNames="IdAgendaMedico" OnRowCommand="dgvAgenda_RowCommand" CssClass="table table-hover align-middle border-0 small" GridLines="None">
                     <Columns>
                         <asp:BoundField HeaderText="Especialidad" DataField="Especialidad.Descripcion" />
                         <asp:BoundField HeaderText="Día" DataField="TurnoTrabajo.DiaDeTrabajo" />
                         <asp:BoundField HeaderText="Hora Entrada" DataField="TurnoTrabajo.HoraEntrada" />
                         <asp:BoundField HeaderText="Hora Salida" DataField="TurnoTrabajo.HoraSalida" />
+                        
+                        <asp:TemplateField HeaderText="Acciones" ItemStyle-Width="150px" ItemStyle-CssClass="text-center">
+                            <ItemTemplate>
+                                <asp:LinkButton ID="btnEliminar" runat="server" CssClass="btn btn-sm btn-link text-danger text-decoration-none fw-bold p-0"
+                                    CommandName="EliminarAgenda"
+                                    CommandArgument='<%# Container.DataItemIndex %>'
+                                    OnClientClick="return confirmarEliminar(this);">
+                                    <i class="bi bi-trash"></i><br />Baja
+                                </asp:LinkButton>
+                            </ItemTemplate>
+                        </asp:TemplateField>
                     </Columns>
                 </asp:GridView>
             </div>

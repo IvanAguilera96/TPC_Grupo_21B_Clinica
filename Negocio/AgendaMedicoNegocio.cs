@@ -176,5 +176,24 @@ namespace Negocio
                 datos.cerrarConexion();
             }
         }
+
+        public void Eliminar(int idAgendaMedico)
+        {
+            AccesoDatos datos = new AccesoDatos();
+            try
+            {
+                datos.setearConsulta("DELETE FROM AgendaMedico WHERE IdAgendaMedico = @id");
+                datos.setearParametros("@id", idAgendaMedico);
+                datos.ejecutarAccion();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
     }
 }
