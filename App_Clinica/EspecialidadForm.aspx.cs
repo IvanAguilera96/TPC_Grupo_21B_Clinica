@@ -33,6 +33,8 @@ namespace App_Clinica
                             txtDescripcion.Text = seleccionado.Descripcion;
                             chkEstado.Checked = seleccionado.Estado;
                         }
+                        // MOdifico el titulo
+                        lblTitulo.InnerText = "Modificar Especialidad";
                     }
                 }
             }

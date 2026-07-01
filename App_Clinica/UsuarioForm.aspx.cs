@@ -45,6 +45,9 @@ namespace App_Clinica
                             ddlPerfil.SelectedValue = seleccionado.Perfil.IdPerfil.ToString();
                             chkEstado.Checked = seleccionado.Estado;
                         }
+
+                        // Modificar titulo
+                        lblTitulo.InnerText = "Modificar Usuario";
                     }
                 }
 

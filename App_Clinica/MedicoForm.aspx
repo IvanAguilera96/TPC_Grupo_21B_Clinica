@@ -8,7 +8,7 @@
 
         <div class="card bg-white p-4 rounded shadow-sm border">
 
-            <h3 id="lblTitulo" runat="server" class="mb-3 text-center text-primary fw-bold">Alta de nuevo Medico
+            <h3 id="lblTitulo" runat="server" class="mb-3 text-center text-primary fw-bold">Alta de nuevo Médico
         </h3>
             <hr class="mt-0 mb-4" />
 
@@ -47,7 +47,7 @@
 
             <div class="d-grid gap-2">
                 <asp:Button ID="btnGuardar" runat="server" Text="Guardar Medico" CssClass="btn btn-primary py-2 fw-bold" OnClick="btnGuardar_Click" />
-                <a href="Default.aspx" class="btn btn-outline-secondary py-2">Cancelar</a>
+                <a href="MedicoPag.aspx" class="btn btn-outline-secondary py-2">Cancelar</a>
             </div>
 
             <div>

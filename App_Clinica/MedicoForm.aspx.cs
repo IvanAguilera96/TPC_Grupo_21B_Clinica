@@ -36,6 +36,8 @@ namespace App_Clinica
                         txtMatricula.Text = seleccionado.Matricula.ToString();
                         chkEstado.Checked = seleccionado.Estado;
                     }
+                    // Modifico titulo
+                    lblTitulo.InnerText = "Modificar Médico";
                 }
                 else
                 {

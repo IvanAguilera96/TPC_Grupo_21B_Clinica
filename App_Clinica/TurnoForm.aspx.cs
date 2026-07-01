@@ -29,9 +29,8 @@ namespace App_Clinica
                     ViewState["IdTurnoAReprogramar"] = IdTurnoViejo;
 
                     // Cambiamos el título de la tarjeta para avisar al usuario
-                    // (Si le pusiste un ID al h3 en el aspx, ej: id="lblTituloForm")
-                    //lblTituloForm.InnerText = "Reprogramar Turno";
 
+                    h3TituloTurno.InnerText = "Reprogramar Turno";
                     PrecargarDatosTurnoViejo(IdTurnoViejo);
                 }
             }
@@ -179,16 +178,29 @@ namespace App_Clinica
             return "btn btn-outline-primary w-100"; // Azul estándar para disponibles
         }
 
-        // 5. BOTÓN GUARDAR (CONFIRMAR ALTA)
+        //(CONFIRMAR ALTA)
         protected void btnGuardar_Click(object sender, EventArgs e)
         {
             try
             {
-                if (ddlPaciente.SelectedValue == "0")
+                if(ddlEspecialidad.SelectedValue == "0")
                 {
-                    Utils.MostrarAlertaModal(this, "Debe seleccionar un paciente.");
+                    Utils.MostrarAlertaModal(this, "Debe seleccionar una Especialidad.");
                     return;
                 }
+
+                if(ddlMedico.SelectedValue == "0")
+                {
+                    Utils.MostrarAlertaModal(this, "Debe seleccionar un Medico.");
+                    return;
+                }
+
+                if (ddlPaciente.SelectedValue == "0")
+                {
+                    Utils.MostrarAlertaModal(this, "Debe seleccionar un Paciente.");
+                    return;
+                }
+
                 if (string.IsNullOrEmpty(hfHoraSeleccionada.Value))
                 {
                     Utils.MostrarAlertaModal(this, "Debe seleccionar un bloque de horario disponible.");
@@ -219,7 +231,7 @@ namespace App_Clinica
                 }
                 else
                 {
-                    // Flujo normal de un alta común y corriente
+                    // Flujo normal de un alta de turnos
                     turnoNegocio.Agregar(nuevo);
                     Session["MensajeExito"] = "¡Turno agendado con éxito!";
                 }
@@ -252,7 +264,7 @@ namespace App_Clinica
             PacienteNegocio negocio = new PacienteNegocio();
             ddlPaciente.DataSource = negocio.Listar();
             ddlPaciente.DataValueField = "IdPaciente";
-            ddlPaciente.DataTextField = "NombreCompleto"; // Asegurense de que esta propiedad exista en Paciente
+            ddlPaciente.DataTextField = "NombreCompleto";
             ddlPaciente.DataBind();
             ddlPaciente.Items.Insert(0, new ListItem("Seleccione un paciente...", "0"));
         }
@@ -300,12 +312,12 @@ namespace App_Clinica
             int idEspecialidad = int.Parse(ddlEspecialidad.SelectedValue);
 
             AgendaMedicoNegocio agendaNegocio = new AgendaMedicoNegocio();
-            // Reutilizamos tu método para listar las agendas de ese médico
+           
             var agendas = agendaNegocio.ListarAgendasPorMedico(idMedico, idEspecialidad);
 
             if (agendas != null && agendas.Count > 0)
             {
-                // Agrupamos y extraemos los días con sus horarios de entrada y salida
+                // Agrupamos y extraemos los dias con sus horarios de entrada y salida
                 var diasYHorarios = agendas.Select(x => $"{x.TurnoTrabajo.DiaDeTrabajo} ({x.TurnoTrabajo.HoraEntrada.ToString(@"hh\:mm")} a {x.TurnoTrabajo.HoraSalida.ToString(@"hh\:mm")} hs)");
 
                 // Unimos todo en una sola cadena separada por comas
@@ -329,14 +341,14 @@ namespace App_Clinica
 
                 if (turnoViejo != null)
                 {
-                    // Pre-seleccionamos Especialidad y disparamos su evento manualmente para llenar los medicos
+                    // seleccionamos Especialidad y disparamos su evento manualmente para llenar los medicos
                     ddlEspecialidad.SelectedValue = turnoViejo.Agenda.Especialidad.IdEspecialidad.ToString();
                     ddlEspecialidad_SelectedIndexChanged(null, null);
 
-                    // Pre-seleccionamos el Medico
+                    // seleccionamos el Medico
                     ddlMedico.SelectedValue = turnoViejo.Agenda.Medico.IdMedico.ToString();
 
-                    // Pre-seleccionamos el Paciente
+                    // seleccionamos el Paciente
                     ddlPaciente.SelectedValue = turnoViejo.Paciente.IdPaciente.ToString();
 
                     // Cargamos la observacion vieja si quieren mantenerla de referencia

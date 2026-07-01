@@ -21,7 +21,7 @@
             </div>
 
             <div class="card bg-white p-4 rounded-3 shadow-sm border-0 mb-4">
-                <div class="table-responsive" style="max-height: 400px; overflow-y: auto;">
+                <div class="table-responsive" style="max-height: 500px; overflow-y: auto;">
                     <asp:GridView ID="dgvUsuario" runat="server" CssClass="table table-hover align-middle border-0 small" 
                         AutoGenerateColumns="false" GridLines="None" DataKeyNames="IdUsuario" OnRowCommand="dgvUsuario_RowCommand">
                         <Columns>

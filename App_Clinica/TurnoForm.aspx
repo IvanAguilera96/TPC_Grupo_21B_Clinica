@@ -10,7 +10,7 @@
     <div class="container mt-4" style="max-width: 600px;">
         <div class="card shadow">
             <div class="card-header bg-primary text-white">
-                <h3 class="card-title mb-0">Registrar Nuevo Turno</h3>
+                <h3 id="h3TituloTurno" runat="server" class="card-title mb-0">Registrar Nuevo Turno </h3>
             </div>
             <div class="card-body">
 

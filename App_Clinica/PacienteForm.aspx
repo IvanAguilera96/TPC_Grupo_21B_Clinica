@@ -58,7 +58,7 @@
 
                 <div class="d-grid gap-2">
                     <asp:Button ID="btnGuardar" runat="server" Text="Guardar Paciente" CssClass="btn btn-primary py-2 fw-bold" OnClick="btnGuardar_Click" />
-                    <a href="Default.aspx" class="btn btn-outline-secondary py-2">Cancelar</a>
+                    <a href="PacientePag.aspx" class="btn btn-outline-secondary py-2">Cancelar</a>
                 </div>
 
                 <div>

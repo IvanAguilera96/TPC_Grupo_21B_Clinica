@@ -37,6 +37,9 @@ namespace App_Clinica
                         chkEstado.Checked = paciente.Estado;
                         txtFechaNacimiento.Text = paciente.FechaNacimiento.ToString("yyyy-MM-dd");
                     }
+
+                    // Modifico titulo
+                    lblTitulo.InnerText = "Modificar Paciente";
                 }
             }
 
