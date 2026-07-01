@@ -25,7 +25,7 @@
                     <asp:GridView ID="dgvUsuario" runat="server" CssClass="table table-hover align-middle border-0 small" 
                         AutoGenerateColumns="false" GridLines="None" DataKeyNames="IdUsuario" OnRowCommand="dgvUsuario_RowCommand">
                         <Columns>
-                            <asp:BoundField DataField="IdUsuario" HeaderText="ID" ItemStyle-CssClass="text-muted fw-semibold" ItemStyle-Width="60px" />
+                            <asp:BoundField DataField="IdUsuario" HeaderText="ID" ItemStyle-CssClass="text-muted fw-semibold" ItemStyle-Width="60px" Visible="false" />
                             
                             <asp:BoundField DataField="Nombre" HeaderText="Nombre de Usuario" ItemStyle-CssClass="fw-bold text-dark" />
                             

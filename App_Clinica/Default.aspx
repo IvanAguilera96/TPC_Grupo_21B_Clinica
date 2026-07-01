@@ -57,14 +57,14 @@
                     <div class="card border-0 shadow-sm p-4 rounded-3 position-relative" style="background-color: #D0E4F7; color: #1C3345;">
                         <div class="d-flex justify-content-between align-items-center">
                             <div>
-                                <h6 class="fw-bold text-uppercase small m-0" style="letter-spacing: 0.5px; opacity: 0.85;">Turnos del Mes</h6>
+                                <h6 class="fw-bold text-uppercase small m-0" style="letter-spacing: 0.5px; opacity: 0.85;">Turnos</h6>
                                 <h2 class="fw-bold mb-0 mt-2">
                                     <asp:Label ID="lblCantTurnosMes" runat="server" Text="0"></asp:Label>
                                 </h2>
                             </div>
                             <i class="bi bi-calendar-check-fill fs-1 opacity-25"></i>
                         </div>
-                        <a href="TurnosPag.aspx" class="stretched-link small text-decoration-none mt-3 d-inline-block fw-bold" style="color: #1C3345;">Auditar agenda global →</a>
+                        <a href="TurnosPag.aspx" class="stretched-link small text-decoration-none mt-3 d-inline-block fw-bold" style="color: #1C3345;">Ver listado completo →</a>
                     </div>
                 </div>
 
@@ -77,7 +77,7 @@
                         <h5 class="text-dark fw-bold mb-3">
                             <i class="bi bi-shield-check text-primary me-2"></i>Últimos Turnos Registrados
                         </h5>
-                        <div class="table-responsive">
+                        <div class="table-responsive" style="max-height: 500px; overflow-y: auto;">
                             <asp:GridView ID="dgvAuditoriaTurnos" runat="server" CssClass="table table-hover align-middle border-0 small" 
                                 AutoGenerateColumns="false" GridLines="None">
                                 <Columns>
@@ -141,7 +141,7 @@
                 <div class="col-12 col-md-8">
                     <div class="card bg-white p-4 rounded-3 shadow-sm border-0 h-100">
                         <h5 class="text-dark fw-bold mb-3"><i class="bi bi-clock text-primary me-1"></i>Turnos Programados para Hoy</h5>
-                        <div class="table-responsive">
+                        <div class="table-responsive" style="max-height: 500px; overflow-y: auto;">
                             <asp:GridView ID="dgvProximosTurnos" runat="server" CssClass="table table-hover align-middle border-0 small" 
                                 AutoGenerateColumns="false" GridLines="None">
                                 <Columns>
@@ -179,7 +179,7 @@
                     </span>
                 </div>
                 
-                <div class="table-responsive">
+                <div class="table-responsive" style="max-height: 500px; overflow-y: auto;">
                     <asp:GridView ID="dgvTurnosDelDia" runat="server" CssClass="table table-hover align-middle border-0 small" 
                         AutoGenerateColumns="false" GridLines="None">
                         <Columns>
