@@ -53,26 +53,46 @@ namespace App_Clinica
             string idMedico = Request.QueryString["idmedico"];
             try
             {
-                if(string.IsNullOrEmpty(txtHoraEntrada.Text) || string.IsNullOrEmpty(txtHoraSalida.Text))
+                if (string.IsNullOrEmpty(txtHoraEntrada.Text) || string.IsNullOrEmpty(txtHoraSalida.Text))
                 {
                     Utils.MostrarAlertaModal(this, "Debe completar el horario de entrada y salida.");
                     return;
                 }
 
+                int medicoId = int.Parse(idMedico);
+                string diaTrabajo = ddlDia.SelectedValue;
+                TimeSpan horaEntrada = TimeSpan.Parse(txtHoraEntrada.Text);
+                TimeSpan horaSalida = TimeSpan.Parse(txtHoraSalida.Text);
+
+                if (horaEntrada >= horaSalida)
+                {
+                    Utils.MostrarAlertaModal(this, "La hora de entrada no puede ser mayor o igual a la hora de salida.");
+                    return;
+                }
+
+                AgendaMedicoNegocio negocio = new AgendaMedicoNegocio();
+
+                //Evaluamos la superposición de horarios en el mismo día
+                if (negocio.ValidarSuperposicionAgenda(medicoId, diaTrabajo, horaEntrada, horaSalida))
+                {
+                    Utils.MostrarAlertaModal(this, "El profesional ya tiene una agenda asignada en ese día que se superpone con el horario ingresado.");
+                    return; 
+                }
+
+                // Si pasa la validación, continúa el flujo normal:
                 AgendaMedico nuevaAgenda = new AgendaMedico();
 
                 nuevaAgenda.Medico = new Medico();
-                nuevaAgenda.Medico.IdMedico = int.Parse(idMedico);
+                nuevaAgenda.Medico.IdMedico = medicoId;
 
                 nuevaAgenda.Especialidad = new Especialidad();
                 nuevaAgenda.Especialidad.IdEspecialidad = int.Parse(ddlEspecialidad.SelectedValue);
 
                 nuevaAgenda.TurnoTrabajo = new TurnoTrabajo();
-                nuevaAgenda.TurnoTrabajo.DiaDeTrabajo = ddlDia.SelectedValue;
-                nuevaAgenda.TurnoTrabajo.HoraEntrada = TimeSpan.Parse(txtHoraEntrada.Text);
-                nuevaAgenda.TurnoTrabajo.HoraSalida = TimeSpan.Parse(txtHoraSalida.Text);
+                nuevaAgenda.TurnoTrabajo.DiaDeTrabajo = diaTrabajo;
+                nuevaAgenda.TurnoTrabajo.HoraEntrada = horaEntrada;
+                nuevaAgenda.TurnoTrabajo.HoraSalida = horaSalida;
 
-                AgendaMedicoNegocio negocio = new AgendaMedicoNegocio();
                 negocio.AgregarConSP(nuevaAgenda);
 
                 Session["MensajeExito"] = "Horario asignado con éxito.";

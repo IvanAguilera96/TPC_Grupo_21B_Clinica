@@ -140,5 +140,41 @@ namespace Negocio
                 datos.cerrarConexion();
             }
         }
+
+        public bool ValidarSuperposicionAgenda(int idMedico, string diaDeTrabajo, TimeSpan horaEntrada, TimeSpan horaSalida)
+        {
+            AccesoDatos datos = new AccesoDatos();
+            try
+            {
+                // Verifica si existe algún horario asignado para el médico en ese día donde los rangos se crucen
+                datos.setearConsulta("SELECT COUNT(1) FROM AgendaMedico A " +
+                                     "INNER JOIN TurnoTrabajo T ON A.IdTurnoTrabajo = T.IdTurnoTrabajo " +
+                                     "WHERE A.IdMedico = @IdMedico AND T.DiaDeTrabajo = @DiaDeTrabajo " +
+                                     "AND @HoraEntrada < T.HoraSalida AND @HoraSalida > T.HoraEntrada");
+
+                datos.setearParametros("@IdMedico", idMedico);
+                datos.setearParametros("@DiaDeTrabajo", diaDeTrabajo);
+                datos.setearParametros("@HoraEntrada", horaEntrada);
+                datos.setearParametros("@HoraSalida", horaSalida);
+
+                datos.ejecutarLectura();
+
+                if (datos.Lector.Read())
+                {
+                    int cantidad = Convert.ToInt32(datos.Lector[0]);
+                    return cantidad > 0; // Si es mayor a 0, hay conflicto de horarios
+                }
+
+                return false;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
     }
 }
