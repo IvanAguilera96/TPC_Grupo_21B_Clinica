@@ -230,7 +230,7 @@ namespace App_Clinica
 
                     // Insertamos el nuevo, y al viejo le hacemos un UPDATE cambiando el estado a "Reprogramado"
                     idNuevoTurno = turnoNegocio.Agregar(nuevo); 
-                    turnoNegocio.CambiarEstado(idViejo, 4); // 4 es "Reprogramado" en la tabla EstadoTurno
+                    turnoNegocio.CambiarEstado(idViejo, 3); // 3 es "Reprogramado" en la tabla EstadoTurno
 
                     Session["MensajeExito"] = "¡El turno se reprogramó con éxito!";
                 }

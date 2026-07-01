@@ -178,7 +178,7 @@ namespace Negocio
                             INNER JOIN AgendaMedico A ON T.IdAgendaMedico = A.IdAgendaMedico
                         WHERE A.IdMedico = @IdMedico 
                             AND T.Fecha = @Fecha
-                            AND T.IdEstadoTurno <> 1 AND T.IdEstadoTurno <> 4 "); // Supongamos que 1 es "Cancelado". Si está cancelado, la hora se libera.
+                            AND T.IdEstadoTurno <> 1 AND T.IdEstadoTurno <> 4 AND T.IdEstadoTurno <> 3"); // Supongamos que 1 es "Cancelado". Si está cancelado, la hora se libera.
 
                 datos.setearParametros("@IdMedico", idMedico);
                 datos.setearParametros("@Fecha", fecha);
