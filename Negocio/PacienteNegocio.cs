@@ -50,7 +50,12 @@ namespace Negocio
 		{
 			AccesoDatos datos = new AccesoDatos();
 
-			try
+            if (ExisteDni(nuevo.Dni, 0))
+            {
+                throw new Exception("Ya existe un médico registrado con el DNI ingresado.");
+            }
+
+            try
 			{
 				datos.setearConsulta("INSERT INTO Paciente (Dni, Nombre, Apellido, FechaNacimiento,  Email, Telefono, Estado) VALUES (@Dni, @Nombre, @Apellido, @FechaNacimiento, @Email, @Telefono, @Estado)");
 				datos.setearParametros("@Dni", nuevo.Dni);
@@ -131,7 +136,13 @@ namespace Negocio
 		public void Modificar(Paciente paciente)
 		{
 			AccesoDatos datos = new AccesoDatos();
-			try
+
+            if (ExisteDni(paciente.Dni, 0))
+            {
+                throw new Exception("Ya existe un médico registrado con el DNI ingresado.");
+            }
+
+            try
 			{
 				datos.setearConsulta("UPDATE Paciente SET Dni = @Dni, Nombre = @Nombre, Apellido = @Apellido, FechaNacimiento = @fechaNacimiento, Email = @Email, Telefono = @Telefono, Estado = @Estado WHERE IdPaciente = @ID");
 				datos.setearParametros("@ID", paciente.IdPaciente);
@@ -184,6 +195,33 @@ namespace Negocio
                 datos.cerrarConexion();
             }
         }
+
+        private bool ExisteDni(string dni, int idPaciente = 0)
+        {
+            AccesoDatos datos = new AccesoDatos();
+            try
+            {
+                datos.setearConsulta("SELECT COUNT(*) FROM Paciente WHERE Dni = @Dni AND IdPaciente <> @IdPaciente");
+                datos.setearParametros("@Dni", dni);
+                datos.setearParametros("@IdPaciente", idPaciente);
+                datos.ejecutarLectura();
+
+                if (datos.Lector.Read())
+                {
+                    int cantidad = (int)datos.Lector[0];
+                    return cantidad > 0;
+                }
+                return false;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        } //ExisteDni
     } 
 
 }

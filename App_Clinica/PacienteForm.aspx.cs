@@ -128,7 +128,7 @@ namespace App_Clinica
             }
             catch (Exception ex)
             {
-                throw ex;
+                Utils.MostrarAlertaModal(this, ex.Message);
             }
         }
     }
