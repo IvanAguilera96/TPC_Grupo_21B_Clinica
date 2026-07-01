@@ -79,7 +79,7 @@ namespace App_Clinica
             {
                 try
                 {
-                    int IdEstadoAusente = 5; // 5 = No Asistió en BD
+                    int IdEstadoAusente = 4; // 4 = No Asistió en BD
                     turnoNegocio.CambiarEstado(IdTurno, IdEstadoAusente);
 
                     lblMensajeExito.Text = "Se registró correctamente la inasistencia del paciente.";
@@ -185,7 +185,7 @@ namespace App_Clinica
                 lblMensajeExito.Visible = false;
                 TurnoNegocio turnoNegocio = new TurnoNegocio();
 
-                int IdEstadoCerrado = 6; // 6 = Cerrado en BD
+                int IdEstadoCerrado = 5; // 5 = Cerrado en BD
                 turnoNegocio.CambiarEstado(idTurno, IdEstadoCerrado);
                 turnoNegocio.ActualizarDiagnostico(idTurno, comentarioDiagnostico);
 

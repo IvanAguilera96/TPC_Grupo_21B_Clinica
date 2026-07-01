@@ -20,7 +20,6 @@
                     OnClick="btnNuevoTurno_Click" />
             </div>
 
-
             <asp:UpdatePanel ID="UpdatePanelCombos" runat="server">
                 <ContentTemplate>
                     <div class="row g-3 mb-3 align-items-end">
@@ -48,8 +47,7 @@
                             </asp:TextBox>
                         </div>
                     </div>
-                </ContentTemplate>
-            </asp:UpdatePanel>
+    
             <div class="mt-2 mb-2">
                 <asp:Label ID="lblMensajeExito" runat="server" CssClass="alert alert-success d-block fw-semibold small py-2 px-3 shadow-sm rounded-3" Visible="false">
                         <i class="bi bi-check-circle-fill me-2"></i>
@@ -127,7 +125,8 @@
                     </asp:GridView>
                 </div>
             </div>
-
+            </ContentTemplate>
+        </asp:UpdatePanel>
         </div>
     </div>
 
