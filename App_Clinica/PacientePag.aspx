@@ -20,6 +20,33 @@
                 </a>
             </div>
 
+            <div class="row g-3 mb-3 align-items-end">
+                <div class="col-12 col-md-3">
+                    <label class="form-label fw-semibold text-secondary mb-1" style="font-size: 0.85rem;">Buscar por DNI:</label>
+                    <asp:TextBox ID="txtFiltroDni" runat="server" CssClass="form-control" 
+                        AutoPostBack="true" OnTextChanged="txtFiltro_TextChanged" placeholder="Ej: 12345678"
+                        onkeypress="return event.charCode >= 48 && event.charCode <= 57;"></asp:TextBox>
+                </div>
+
+                <div class="col-12 col-md-4">
+                    <label class="form-label fw-semibold text-secondary mb-1" style="font-size: 0.85rem;">Buscar por Nombre o Apellido:</label>
+                    <asp:TextBox ID="txtFiltroNombre" runat="server" CssClass="form-control" 
+                        AutoPostBack="true" OnTextChanged="txtFiltro_TextChanged" placeholder="Escriba un nombre o apellido..."></asp:TextBox>
+                </div>
+    
+                <div class="col-12 col-md-2">
+                    <asp:Button ID="btnBuscar" runat="server" Text="🔍 Buscar" 
+                        CssClass="btn border-0 w-100 fw-bold py-2 shadow-sm" 
+                        style="background-color: #D0E4F7; color: #1C3345;" OnClick="btnBuscar_Click" />
+                </div>
+
+                <div class="col-12 col-md-3">
+                    <asp:Button ID="btnLimpiarFiltros" runat="server" Text="Limpiar Filtros 🔄" 
+                        CssClass="btn border-0 w-75 fw-bold py-2 shadow-sm" OnClick="btnLimpiarFiltros_Click"
+                        style="background-color: #D0E4F7; color: #1C3345;"/>
+                </div>
+            </div>
+
             <div class="card bg-white p-4 rounded-3 shadow-sm border-0 mb-4">
                 <div class="table-responsive" style="max-height: 500px; overflow-y: auto;">
                     <asp:GridView ID="dgvPaciente" runat="server" DataKeyNames="IdPaciente" 

@@ -11,42 +11,56 @@ namespace Negocio
 {
 	public class PacienteNegocio
 	{
-		public List<Paciente> Listar()
-		{
+        public List<Paciente> Listar(string filtroDni = "", string filtroNombre = "")
+        {
             List<Paciente> lista = new List<Paciente>();
             AccesoDatos datos = new AccesoDatos();
 
-			try
-			{
-				datos.setearConsulta("Select IdPaciente, Dni, Nombre, Apellido, FechaNacimiento, Email, Telefono, Estado From Paciente");
-				datos.ejecutarLectura();
+            try
+            {
+                string consulta = "SELECT IdPaciente, Dni, Nombre, Apellido, FechaNacimiento, Email, Telefono, Estado FROM Paciente WHERE 1 = 1";
 
-				while (datos.Lector.Read())
-				{
-					Paciente aux = new Paciente();
-					aux.IdPaciente = (int)datos.Lector["IdPaciente"];
-					aux.Dni = (string)datos.Lector["Dni"];
-					aux.Nombre = (string)datos.Lector["Nombre"];
-					aux.Apellido = (string)datos.Lector["Apellido"];
+                if (!string.IsNullOrWhiteSpace(filtroDni))
+                {
+                    consulta += " AND Dni LIKE @Dni";
+                    datos.setearParametros("@Dni", filtroDni + "%"); 
+                }
+
+                if (!string.IsNullOrWhiteSpace(filtroNombre))
+                {
+                    consulta += " AND (Nombre LIKE @Nombre OR Apellido LIKE @Nombre)";
+                    datos.setearParametros("@Nombre", "%" + filtroNombre + "%"); 
+                }
+
+                datos.setearConsulta(consulta);
+                datos.ejecutarLectura();
+
+                while (datos.Lector.Read())
+                {
+                    Paciente aux = new Paciente();
+                    aux.IdPaciente = (int)datos.Lector["IdPaciente"];
+                    aux.Dni = (string)datos.Lector["Dni"];
+                    aux.Nombre = (string)datos.Lector["Nombre"];
+                    aux.Apellido = (string)datos.Lector["Apellido"];
                     aux.FechaNacimiento = (DateTime)datos.Lector["FechaNacimiento"];
                     aux.Email = (string)datos.Lector["Email"];
-					aux.Telefono = (string)datos.Lector["Telefono"];
-					aux.Estado = (bool)datos.Lector["Estado"];
-					lista.Add(aux);
-				}
-				return lista;
-			}
-			catch (Exception ex)
-			{
-				throw ex;
-			}
-			finally
-			{
-				datos.cerrarConexion();
-			}
-        } // Listar
+                    aux.Telefono = (string)datos.Lector["Telefono"];
+                    aux.Estado = (bool)datos.Lector["Estado"];
+                    lista.Add(aux);
+                }
+                return lista;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        } //Listar
 
-		public void Agregar(Paciente nuevo)
+        public void Agregar(Paciente nuevo)
 		{
 			AccesoDatos datos = new AccesoDatos();
 

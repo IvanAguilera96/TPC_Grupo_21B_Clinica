@@ -21,16 +21,11 @@ namespace App_Clinica
             {
                 ActualizarGrillaPaciente();
 
-                //Valida si debe mostrar mensaje guardado en Session
                 if (Session["MensajeExito"] != null)
                 {
                     lblMensajeGrilla.Visible = true;
-
-                    //Asigna mensaje almacenado en Session
                     lblMensajeGrilla.Text = Session["MensajeExito"].ToString();
                     lblMensajeGrilla.ForeColor = System.Drawing.Color.Green;
-
-                    //Limpia el mensaje
                     Session["MensajeExito"] = null;
                 }
             }
@@ -38,15 +33,15 @@ namespace App_Clinica
 
         protected void dgvPaciente_RowCommand(object sender, GridViewCommandEventArgs e)
         {
-            // Recupero el ID de la columna seleccionada
+            if (e.CommandName == "Page") return; // Evita interferencias con la paginación nativa
+
             string ID = e.CommandArgument.ToString();
 
-            if(e.CommandName == "Editar")
+            if (e.CommandName == "Editar")
             {
-                //Paso ID de la fila seleccionada
                 Response.Redirect("PacienteForm.aspx?id=" + ID);
             }
-            else if(e.CommandName == "Eliminar")
+            else if (e.CommandName == "Eliminar")
             {
                 try
                 {
@@ -65,7 +60,6 @@ namespace App_Clinica
                     lblMensajeGrilla.Visible = true;
                 }
             }
-         
         }
 
         public void ActualizarGrillaPaciente()
@@ -73,22 +67,46 @@ namespace App_Clinica
             try
             {
                 PacienteNegocio negocio = new PacienteNegocio();
-                dgvPaciente.DataSource = negocio.Listar();
+
+                string dni = txtFiltroDni.Text.Trim();
+                string nombreApellido = txtFiltroNombre.Text.Trim();
+
+                // Le pasamos los filtros directamente al método Listar
+                dgvPaciente.DataSource = negocio.Listar(dni, nombreApellido);
                 dgvPaciente.DataBind();
             }
             catch (Exception ex)
             {
-                throw ex;
+                lblMensajeGrilla.ForeColor = System.Drawing.Color.Red;
+                lblMensajeGrilla.Text = "Error al cargar datos: " + ex.Message;
+                lblMensajeGrilla.Visible = true;
             }
+        }
+
+        protected void txtFiltro_TextChanged(object sender, EventArgs e)
+        {
+            dgvPaciente.PageIndex = 0; // Reinicia a la primera página al filtrar
+            ActualizarGrillaPaciente();
+        }
+
+        protected void btnLimpiarFiltros_Click(object sender, EventArgs e)
+        {
+            txtFiltroDni.Text = string.Empty;
+            txtFiltroNombre.Text = string.Empty;
+            dgvPaciente.PageIndex = 0;
+            ActualizarGrillaPaciente();
         }
 
         protected void dgvPaciente_PageIndexChanging(object sender, GridViewPageEventArgs e)
         {
             dgvPaciente.PageIndex = e.NewPageIndex;
+            ActualizarGrillaPaciente();
+        }
 
-            PacienteNegocio negocio = new PacienteNegocio();
-            dgvPaciente.DataSource = negocio.Listar();
-            dgvPaciente.DataBind();
+        protected void btnBuscar_Click(object sender, EventArgs e)
+        {
+            dgvPaciente.PageIndex = 0; 
+            ActualizarGrillaPaciente();
         }
     }
 }
