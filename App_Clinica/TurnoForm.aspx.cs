@@ -24,6 +24,19 @@ namespace App_Clinica
                 CargarEspecialidades();
                 CargarPacientes();
 
+
+                // si viene un Paciente sugerido desde el Modal de Historial
+                if (Request.QueryString["pacienteId"] != null)
+                {
+                    string idPacienteSugerido = Request.QueryString["pacienteId"];
+                    // Verificamos que el ID exista en los ítems del ddl
+                    if (ddlPaciente.Items.FindByValue(idPacienteSugerido) != null)
+                    {
+                        ddlPaciente.SelectedValue = idPacienteSugerido;
+                        ddlPaciente.Enabled = false; 
+                    }
+                }
+
                 // Si viene por Reprogramnar
                 if (Request.QueryString["reprogramar"] != null)
                 {

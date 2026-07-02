@@ -60,6 +60,37 @@ namespace App_Clinica
                     lblMensajeGrilla.Visible = true;
                 }
             }
+            else if (e.CommandName == "Historial")
+            {
+                try
+                {
+                    // GUARDA EL ID DEL PACIENTE SELECCIONADO
+                    hfPacienteSeleccionadoId.Value = ID;
+                    PacienteNegocio negocio = new PacienteNegocio();
+                    List<Turno> historial = negocio.ListarUltimosTurnosPorPaciente(int.Parse(ID));
+
+                    if (historial != null && historial.Count > 0)
+                    {
+                        dgvHistorialTurnos.DataSource = historial;
+                        dgvHistorialTurnos.DataBind();
+                        dgvHistorialTurnos.Visible = true;
+                        lblHistorialVacio.Visible = false;
+                    }
+                    else
+                    {
+                        dgvHistorialTurnos.Visible = false;
+                        lblHistorialVacio.Visible = true;
+                    }
+
+                    ScriptManager.RegisterStartupScript(this, this.GetType(), "PopHistorial", "abrirModalHistorial();", true);
+                }
+                catch (Exception ex)
+                {
+                    lblMensajeGrilla.ForeColor = System.Drawing.Color.Red;
+                    lblMensajeGrilla.Text = "Error al intentar cargar el historial: " + ex.Message;
+                    lblMensajeGrilla.Visible = true;
+                }
+            }
         }
 
         public void ActualizarGrillaPaciente()
@@ -107,6 +138,14 @@ namespace App_Clinica
         {
             dgvPaciente.PageIndex = 0; 
             ActualizarGrillaPaciente();
+        }
+
+        protected void btnNuevoTurnoDesdeModal_Click(object sender, EventArgs e)
+        {
+            if (!string.IsNullOrEmpty(hfPacienteSeleccionadoId.Value))
+            {
+                Response.Redirect("TurnoForm.aspx?pacienteId=" + hfPacienteSeleccionadoId.Value);
+            }
         }
     }
 }

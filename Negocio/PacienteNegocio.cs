@@ -236,6 +236,61 @@ namespace Negocio
                 datos.cerrarConexion();
             }
         } //ExisteDni
+
+        public List<Turno> ListarUltimosTurnosPorPaciente(int idPaciente)
+        {
+            List<Turno> lista = new List<Turno>();
+            AccesoDatos datos = new AccesoDatos();
+
+            try
+            {
+                datos.setearConsulta(@"
+                SELECT TOP 5 T.IdTurno, T.Fecha, T.Hora, 
+                             (M.Nombre + ' ' + M.Apellido) AS MedicoNombre, 
+                             ESP.Descripcion AS EspecialidadDesc, 
+                             E.Descripcion AS EstadoDesc
+                FROM Turno T
+                INNER JOIN AgendaMedico A ON T.IdAgendaMedico = A.IdAgendaMedico
+                INNER JOIN Medico M ON A.IdMedico = M.IdMedico
+                INNER JOIN Especialidad ESP ON A.IdEspecialidad = ESP.IdEspecialidad
+                INNER JOIN EstadoTurno E ON T.IdEstadoturno = E.IdEstadoTurno
+                WHERE T.IdPaciente = @IdPaciente
+                ORDER BY T.Fecha DESC, T.Hora DESC");
+
+                datos.setearParametros("@IdPaciente", idPaciente);
+                datos.ejecutarLectura();
+
+                while (datos.Lector.Read())
+                {
+                    Turno aux = new Turno();
+                    aux.IdTurno = (int)datos.Lector["IdTurno"];
+                    aux.Fecha = (DateTime)datos.Lector["Fecha"];
+                    aux.Hora = (TimeSpan)datos.Lector["Hora"];
+
+                    aux.Agenda = new AgendaMedico();
+
+                    aux.Agenda.Medico = new Medico();
+                    aux.Agenda.Medico.Nombre = datos.Lector["MedicoNombre"].ToString();
+
+                    aux.Agenda.Especialidad = new Especialidad();
+                    aux.Agenda.Especialidad.Descripcion = datos.Lector["EspecialidadDesc"].ToString();
+
+                    aux.Estado = new EstadoTurno();
+                    aux.Estado.Descripcion = datos.Lector["EstadoDesc"].ToString();
+
+                    lista.Add(aux);
+                }
+                return lista;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
     } 
 
 }
