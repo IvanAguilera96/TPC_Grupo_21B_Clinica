@@ -7,7 +7,7 @@
 
     <asp:UpdatePanel ID="UpdatePanelPrincipal" runat="server" UpdateMode="Conditional">
         <ContentTemplate>
-            
+
             <asp:HiddenField ID="hfIdTurnoACerrar" runat="server" />
 
             <div class="row justify-content-center">
@@ -74,45 +74,65 @@
                                         </ItemTemplate>
                                     </asp:TemplateField>
 
-                                    <asp:TemplateField HeaderText="Acciones" ItemStyle-Width="140px" ItemStyle-CssClass="text-end">
+                                    <asp:TemplateField HeaderText="Acciones" ItemStyle-Width="120px" ItemStyle-CssClass="text-center">
                                         <ItemTemplate>
-                                            <div class="d-inline-flex justify-content-end w-100 gap-1">
-                                                
-                                                <asp:LinkButton ID="btnVerDetalle" runat="server"
-                                                    CommandName="VerDetalle" CommandArgument='<%# Eval("IdTurno") %>'
-                                                    CssClass="btn btn-sm p-1 text-primary fs-5" title="Ver Detalle del Turno">
-                                                        <i class="bi bi-eye-fill"></i>
-                                                </asp:LinkButton>
-
-                                                <button type="button" class="btn btn-sm p-1 text-success fs-5" title="Cerrar Turno"
-                                                    style='<%# Eval("Estado.Descripcion").ToString() == "Cancelado" || Eval("Estado.Descripcion").ToString() == "Cerrado" || Eval("Estado.Descripcion").ToString() == "No Asistió" || Eval("Estado.Descripcion").ToString() == "Reprogramado" ? "display:none;": "" %>'
-                                                    onclick="abrirModalDiagnostico('<%# Eval("IdTurno") %>')">
-                                                    <i class="bi bi-check-circle-fill"></i>
+                                            <div class="dropdown">
+                                                <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                                    Gestionar
                                                 </button>
 
-                                                <asp:LinkButton ID="btnAusente" runat="server"
-                                                    CommandName="AusenteTurno" CommandArgument='<%# Eval("IdTurno") %>'
-                                                    CssClass="btn btn-sm p-1 text-dark fs-5" title="Marcar como No Asistió"
-                                                    OnClientClick="return confirmarAccionTurno(this, 'Ausente');"
-                                                    Visible='<%# Eval("Estado.Descripcion").ToString() != "Cancelado" && Eval("Estado.Descripcion").ToString() != "Cerrado" && Eval("Estado.Descripcion").ToString() != "No Asistió" && Eval("Estado.Descripcion").ToString() != "Reprogramado" %>'>
-                                                        <i class="bi bi-person-x-fill"></i>
-                                                </asp:LinkButton>
+                                                <ul class="dropdown-menu shadow-sm">
 
-                                                <asp:LinkButton ID="btnReprogramar" runat="server"
-                                                    CommandName="ReprogramarTurno" CommandArgument='<%# Eval("IdTurno") %>'
-                                                    CssClass="btn btn-sm p-1 text-info fs-5" title="Reprogramar Turno"
-                                                    Visible='<%# Eval("Estado.Descripcion").ToString() != "Cancelado" && Eval("Estado.Descripcion").ToString() != "Cerrado" && Eval("Estado.Descripcion").ToString() != "No Asistió" && Eval("Estado.Descripcion").ToString() != "Reprogramado" %>'>
-                                                        <i class="bi bi-arrow-repeat"></i>
-                                                </asp:LinkButton>
+                                                    <li>
+                                                        <asp:LinkButton ID="btnVerDetalle" runat="server"
+                                                            CommandName="VerDetalle" CommandArgument='<%# Eval("IdTurno") %>'
+                                                            CssClass="dropdown-item text-primary py-2 fs-6">
+                                                            <i class="bi bi-eye-fill me-2"></i> Ver Detalle
+                                                        </asp:LinkButton>
+                                                    </li>
 
-                                                <asp:LinkButton ID="btnCancelar" runat="server"
-                                                    CommandName="CancelarTurno" CommandArgument='<%# Eval("IdTurno") %>'
-                                                    CssClass="btn btn-sm p-1 text-danger fs-5" title="Cancelar Turno"
-                                                    OnClientClick="return confirmarAccionTurno(this, 'Cancelar');"
-                                                    Visible='<%# Eval("Estado.Descripcion").ToString() != "Cancelado" && Eval("Estado.Descripcion").ToString() != "Cerrado" && Eval("Estado.Descripcion").ToString() != "No Asistió" && Eval("Estado.Descripcion").ToString() != "Reprogramado" %>'>
-                                                        <i class="bi bi-x-circle-fill"></i>
-                                                </asp:LinkButton>
+                                                    <li style='<%# Eval("Estado.Descripcion").ToString() == "Cancelado" || Eval("Estado.Descripcion").ToString() == "Cerrado" || Eval("Estado.Descripcion").ToString() == "No Asistió" || Eval("Estado.Descripcion").ToString() == "Reprogramado" ? "display:none;": "" %>'>
+                                                        <hr class="dropdown-divider">
+                                                    </li>
 
+                                                    <li style='<%# Eval("Estado.Descripcion").ToString() == "Cancelado" || Eval("Estado.Descripcion").ToString() == "Cerrado" || Eval("Estado.Descripcion").ToString() == "No Asistió" || Eval("Estado.Descripcion").ToString() == "Reprogramado" ? "display:none;": "" %>'>
+                                                        <button type="button" class="dropdown-item text-success py-2 fs-6"
+                                                            onclick="abrirModalDiagnostico('<%# Eval("IdTurno") %>')">
+                                                            <i class="bi bi-check-circle-fill me-2"></i>Cerrar Turno
+                   
+                                                        </button>
+                                                    </li>
+
+                                                    <li id="liAusente" runat="server"
+                                                        visible='<%# Eval("Estado.Descripcion").ToString() != "Cancelado" && Eval("Estado.Descripcion").ToString() != "Cerrado" && Eval("Estado.Descripcion").ToString() != "No Asistió" && Eval("Estado.Descripcion").ToString() != "Reprogramado" %>'>
+                                                        <asp:LinkButton ID="btnAusente" runat="server"
+                                                            CommandName="AusenteTurno" CommandArgument='<%# Eval("IdTurno") %>'
+                                                            CssClass="dropdown-item text-dark py-2 fs-6"
+                                                            OnClientClick="return confirmarAccionTurno(this, 'Ausente');">
+                                                            <i class="bi bi-person-x-fill me-2"></i> No Asistió
+                                                        </asp:LinkButton>
+                                                    </li>
+
+                                                    <li id="liReprogramar" runat="server"
+                                                        visible='<%# Eval("Estado.Descripcion").ToString() != "Cancelado" && Eval("Estado.Descripcion").ToString() != "Cerrado" && Eval("Estado.Descripcion").ToString() != "No Asistió" && Eval("Estado.Descripcion").ToString() != "Reprogramado" %>'>
+                                                        <asp:LinkButton ID="btnReprogramar" runat="server"
+                                                            CommandName="ReprogramarTurno" CommandArgument='<%# Eval("IdTurno") %>'
+                                                            CssClass="dropdown-item text-info py-2 fs-6">
+                                                            <i class="bi bi-arrow-repeat me-2"></i> Reprogramar
+                                                        </asp:LinkButton>
+                                                    </li>
+
+                                                    <li id="liCancelar" runat="server"
+                                                        visible='<%# Eval("Estado.Descripcion").ToString() != "Cancelado" && Eval("Estado.Descripcion").ToString() != "Cerrado" && Eval("Estado.Descripcion").ToString() != "No Asistió" && Eval("Estado.Descripcion").ToString() != "Reprogramado" %>'>
+                                                        <asp:LinkButton ID="btnCancelar" runat="server"
+                                                            CommandName="CancelarTurno" CommandArgument='<%# Eval("IdTurno") %>'
+                                                            CssClass="dropdown-item text-danger py-2 fs-6"
+                                                            OnClientClick="return confirmarAccionTurno(this, 'Cancelar');">
+                                                            <i class="bi bi-x-circle-fill me-2"></i> Cancelar Turno
+                                                        </asp:LinkButton>
+                                                    </li>
+
+                                                </ul>
                                             </div>
                                         </ItemTemplate>
                                     </asp:TemplateField>
