@@ -179,6 +179,47 @@ namespace Negocio
 			}
         }// Modificar
 
+        public Paciente BuscarPorDni(string dni)
+        {
+            AccesoDatos datos = new AccesoDatos();
+            try
+            {
+                datos.setearConsulta("SELECT IdPaciente, Nombre, Apellido, Dni, Email, Telefono FROM Paciente WHERE Dni = @Dni");
+                datos.setearParametros("@Dni", dni);
+                datos.ejecutarLectura();
+
+                if (datos.Lector.Read())
+                {
+                    Paciente paciente = new Paciente();
+                    paciente.IdPaciente = (int)datos.Lector["IdPaciente"];
+                    paciente.Nombre = (string)datos.Lector["Nombre"];
+                    paciente.Apellido = (string)datos.Lector["Apellido"];
+                    paciente.Dni = (string)datos.Lector["Dni"];
+
+                    // Validamos nulos por las dudas en el email
+                    if (!(datos.Lector["Email"] is DBNull))
+                        paciente.Email = (string)datos.Lector["Email"];
+
+                    // Validamos nulos por las dudas en el Telefono
+                    if (!(datos.Lector["Telefono"] is DBNull))
+                        paciente.Telefono = (string)datos.Lector["Telefono"];
+
+                    return paciente;
+                }
+
+                return null;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
+
+
         public string ObtenerEmailPorId(int idPaciente)
         {
             AccesoDatos datos = new AccesoDatos();

@@ -22,33 +22,84 @@ namespace App_Clinica
             if (!IsPostBack)
             {
                 CargarEspecialidades();
-                CargarPacientes();
 
-
-                // si viene un Paciente sugerido desde el Modal de Historial
+                // Si viene un Paciente sugerido desde el Modal de Historial
                 if (Request.QueryString["pacienteId"] != null)
                 {
-                    string idPacienteSugerido = Request.QueryString["pacienteId"];
-                    // Verificamos que el ID exista en los ítems del ddl
-                    if (ddlPaciente.Items.FindByValue(idPacienteSugerido) != null)
-                    {
-                        ddlPaciente.SelectedValue = idPacienteSugerido;
-                        ddlPaciente.Enabled = false; 
-                    }
+                    int idSugerido = int.Parse(Request.QueryString["pacienteId"]);
+                    CargarPacientePorIdDirecto(idSugerido);
                 }
 
-                // Si viene por Reprogramnar
+                // Si viene por Reprogramar
                 if (Request.QueryString["reprogramar"] != null)
                 {
                     int IdTurnoViejo = int.Parse(Request.QueryString["reprogramar"]);
-                    // Guardamos el ID en el ViewState para tenerlo a mano al guardar
                     ViewState["IdTurnoAReprogramar"] = IdTurnoViejo;
-
-                    // Cambiamos el título de la tarjeta para avisar al usuario
 
                     h3TituloTurno.InnerText = "Reprogramar Turno";
                     PrecargarDatosTurnoViejo(IdTurnoViejo);
                 }
+            }
+        }
+
+        // EVENTO PARA BUSCAR AL PACIENTE POR DNI
+        protected void btnBuscarPaciente_Click(object sender, EventArgs e)
+        {
+            string dniElegido = txtDniPaciente.Text.Trim();
+
+            if (string.IsNullOrEmpty(dniElegido))
+            {
+                Utils.MostrarAlertaModal(this, "Debe ingresar un número de DNI.");
+                ResetearControlesPaciente();
+                return;
+            }
+
+            try
+            {
+                PacienteNegocio negocio = new PacienteNegocio();
+                Paciente paciente = negocio.BuscarPorDni(dniElegido);
+
+                if (paciente != null)
+                {
+                    lblNombrePaciente.Text = $"✅ {paciente.NombreCompleto}";
+                    lblNombrePaciente.CssClass = "fw-bold text-success small";
+                    hfIdPaciente.Value = paciente.IdPaciente.ToString();
+                }
+                else
+                {
+                    lblNombrePaciente.Text = "❌ Paciente no registrado.";
+                    lblNombrePaciente.CssClass = "fw-bold text-danger small";
+                    hfIdPaciente.Value = "";
+                    Utils.MostrarAlertaModal(this, "No se encontró ningún paciente con el DNI ingresado.");
+                }
+            }
+            catch (Exception ex)
+            {
+                Utils.MostrarAlertaModal(this, "Error al buscar el paciente: " + ex.Message);
+            }
+        }
+
+        private void CargarPacientePorIdDirecto(int idPaciente)
+        {
+            try
+            {
+                PacienteNegocio negocio = new PacienteNegocio();
+                Paciente paciente = negocio.Listar().FirstOrDefault(x => x.IdPaciente == idPaciente);
+                if (paciente != null)
+                {
+                    txtDniPaciente.Text = paciente.Dni;
+                    lblNombrePaciente.Text = $"✅ {paciente.NombreCompleto}";
+                    lblNombrePaciente.CssClass = "fw-bold text-success small";
+                    hfIdPaciente.Value = paciente.IdPaciente.ToString();
+
+                    // Bloqueamos la edición si vino sugerido imperativamente del historial
+                    txtDniPaciente.Enabled = false;
+                    btnBuscarPaciente.Enabled = false;
+                }
+            }
+            catch (Exception ex)
+            {
+                Utils.MostrarAlertaModal(this, "Error al cargar paciente sugerido: " + ex.Message);
             }
         }
 
@@ -73,11 +124,10 @@ namespace App_Clinica
                 ResetearControlesMedicos();
             }
             ActualizarAvisoDiasAtencion();
-            // Si cambian la especialidad, limpiamos los horarios anteriores
             LimpiarSlots();
         }
 
-        // AL CAMBIAR MEDICO -> RE-EVALUAMOS SI YA HABIA UNA FECHA CARGADA
+        // AL CAMBIAR MEDICO -> REVISAMOS SI YA HABIA UNA FECHA CARGADA
         protected void ddlMedico_SelectedIndexChanged(object sender, EventArgs e)
         {
             txtFecha.Text = null;
@@ -93,7 +143,7 @@ namespace App_Clinica
         // AL CAMBIAR LA FECHA -> GENERAMOS LOS RECTANGULOS DE TIEMPO
         protected void txtFecha_TextChanged(object sender, EventArgs e)
         {
-            hfHoraSeleccionada.Value = ""; // Si cambia la fecha, reseteamos la hora elegida anterior
+            hfHoraSeleccionada.Value = "";
             GenerarBloquesHorarios();
         }
 
@@ -110,7 +160,6 @@ namespace App_Clinica
 
             DateTime fechaElegida = DateTime.Parse(txtFecha.Text);
 
-            // Validamos que no busquen una fecha pasada
             if (fechaElegida.Date < DateTime.Today)
             {
                 Utils.MostrarAlertaModal(this, "No se pueden asignar turnos para fechas pasadas.");
@@ -118,11 +167,9 @@ namespace App_Clinica
                 return;
             }
 
-            // Buscamos las agendas asignadas al médico para esa especialidad
             AgendaMedicoNegocio agendaNegocio = new AgendaMedicoNegocio();
             var agendas = agendaNegocio.ListarAgendasPorMedico(idMedico, idEspecialidad);
 
-            // Mapeamos el día de la semana al string correspondiente
             string diaSemana = TraducirDiaSemana(fechaElegida.DayOfWeek);
             var agendaDelDia = agendas.Find(x => x.TurnoTrabajo.DiaDeTrabajo.ToLower() == diaSemana.ToLower());
 
@@ -133,14 +180,11 @@ namespace App_Clinica
                 return;
             }
 
-            // Guardamos el ID de la agenda para recuperarlo al guardar el turno
             ViewState["IdAgendaMedicoElegida"] = agendaDelDia.IdAgendaMedico;
 
-            // Buscamos los turnos ya ocupados en la base de datos para esa fecha
             List<string> horasOcupadas = turnoNegocio.ObtenerHorasOcupadas(idMedico, fechaElegida.ToString("yyyy-MM-dd"));
             ViewState["HorasOcupadas"] = horasOcupadas;
 
-            // Generamos los intervalos de 30 minutos secuenciales
             List<string> listaSlots = new List<string>();
             TimeSpan inicio = agendaDelDia.TurnoTrabajo.HoraEntrada;
             TimeSpan fin = agendaDelDia.TurnoTrabajo.HoraSalida;
@@ -154,27 +198,22 @@ namespace App_Clinica
 
             ViewState["SlotsGenerados"] = listaSlots;
 
-            // Enlazamos al Repeater para pintar los botones
             repHorarios.DataSource = listaSlots;
             repHorarios.DataBind();
         }
 
-        // MANEJO DE CLICKS EN LOS RECTANGULOS DEL REPEATER
         protected void repHorarios_ItemCommand(object source, RepeaterCommandEventArgs e)
         {
             if (e.CommandName == "SeleccionarHora")
             {
-                // Guardamos la hora en el HiddenField
                 hfHoraSeleccionada.Value = e.CommandArgument.ToString();
 
-                // Refrescamos el repeater para aplicar el color verde al botón seleccionado
                 var listaSlots = ViewState["SlotsGenerados"] as List<string>;
                 repHorarios.DataSource = listaSlots;
                 repHorarios.DataBind();
             }
         }
 
-        // METODOS AUXILIARES QUE UTILIZA EL REPEATER DESDE EL HTML
         public bool EsTurnoOcupado(string horaSlot)
         {
             var ocupadas = ViewState["HorasOcupadas"] as List<string> ?? new List<string>();
@@ -185,18 +224,18 @@ namespace App_Clinica
         {
             if (EsTurnoOcupado(horaSlot))
             {
-                return "btn btn-outline-secondary w-100 disabled"; // Gris/Blanco si está ocupado
+                return "btn btn-outline-secondary w-100 disabled";
             }
 
             if (hfHoraSeleccionada.Value == horaSlot)
             {
-                return "btn btn-success w-100 fw-bold"; // Verde llamativo si se seleccionó
+                return "btn btn-success w-100 fw-bold";
             }
 
-            return "btn btn-outline-primary w-100"; // Azul estándar para disponibles
+            return "btn btn-outline-primary w-100";
         }
 
-        //(CONFIRMAR ALTA)
+        // CONFIRMAR ALTA / REPROGRAMACIÓN
         protected void btnGuardar_Click(object sender, EventArgs e)
         {
             try
@@ -213,9 +252,10 @@ namespace App_Clinica
                     return;
                 }
 
-                if (ddlPaciente.SelectedValue == "0")
+                // Validacion, Revisar si el hidden de paciente esta vacio
+                if (string.IsNullOrEmpty(hfIdPaciente.Value))
                 {
-                    Utils.MostrarAlertaModal(this, "Debe seleccionar un Paciente.");
+                    Utils.MostrarAlertaModal(this, "Debe buscar y seleccionar un Paciente válido ingresando su DNI.");
                     return;
                 }
 
@@ -232,7 +272,7 @@ namespace App_Clinica
                 nuevo.Diagnostico = "";
 
                 nuevo.Paciente = new Paciente();
-                nuevo.Paciente.IdPaciente = int.Parse(ddlPaciente.SelectedValue);
+                nuevo.Paciente.IdPaciente = int.Parse(hfIdPaciente.Value); // Leemos el HiddenField cambiado
 
                 nuevo.Agenda = new AgendaMedico();
                 nuevo.Agenda.IdAgendaMedico = (int)ViewState["IdAgendaMedicoElegida"];
@@ -243,28 +283,25 @@ namespace App_Clinica
                 {
                     int idViejo = (int)ViewState["IdTurnoAReprogramar"];
 
-                    // Insertamos el nuevo, y al viejo le hacemos un UPDATE cambiando el estado a "Reprogramado"
-                    idNuevoTurno = turnoNegocio.Agregar(nuevo); 
-                    turnoNegocio.CambiarEstado(idViejo, 3); // 3 es "Reprogramado" en la tabla EstadoTurno
+                    idNuevoTurno = turnoNegocio.Agregar(nuevo);
+                    turnoNegocio.CambiarEstado(idViejo, 3);
 
                     Session["MensajeExito"] = "¡El turno se reprogramó con éxito!";
                 }
                 else
                 {
-                    // Flujo normal de un alta de turnos
                     idNuevoTurno = turnoNegocio.Agregar(nuevo);
                     Session["MensajeExito"] = "¡Turno agendado con éxito!";
                 }
 
                 try
                 {
-
-                    string nombrePaciente = ddlPaciente.SelectedItem.Text;
+                    // Cambiado para extraer el nombre desde el Label informativo
+                    string nombrePaciente = lblNombrePaciente.Text.Replace("✅ ", "");
                     string nombreMedico = ddlMedico.SelectedItem.Text;
 
                     PacienteNegocio negocio = new PacienteNegocio();
-                    //string emailPaciente = negocio.ObtenerEmailPorId(nuevo.Paciente.IdPaciente);
-                    string emailPaciente = "";//"invokerk868@gmail.com";
+                    string emailPaciente = "";
 
                     if (!string.IsNullOrEmpty(emailPaciente))
                     {
@@ -280,9 +317,7 @@ namespace App_Clinica
                 }
                 catch (Exception)
                 {
-                    // Importante: Dejamos el catch vacío o registramos el error de manera silenciosa.
-                    // Si el mail falla (por falta de internet temporal, etc.), NO queremos interrumpir el flujo.
-                    // El turno ya se guardó en la base de datos, por lo que el programa debe continuar a la siguiente línea.
+                    // Manejo silencioso de envío de correo electrónico
                 }
 
                 Response.Redirect("TurnosPag.aspx", false);
@@ -291,7 +326,6 @@ namespace App_Clinica
             {
                 Utils.MostrarAlertaModal(this, "Error al confirmar el turno: " + ex.Message);
             }
-
         }
 
         protected void btnCancelar_Click(object sender, EventArgs e)
@@ -309,17 +343,6 @@ namespace App_Clinica
             ddlEspecialidad.Items.Insert(0, new ListItem("Seleccione una especialidad...", "0"));
         }
 
-        private void CargarPacientes()
-        {
-            PacienteNegocio negocio = new PacienteNegocio();
-            ddlPaciente.DataSource = negocio.Listar();
-            ddlPaciente.DataValueField = "IdPaciente";
-            ddlPaciente.DataTextField = "NombreCompleto";
-            ddlPaciente.DataBind();
-            ddlPaciente.Items.Insert(0, new ListItem("Seleccione un paciente...", "0"));
-        }
-
-        // METODOS DE LIMPIEZA INTERNA
         private void LimpiarSlots()
         {
             repHorarios.DataSource = null;
@@ -334,6 +357,13 @@ namespace App_Clinica
             ddlMedico.Enabled = false;
             ddlMedico.Items.Clear();
             txtFecha.Text = null;
+        }
+
+        private void ResetearControlesPaciente()
+        {
+            lblNombrePaciente.Text = "Ninguno (Ingrese un DNI y busque)";
+            lblNombrePaciente.CssClass = "fw-bold text-dark small";
+            hfIdPaciente.Value = "";
         }
 
         private string TraducirDiaSemana(DayOfWeek day)
@@ -352,7 +382,6 @@ namespace App_Clinica
 
         private void ActualizarAvisoDiasAtencion()
         {
-            // Validamos que se haya seleccionado especialidad y médico
             if (ddlEspecialidad.SelectedValue == "0" || ddlMedico.SelectedValue == "0")
             {
                 lblDiasAtencion.Text = "";
@@ -363,17 +392,12 @@ namespace App_Clinica
             int idEspecialidad = int.Parse(ddlEspecialidad.SelectedValue);
 
             AgendaMedicoNegocio agendaNegocio = new AgendaMedicoNegocio();
-           
             var agendas = agendaNegocio.ListarAgendasPorMedico(idMedico, idEspecialidad);
 
             if (agendas != null && agendas.Count > 0)
             {
-                // Agrupamos y extraemos los dias con sus horarios de entrada y salida
                 var diasYHorarios = agendas.Select(x => $"{x.TurnoTrabajo.DiaDeTrabajo} ({x.TurnoTrabajo.HoraEntrada.ToString(@"hh\:mm")} a {x.TurnoTrabajo.HoraSalida.ToString(@"hh\:mm")} hs)");
-
-                // Unimos todo en una sola cadena separada por comas
                 string textoDias = string.Join(", ", diasYHorarios);
-
                 lblDiasAtencion.Text = $"💡 Este profesional atiende los días: {textoDias}.";
             }
             else
@@ -386,25 +410,25 @@ namespace App_Clinica
         {
             try
             {
-                // Buscamos el turno completo con sus relaciones en la base de datos
-                Turno turnoViejo = new Turno();
-                turnoViejo = turnoNegocio.BuscarPorId(idTurno);
+                Turno turnoViejo = turnoNegocio.BuscarPorId(idTurno);
 
                 if (turnoViejo != null)
                 {
-                    // seleccionamos Especialidad y disparamos su evento manualmente para llenar los medicos
                     ddlEspecialidad.SelectedValue = turnoViejo.Agenda.Especialidad.IdEspecialidad.ToString();
                     ddlEspecialidad_SelectedIndexChanged(null, null);
 
-                    // seleccionamos el Medico
                     ddlMedico.SelectedValue = turnoViejo.Agenda.Medico.IdMedico.ToString();
 
-                    // seleccionamos el Paciente
-                    ddlPaciente.SelectedValue = turnoViejo.Paciente.IdPaciente.ToString();
+                    // PRECARGA DEL PACIENTE MEDIANTE SUS NUEVOS CONTROLES DE DNI
+                    if (turnoViejo.Paciente != null)
+                    {
+                        txtDniPaciente.Text = turnoViejo.Paciente.Dni;
+                        lblNombrePaciente.Text = $"✅ {turnoViejo.Paciente.NombreCompleto}";
+                        lblNombrePaciente.CssClass = "fw-bold text-success small";
+                        hfIdPaciente.Value = turnoViejo.Paciente.IdPaciente.ToString();
+                    }
 
-                    // Cargamos la observacion vieja si quieren mantenerla de referencia
                     txtObservacion.Text = turnoViejo.Observacion;
-
                     ActualizarAvisoDiasAtencion();
                 }
             }

@@ -1,10 +1,6 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Clinica.Master" AutoEventWireup="true" CodeBehind="TurnoForm.aspx.cs" Inherits="App_Clinica.TurnoForm" %>
-
-<asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
-</asp:Content>
+<asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server"></asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
-
-
 
     <div class="container mt-4" style="max-width: 600px;">
         <div class="card shadow">
@@ -13,40 +9,31 @@
             </div>
             <div class="card-body">
 
-          
-                        <!-- Especialidad -->
-                        <div class="mb-3">
-                            <label class="form-label">Seleccione Especialidad:</label>
-                            <asp:DropDownList ID="ddlEspecialidad" runat="server" CssClass="form-select"
-                                AutoPostBack="true" OnSelectedIndexChanged="ddlEspecialidad_SelectedIndexChanged">
-                            </asp:DropDownList>
-                        </div>
-
-                        <!-- Medico -->
-                        <div class="mb-3">
-                            <label class="form-label">Seleccione Médico:</label>
-                            <asp:DropDownList ID="ddlMedico" runat="server" CssClass="form-select" Enabled="false"
-                                AutoPostBack="true" OnSelectedIndexChanged="ddlMedico_SelectedIndexChanged">
-                            </asp:DropDownList>
-                        </div>
-
-                                        <!-- El Label para el aviso de dias de atencion -->
-                <asp:Label ID="lblDiasAtencion" runat="server" CssClass="d-block text-muted small mb-2" Font-Italic="true"></asp:Label>
-          
-
-
-                <!-- Fecha del Turno con AutoPostBack -->
                 <div class="mb-3">
-                    <label class="form-label">Seleccione la Fecha del Turno:</label>
+                    <label class="form-label fw-semibold">Seleccione Especialidad:</label>
+                    <asp:DropDownList ID="ddlEspecialidad" runat="server" CssClass="form-select"
+                        AutoPostBack="true" OnSelectedIndexChanged="ddlEspecialidad_SelectedIndexChanged">
+                    </asp:DropDownList>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">Seleccione Médico:</label>
+                    <asp:DropDownList ID="ddlMedico" runat="server" CssClass="form-select" Enabled="false"
+                        AutoPostBack="true" OnSelectedIndexChanged="ddlMedico_SelectedIndexChanged">
+                    </asp:DropDownList>
+                </div>
+
+                <asp:Label ID="lblDiasAtencion" runat="server" CssClass="d-block text-muted small mb-2" Font-Italic="true"></asp:Label>
+
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">Seleccione la Fecha del Turno:</label>
                     <asp:TextBox ID="txtFecha" runat="server" TextMode="Date" CssClass="form-control"
                         AutoPostBack="true" OnTextChanged="txtFecha_TextChanged"></asp:TextBox>
                 </div>
 
-                <!-- Selector de Horarios en Bloques Modificado -->
                 <div class="mb-3">
                     <label class="form-label d-block">Horarios Disponibles para esta fecha:</label>
 
-                    <!-- Input oculto para guardar la hora exacta en la que el usuario hizo clic -->
                     <asp:HiddenField ID="hfHoraSeleccionada" runat="server" />
 
                     <div class="row row-cols-4 g-2">
@@ -65,20 +52,29 @@
                     </div>
                 </div>
 
-
-                <!--Paciente-->
                 <div class="mb-3">
-                    <label class="form-label">5. Seleccione Paciente:</label>
-                    <asp:DropDownList ID="ddlPaciente" runat="server" CssClass="form-select"></asp:DropDownList>
+                    <label class="form-label fw-semibold">Buscar Paciente:</label>
+                    <div class="input-group mb-2">
+                        <asp:TextBox ID="txtDniPaciente" runat="server" CssClass="form-control" 
+                            placeholder="Ingrese DNI del paciente..." MaxLength="12"></asp:TextBox>
+                        <asp:Button ID="btnBuscarPaciente" runat="server" Text="Buscar 🔍" 
+                            CssClass="btn btn-primary" OnClick="btnBuscarPaciente_Click" />
+                    </div>
+                    
+                    <div class="p-2 bg-light rounded border">
+                        <span class="text-muted small d-block">Paciente seleccionado:</span>
+                        <asp:Label ID="lblNombrePaciente" runat="server" CssClass="fw-bold text-dark small" 
+                            Text="Ninguno (Ingrese un DNI y busque)"></asp:Label>
+                    </div>
+
+                    <asp:HiddenField ID="hfIdPaciente" runat="server" />
                 </div>
 
-                <!--Observaciones opcional-->
                 <div class="mb-4">
-                    <label class="form-label">Observaciones (Motivo de consulta):</label>
+                    <label class="form-label fw-semibold">Observaciones (Motivo de consulta):</label>
                     <asp:TextBox ID="txtObservacion" runat="server" TextMode="MultiLine" Rows="2" CssClass="form-control"></asp:TextBox>
                 </div>
 
-                <!-- Botones de Accion -->
                 <div class="d-flex justify-content-between">
                     <asp:Button ID="btnCancelar" runat="server" Text="Cancelar" CssClass="btn btn-outline-secondary" OnClick="btnCancelar_Click" />
                     <asp:Button ID="btnGuardar" runat="server" Text="Confirmar Turno 💾" CssClass="btn btn-success" OnClick="btnGuardar_Click" />
@@ -87,5 +83,4 @@
             </div>
         </div>
     </div>
-
 </asp:Content>
